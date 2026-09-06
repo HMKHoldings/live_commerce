@@ -1,62 +1,6 @@
+import { heroSlides as slides } from "./heroSlides.jsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-
-const slides = [
-  {
-    theme: "orange",
-    category: "전체",
-    label: "SNS 라이브 쇼핑",
-    eyebrow: <>SNS에서 만난 그 <em>상품,</em></>,
-    title: <><span>좋아하는 <em>SNS 라이브</em>를 보고,</span><br /><span><em>오렌지 마켓</em>에서 바로 쇼핑하세요!</span></>,
-    description: "SNS 속 핫한 상품을, 오렌지 마켓에서 더 편하고 안전하게 만나보세요.",
-    cta: "지금 쇼핑하기",
-  },
-  {
-    theme: "fresh",
-    category: "식품",
-    label: "제철 식품",
-    eyebrow: "FRESH PICKS · 오늘의 신선함",
-    title: <>제철의 맛을 <em>가득 담아,</em><br /><em>신선한 일상</em>을 만나보세요!</>,
-    description: "싱싱한 채소부터 달콤한 제철 과일까지, 우리 집 식탁을 더 맛있게.",
-    cta: "제철 식품 둘러보기",
-    image: "/images/fresh-produce.jpg",
-    imageAlt: "싱싱한 제철 채소와 과일",
-    inset: "/images/strawberries.jpg",
-    insetAlt: "빨갛게 익은 신선한 딸기",
-    artEyebrow: "FRESH & DELICIOUS",
-    artTitle: "오늘 식탁에 신선함 한 스푼",
-  },
-  {
-    theme: "living",
-    category: "생활",
-    label: "라이프스타일",
-    eyebrow: "LIFE & HOME · 나를 위한 공간",
-    title: <>매일 머무는 공간에<br /><em>기분 좋은 변화</em>를 더해요.</>,
-    description: "포근한 침구와 감각적인 생활용품으로, 평범한 하루를 특별하게.",
-    cta: "라이프스타일 둘러보기",
-    image: "/images/lifestyle-tea.jpg",
-    imageAlt: "따뜻한 차를 즐기는 감각적인 티웨어",
-    inset: "/images/bedding.jpg",
-    insetAlt: "아늑한 침실의 포근한 침구",
-    artEyebrow: "A LITTLE EVERYDAY JOY",
-    artTitle: "우리 집, 가장 편안한 취향",
-  },
-  {
-    theme: "beauty",
-    category: "뷰티",
-    label: "뷰티 케어",
-    eyebrow: "BEAUTY MOMENT · 오늘 더 빛나는 나",
-    title: <>나를 아끼는 작은 습관,<br /><em>매일 더 빛나는</em> 뷰티 케어.</>,
-    description: "산뜻한 스킨케어부터 촉촉한 세럼까지, 나에게 꼭 맞는 아름다움.",
-    cta: "뷰티 상품 둘러보기",
-    image: "/images/pink-skincare.png",
-    imageAlt: "핑크빛 배경 위의 스킨케어 제품",
-    inset: "/images/serum.jpg",
-    insetAlt: "매일의 피부 관리를 위한 세럼",
-    artEyebrow: "YOUR DAILY GLOW",
-    artTitle: "오늘도 나답게, 아름답게",
-  },
-];
 
 const total = slides.length;
 const carouselSlides = [
