@@ -1,0 +1,47 @@
+﻿@layer responsive {
+  .promo-carousel-stage { overflow: hidden; border-radius: 8px; touch-action: pan-y; }
+  .promo-carousel-track { display: flex; gap: 12px; transition: transform 450ms ease; will-change: transform; }
+  .promo-carousel-slide { flex: 0 0 calc((100% - (var(--columns) - 1) * 12px) / var(--columns)); min-width: 0; }
+  .promo-carousel .store-promo { width: 100%; height: 100%; min-height: 148px; padding: 22px 20px; border-radius: 8px; }
+  .promo-carousel .store-promo-copy { max-width: 72%; }
+  .promo-carousel .store-promo-copy > strong { font-size: clamp(18px, 1.35vw, 23px); }
+  .promo-carousel .store-promo-copy > span:not(.store-promo-cta) { font-size: 13px; }
+  .promo-carousel .store-coupon .store-promo-copy { padding-left: 24px; }
+  .promo-carousel .store-promo-gift { width: 20px; height: 20px; }
+  .promo-carousel .store-coupon-art { right: 12px; top: 43px; width: clamp(83px, 7vw, 116px); height: 75px; }
+  .promo-carousel .store-coupon-art strong { font-size: clamp(17px, 1.45vw, 23px); white-space: nowrap; }
+  .promo-carousel .store-kakao-icon { right: 16px; top: 37px; width: 74px; height: 74px; }
+  .promo-carousel .store-leaves { right: 8px; top: 22px; transform: scale(.8); transform-origin: right center; }
+  @media (min-width: 1101px) and (max-width: 1300px) {
+    .promo-carousel .store-promo { padding-inline: 14px; }
+    .promo-carousel .store-promo-copy > strong { font-size: 17px; }
+    .promo-carousel .store-promo-copy > span:not(.store-promo-cta) { font-size: 11px; }
+    .promo-carousel .store-coupon-art { width: 80px; right: 8px; }
+    .promo-carousel .store-kakao-icon { width: 62px; height: 62px; right: 10px; top: 44px; }
+    .promo-carousel .store-leaves { transform: scale(.65); }
+  }
+  .promo-carousel-controls { display: flex; justify-content: center; align-items: center; gap: 6px; padding-top: 10px; color: #666b60; }
+  .promo-carousel-controls > button { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; padding: 0; }
+  .promo-carousel-controls button:hover { background: #fff0e7; color: #ff650b; }
+  .promo-carousel-controls button:focus-visible { outline: 2px solid #ff650b; outline-offset: 2px; }
+  .promo-carousel-controls svg { pointer-events: none; }
+  .promo-carousel-dots { display: flex; align-items: center; gap: 3px; }
+  .promo-carousel-dots button { display: grid; place-items: center; width: 24px; height: 30px; padding: 0; }
+  .promo-carousel-dots button::after { content: ''; width: 7px; height: 7px; border-radius: 9px; background: #d8dbd4; transition: width 200ms; }
+  .promo-carousel-dots button[aria-current]::after { width: 21px; background: #ff650b; }
+  .promo-carousel-count { font-size: 12px; font-variant-numeric: tabular-nums; margin-inline: 8px; }
+  @media (max-width: 640px) {
+    .promo-carousel .store-promo { min-height: 162px; padding: 22px 18px; }
+    .promo-carousel .store-promo-copy { max-width: 70%; }
+    .promo-carousel .store-promo-copy > strong { font-size: 18px; }
+    .promo-carousel .store-promo-copy > span:not(.store-promo-cta) { font-size: 12px; max-width: 185px; }
+    .promo-carousel .store-coupon-art { right: 12px; top: 51px; width: 87px; height: 65px; }
+    .promo-carousel .store-coupon-art strong { font-size: 20px; }
+    .promo-carousel .store-kakao-icon { right: 15px; top: 46px; width: 70px; height: 70px; }
+    .promo-carousel .store-leaves { right: 8px; top: 32px; transform: scale(.8); transform-origin: right center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .promo-carousel-track, .promo-carousel-dots button::after { transition: none; }
+  }
+}
+
