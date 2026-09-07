@@ -1,0 +1,47 @@
+.review-slider {
+  --review-width: 320px;
+  --review-gap: 20px;
+  --review-duration: 65s;
+  overflow: hidden;
+}
+.review-slider-track {
+  display: flex;
+  width: max-content;
+  padding-block: 3px 8px;
+  animation: review-drift var(--review-duration) linear infinite;
+  will-change: transform;
+}
+.review-slider-group {
+  display: flex;
+  gap: var(--review-gap);
+  padding-right: var(--review-gap);
+  flex-shrink: 0;
+}
+.review-slider-track .lower-review-card {
+  flex: 0 0 var(--review-width);
+  width: var(--review-width);
+  border: 1px solid #ecece7;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+.review-slider-track .lower-review-card:hover { border-color: #ffb884; background: #fffaf6; }
+.review-slider-track .lower-review-card:focus-visible { outline: 2px solid #ff650d; outline-offset: -3px; }
+.review-slider-track .lower-review-arrow { display: none; }
+.review-slider-track .lower-review-copy > strong { white-space: normal; font-size: 15px; }
+@keyframes review-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+/* Keyboard navigation uses the original cards in a stationary scrollable row. */
+
+.review-slider:has(:focus-visible) .review-slider-track { animation-play-state: paused; }
+
+@media (max-width: 640px) {
+  .review-slider-track .lower-review-card { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .review-slider { overflow-x: auto; }
+  .review-slider-track { animation: none; transform: none; will-change: auto; }
+  .review-slider-copy { display: none; }
+}

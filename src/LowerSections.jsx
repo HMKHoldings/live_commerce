@@ -1,5 +1,8 @@
-import React from "react";
-import { Check, ChevronRight, Heart } from "lucide-react";
+import ReviewSlider from "./ReviewSlider";
+import React, { useEffect, useState } from "react";
+import DealProgress from "./DealProgress";
+import "./deal-animation.css";
+import { Check, ChevronRight, Heart, Clock3 } from "lucide-react";
 import { bestProducts, collections, groupDeals, reviews } from "./marketData";
 
 const won = (value) => `${value.toLocaleString("ko-KR")}원`;
@@ -29,6 +32,11 @@ export default function LowerSections({
   onOpenReview,
   filter,
 }) {
+  const [now, setNow] = useState(Date.now);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   const visibleDeals = groupDeals.filter(filter);
   const visibleBest = bestProducts.filter(filter);
 
@@ -43,6 +51,11 @@ export default function LowerSections({
         />
         <div className="lower-deal-grid">
           {visibleDeals.map((deal) => {
+            const remaining = Math.max(0, Math.ceil((Date.parse(deal.endsAt) - now) / 1000));
+            const expired = remaining === 0;
+            const days = Math.floor(remaining / 86400);
+            const time = [Math.floor(remaining / 3600) % 24, Math.floor(remaining / 60) % 60, remaining % 60]
+              .map((part) => String(part).padStart(2, "0")).join(":");
             const joined = joinedDeals.includes(deal.id);
             const participants = deal.participants + Number(joined);
             return (
@@ -55,7 +68,7 @@ export default function LowerSections({
                 >
                   <img src={deal.image} alt={deal.name} loading="lazy" />
                   <span className="lower-deal-badge">공동구매</span>
-                  <span className="lower-deal-days">{deal.daysLeft}일 남음</span>
+                  <span className="lower-deal-days">{expired ? "마감" : `${Math.ceil(remaining / 86400)}일 남음`}</span>
                 </button>
                 <div className="lower-deal-body">
                   <button
@@ -71,12 +84,11 @@ export default function LowerSections({
                     <del>{won(deal.originalPrice)}</del>
                     <span>{deal.discount}%</span>
                   </div>
-                  <progress
-                    className="lower-deal-progress"
-                    value={participants}
-                    max={deal.target}
-                    aria-label={`${deal.name} 공동구매 참여 현황`}
-                  />
+                  <div className={`deal-countdown${remaining < 86400 ? " urgent" : ""}`} role="timer" aria-live="off" aria-label={`${deal.name} 남은 시간`}>
+                    <Clock3 size={15} aria-hidden="true" />
+                    {expired ? "공동구매가 종료되었습니다" : `${days > 0 ? `${days}일 ` : ""}${time} 남음`}
+                  </div>
+                  <DealProgress value={participants} max={deal.target} name={deal.name} />
                   <div className="lower-deal-count" aria-live="polite">
                     <strong>{participants.toLocaleString("ko-KR")}명 참여중</strong>
                     <span>{deal.target.toLocaleString("ko-KR")}명</span>
@@ -84,12 +96,12 @@ export default function LowerSections({
                   <button
                     type="button"
                     className={`lower-join${joined ? " lower-joined" : ""}`}
-                    onClick={() => onJoinDeal(deal)}
-                    disabled={joined}
-                    aria-label={`${deal.name} ${joined ? "참여 완료" : "공동구매 참여하기"}`}
+                    onClick={() => { if (Date.now() < Date.parse(deal.endsAt)) onJoinDeal(deal); }}
+                    disabled={joined || expired}
+                    aria-label={`${deal.name} ${expired ? "마감" : joined ? "참여 완료" : "공동구매 참여하기"}`}
                   >
                     {joined && <Check size={17} />}
-                    {joined ? "참여 완료" : "참여하기"}
+                    {expired ? "마감" : joined ? "참여 완료" : "참여하기"}
                   </button>
                 </div>
               </article>
@@ -136,7 +148,7 @@ export default function LowerSections({
           description="실제 구매 고객님들의 생생한 후기를 확인하세요."
           onMore={onOpenReviews}
         />
-        <div className="lower-review-grid">
+        <ReviewSlider>
           {reviews.map((review) => (
             <button
               type="button"
@@ -157,7 +169,7 @@ export default function LowerSections({
               <ChevronRight className="lower-review-arrow" size={13} aria-hidden="true" />
             </button>
           ))}
-        </div>
+        </ReviewSlider>
       </section>
 
       <section id="best" aria-labelledby="best-heading">

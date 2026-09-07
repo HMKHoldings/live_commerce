@@ -1,0 +1,14 @@
+.sns-live-page { padding-block: 24px 42px; min-height: 65vh; }
+.sns-live-page .section-heading h2 { font-size: 30px; }
+.sns-live-tools { margin: 16px 0 26px; }
+.sns-platforms { display: flex; gap: 10px; flex-wrap: wrap; }
+.sns-platforms button { padding: 9px 18px; border: 1px solid #e2e5dc; border-radius: 24px; color: #64685e; font-size: 14px; }
+.sns-platforms button[aria-pressed="true"] { color: #fff; background: #ff650d; border-color: #ff650d; }
+.sns-platforms button:focus-visible { outline: 2px solid #ff650d; outline-offset: 3px; }
+.sns-demo-note { margin-top: 14px; font-size: 12px; color: #777b71; }
+@media (max-width: 640px) {
+  .sns-live-page { padding-top: 12px; }
+  .sns-live-page .section-heading h2 { font-size: 24px; }
+  .sns-platforms { gap: 8px; }
+  .sns-platforms button { font-size: 12px; padding: 8px 12px; }
+}

@@ -28,6 +28,10 @@ const socialChannels = [
 ];
 
 const information = {
+  about: {
+    title: "회사소개",
+    body: "오렌지스토어는 식품, 생활용품, 뷰티 상품과 SNS 쇼핑 콘텐츠를 한곳에서 만나볼 수 있는 쇼핑몰입니다. 현재는 서비스 화면을 체험하는 데모 스토어입니다.",
+  },
   terms: {
     title: "이용약관 안내",
     body: "오렌지스토어은 쇼핑몰 화면을 체험하는 데모입니다. 회원가입, 주문, 결제는 실제로 처리되지 않습니다. 정식 서비스의 이용약관은 운영 시 별도로 안내될 예정입니다.",
@@ -153,15 +157,18 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
         </section>
       </div>
 
+      <nav className="store-footer-bar" aria-label="회사 및 이용 안내">
+        <div className="wrap store-footer-bar-inner">
+          {[["about", "회사소개"], ["partnership", "제휴문의"], ["seller", "입점신청"], ["terms", "이용약관"], ["privacy", "개인정보처리방침"], ["contact", "고객센터"]].map(([key, label]) => (
+            <button key={key} type="button" onClick={() => openPanel({ type: "information", key })}>{label}</button>
+          ))}
+        </div>
+      </nav>
       <footer className="store-footer">
         <div className="wrap store-footer-inner">
           <div className="store-footer-brand">{brand}</div>
           <div className="store-company">
-            <nav className="store-policy-links" aria-label="회사 및 이용 안내">
-              {[["terms", "이용약관"], ["privacy", "개인정보처리방침"], ["seller", "입점문의"], ["partnership", "제휴문의"], ["contact", "고객센터"]].map(([key, label]) => (
-                <button key={key} type="button" onClick={() => openPanel({ type: "information", key })}>{label}</button>
-              ))}
-            </nav>
+
             <p>(주)오렌지스토어 <span>|</span> 대표이사 김오렌지 <span>|</span> 사업자등록번호 123-45-67890 <span>|</span> 통신판매업신고 제2024-서울강남-01234호</p>
             <p>서울특별시 강남구 테헤란로 123, 오렌지타워 10층 <span>|</span> 고객센터 1588-1234</p>
             <small>© 2026 ORANGE STORE. All rights reserved.</small>

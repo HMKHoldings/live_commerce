@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import ProductDetail from "./ProductDetail";
+import "./sns-live.css";
+import MegaMenu from "./MegaMenu";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Search,
@@ -139,7 +142,11 @@ const products = [
     category: "식품",
   },
 ];
-const inventory = [...new Map([...products, ...groupDeals, ...bestProducts].map((p) => [p.id, p])).values()];
+const inventory = [
+  ...new Map(
+    [...products, ...groupDeals, ...bestProducts].map((p) => [p.id, p]),
+  ).values(),
+];
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 function Orange({ small = false }) {
   return (
@@ -196,29 +203,65 @@ function App() {
     [liked, setLiked] = useState([]),
     [cart, setCart] = useState({}),
     [panel, setPanel] = useState(null),
-    [selected, setSelected] = useState(null),
+    [selected, setSelectedState] = useState(
+      () =>
+        inventory.find(
+          (p) =>
+            String(p.id) ===
+            new URLSearchParams(location.search).get("product"),
+        ) || null,
+    ),
     [menu, setMenu] = useState(false),
+    [livePlatform, setLivePlatform] = useState("전체"),
     [category, setCategory] = useState("전체"),
     [active, setActive] = useState("쇼핑"),
     [toast, setToast] = useState(""),
     [joinedDeals, setJoinedDeals] = useState([]),
     [collection, setCollection] = useState(null),
     [selectedReview, setSelectedReview] = useState(null);
+  const setSelected = (product) => {
+    const url = new URL(location.href);
+    if (product) url.searchParams.set("product", product.id);
+    else url.searchParams.delete("product");
+    if (url.href !== location.href) history.pushState(null, "", url);
+    setSelectedState(product || null);
+    setPanel(null);
+    setMenu(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+  useEffect(() => {
+    const sync = () => {
+      setSelectedState(
+        inventory.find(
+          (p) =>
+            String(p.id) ===
+            new URLSearchParams(location.search).get("product"),
+        ) || null,
+      );
+      setPanel(null);
+      setMenu(false);
+    };
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, []);
   const notify = (s) => {
     setToast(s);
     window.setTimeout(() => setToast(""), 2600);
   };
   const toggle = (id) =>
     setLiked((a) => (a.includes(id) ? a.filter((x) => x !== id) : [...a, id]));
-  const add = (p) => {
-    setCart((c) => ({ ...c, [p.id]: (c[p.id] || 0) + 1 }));
+  const add = (p, quantity = 1) => {
+    setCart((c) => ({ ...c, [p.id]: (c[p.id] || 0) + quantity }));
     notify("장바구니에 상품을 담았어요");
   };
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   const joinDeal = (deal) => {
     if (joinedDeals.includes(deal.id)) return;
     setJoinedDeals((ids) => [...ids, deal.id]);
-    setCart((current) => ({ ...current, [deal.id]: (current[deal.id] || 0) + 1 }));
+    setCart((current) => ({
+      ...current,
+      [deal.id]: (current[deal.id] || 0) + 1,
+    }));
     notify("공동구매 상품을 장바구니에 담았어요");
   };
   const browseCollection = (nextCollection) => {
@@ -242,25 +285,53 @@ function App() {
     setActive("쇼핑");
     requestAnimationFrame(() => {
       document.getElementById("live").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
       });
     });
   };
   const navigate = (name) => {
+    if (selected) setSelected(null);
     setActive(name);
+    setMenu(false);
+    setLivePlatform("전체");
     setSearch("");
     setQuery("");
     setCategory("전체");
-    document
-      .getElementById(name === "베스트" ? "best" : name === "공동구매" ? "group-buy" : name === "공유창고" ? "collections" : "live")
-      .scrollIntoView({ behavior: "smooth" });
+    requestAnimationFrame(() => {
+      document
+        .getElementById(
+          name === "베스트"
+            ? "best"
+            : name === "공동구매"
+              ? "group-buy"
+              : name === "공유창고"
+                ? "collections"
+                : "live",
+        )
+        ?.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "instant"
+            : "smooth",
+        });
+    });
   };
   const card = (p, live) => (
     <article className="product" key={p.id}>
       {live ? (
-        <LiveVideo product={p} Platform={Platform} onOpen={() => setSelected(p)} />
+        <LiveVideo
+          product={p}
+          Platform={Platform}
+          onOpen={() => setSelected(p)}
+        />
       ) : (
-        <button className="product-image short" onClick={() => setSelected(p)} aria-label={p.name + " 자세히 보기"}>
+        <button
+          className="product-image short"
+          onClick={() => setSelected(p)}
+          aria-label={p.name + " 자세히 보기"}
+        >
           <img src={p.image} alt={p.name} loading="lazy" />
         </button>
       )}
@@ -317,10 +388,13 @@ function App() {
             className="search"
             onSubmit={(e) => {
               e.preventDefault();
+              if (selected) setSelected(null);
               setSearch(query);
-              document
-                .getElementById("live")
-                .scrollIntoView({ behavior: "smooth" });
+              requestAnimationFrame(() =>
+                document
+                  .getElementById("live")
+                  ?.scrollIntoView({ behavior: "smooth" }),
+              );
             }}
           >
             <input
@@ -357,8 +431,9 @@ function App() {
               onClick={() => setMenu(!menu)}
               aria-label="카테고리 메뉴"
               aria-expanded={menu}
+              aria-controls="header-categories"
             >
-              <Menu />
+              {menu ? <X /> : <Menu />}
             </button>
             <div className="nav-primary">
               {[
@@ -372,7 +447,13 @@ function App() {
               ].map((n) => (
                 <button
                   key={n}
-                  className={[active === n ? "active" : "", n === "공유창고" ? "nav-service" : "", n === "신상품" ? "nav-shopping-end" : ""].filter(Boolean).join(" ")}
+                  className={[
+                    active === n ? "active" : "",
+                    n === "공유창고" ? "nav-service" : "",
+                    n === "신상품" ? "nav-shopping-end" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   onClick={() =>
                     n === "고객센터" ? setPanel("help") : navigate(n)
                   }
@@ -389,175 +470,239 @@ function App() {
               ))}
             </div>
             {menu && (
-              <div className="category-menu">
-                <strong>카테고리</strong>
-                {["전체", "식품", "생활", "뷰티"].map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => {
-                      setCategory(c);
-                      setMenu(false);
-                    }}
-                  >
-                    {c}
-                    <ChevronRight size={16} />
-                  </button>
-                ))}
-              </div>
+              <MegaMenu
+                onClose={() => setMenu(false)}
+                onCategory={(nextCategory) => {
+                  setMenu(false);
+                  browseCollection({
+                    title: `${nextCategory} 전체 상품`,
+                    products: inventory.filter(
+                      (p) => p.category === nextCategory,
+                    ),
+                  });
+                }}
+                onCollection={(label, nextCategory) => {
+                  const aliases = {
+                    스킨케어: ["세럼", "앰플"],
+                    농산물: ["감귤", "딸기", "채소"],
+                    축산: ["한우", "삼겹살"],
+                    "과일/견과": ["감귤", "딸기", "견과"],
+                    주방용품: ["프라이팬"],
+                    "주방용품/식기": ["프라이팬"],
+                    "주방/생활가전": ["에어프라이어"],
+                    "침구/커튼/수예소품": ["이불", "타월"],
+                    "욕실/세탁용품": ["타월", "화장지"],
+                    건강식품: ["콜라겐"],
+                  };
+                  const terms = aliases[label] || label.split("/");
+                  setMenu(false);
+                  browseCollection({
+                    title: label,
+                    products: inventory.filter(
+                      (p) =>
+                        p.category === nextCategory &&
+                        terms.some((term) =>
+                          `${p.name} ${p.desc}`.includes(term),
+                        ),
+                    ),
+                  });
+                }}
+              />
             )}
           </div>
         </nav>
       </header>
-      <main>
-        <HeroBanner
-          Orange={Orange}
-          Platform={Platform}
-          onShop={browseBannerCategory}
+      {selected ? (
+        <ProductDetail
+          key={selected.id}
+          product={selected}
+          products={inventory}
+          reviews={reviews}
+          liked={liked.includes(selected.id)}
+          joined={joinedDeals.includes(selected.id)}
+          onLike={toggle}
+          onSelect={setSelected}
+          onBack={() => setSelected(null)}
+          onAdd={add}
+          onBuy={(product, quantity) => {
+            add(product, quantity);
+            setPanel("cart");
+          }}
+          notify={notify}
         />
-        <div className="catalog wrap">
-          {(search || category !== "전체") && (
-            <div className="filter-status">
-              <span>
-                {search ? `“${search}” 검색 결과` : category + " 상품"}
-              </span>
-              <button
-                onClick={() => {
-                  setSearch("");
-                  setQuery("");
-                  setCategory("전체");
-                }}
-              >
-                전체 보기 <X size={15} />
-              </button>
-            </div>
+      ) : (
+        <main>
+          {active !== "SNS 라이브" && (
+            <HeroBanner
+              Orange={Orange}
+              Platform={Platform}
+              onShop={browseBannerCategory}
+            />
           )}
-          <section id="live">
-            <div className="section-heading">
-              <h2>
-                {active === "쇼핑"
-                  ? "SNS 라이브 연동 상품"
-                  : active === "베스트"
+          <div className="catalog wrap">
+            {(search || category !== "전체") && (
+              <div className="filter-status">
+                <span>
+                  {search ? `“${search}” 검색 결과` : category + " 상품"}
+                </span>
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    setQuery("");
+                    setCategory("전체");
+                  }}
+                >
+                  전체 보기 <X size={15} />
+                </button>
+              </div>
+            )}
+            <section
+              id="live"
+              className={active === "SNS 라이브" ? "sns-live-page" : undefined}
+            >
+              <div className="section-heading">
+                <h2>
+                  {active === "쇼핑"
                     ? "SNS 라이브 연동 상품"
-                    : active}
-              </h2>
-              <p>
-                지금 SNS에서 화제인 그 상품! 오렌지스토어에서 바로 만나보세요.
-              </p>
-              <button
-                onClick={() => {
-                  setPanel("all");
-                }}
-              >
-                더보기 <ChevronRight size={15} />
-              </button>
-            </div>
-            <div className="product-grid">
-              {products
-                .filter((p) => p.platform && filter(p))
-                .map((p) => card(p, true))}
-            </div>
-            {!products.some((p) => p.platform && filter(p)) && (
-              <p className="empty">조건에 맞는 라이브 상품이 없습니다.</p>
+                    : active === "베스트"
+                      ? "SNS 라이브 연동 상품"
+                      : active}
+                </h2>
+                <p>
+                  {active === "SNS 라이브"
+                    ? "다양한 채널의 쇼핑 영상을 한곳에서 만나보세요."
+                    : "지금 SNS에서 화제인 그 상품! 오렌지스토어에서 바로 만나보세요."}
+                </p>
+                {active !== "SNS 라이브" && (
+                  <button onClick={() => navigate("SNS 라이브")}>
+                    더보기 <ChevronRight size={15} />
+                  </button>
+                )}
+              </div>
+              {active === "SNS 라이브" && (
+                <div className="sns-live-tools">
+                  <div className="sns-platforms" aria-label="영상 채널 선택">
+                    {[
+                      "전체",
+                      "YouTube",
+                      "TikTok",
+                      "네이버 쇼핑라이브",
+                      "Instagram",
+                    ].map((channel) => (
+                      <button
+                        key={channel}
+                        type="button"
+                        aria-pressed={livePlatform === channel}
+                        onClick={() => setLivePlatform(channel)}
+                      >
+                        {channel}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="sns-demo-note">
+                    현재 샘플 영상입니다. 실시간 방송 연동은 준비 중입니다.
+                  </p>
+                </div>
+              )}
+              <div className="product-grid">
+                {products
+                  .filter(
+                    (p) =>
+                      p.platform &&
+                      filter(p) &&
+                      (active !== "SNS 라이브" ||
+                        livePlatform === "전체" ||
+                        p.platform === livePlatform),
+                  )
+                  .map((p) => card(p, true))}
+              </div>
+              {!products.some(
+                (p) =>
+                  p.platform &&
+                  filter(p) &&
+                  (active !== "SNS 라이브" ||
+                    livePlatform === "전체" ||
+                    p.platform === livePlatform),
+              ) && <p className="empty">조건에 맞는 라이브 상품이 없습니다.</p>}
+            </section>
+            {active !== "SNS 라이브" && (
+              <>
+                <section id="popular">
+                  <div className="section-heading">
+                    <h2>지금 인기 상품</h2>
+                    <p>지금 가장 사랑받는 상품들을 만나보세요.</p>
+                    <button onClick={() => setPanel("all")}>
+                      더보기 <ChevronRight size={15} />
+                    </button>
+                  </div>
+                  <div className="product-grid">
+                    {products
+                      .filter(
+                        (p) =>
+                          !p.platform &&
+                          filter(p) &&
+                          (active !== "SNS 라이브" ||
+                            livePlatform === "전체" ||
+                            p.platform === livePlatform),
+                      )
+                      .map((p) => card(p, false))}
+                  </div>
+                  {!products.some(
+                    (p) =>
+                      !p.platform &&
+                      filter(p) &&
+                      (active !== "SNS 라이브" ||
+                        livePlatform === "전체" ||
+                        p.platform === livePlatform),
+                  ) && (
+                    <p className="empty">조건에 맞는 인기 상품이 없습니다.</p>
+                  )}
+                </section>
+                <LowerSections
+                  liked={liked}
+                  onToggleLike={toggle}
+                  onSelectProduct={setSelected}
+                  onJoinDeal={joinDeal}
+                  joinedDeals={joinedDeals}
+                  onBrowse={browseCollection}
+                  onOpenReviews={() => openReview(null)}
+                  onOpenReview={openReview}
+                  filter={filter}
+                />
+              </>
             )}
-          </section>
-          <section id="popular">
-            <div className="section-heading">
-              <h2>지금 인기 상품</h2>
-              <p>지금 가장 사랑받는 상품들을 만나보세요.</p>
-              <button onClick={() => setPanel("all")}>
-                더보기 <ChevronRight size={15} />
-              </button>
-            </div>
-            <div className="product-grid">
-              {products
-                .filter((p) => !p.platform && filter(p))
-                .map((p) => card(p, false))}
-            </div>
-            {!products.some((p) => !p.platform && filter(p)) && (
-              <p className="empty">조건에 맞는 인기 상품이 없습니다.</p>
-            )}
-          </section>
-          <LowerSections
-            liked={liked}
-            onToggleLike={toggle}
-            onSelectProduct={setSelected}
-            onJoinDeal={joinDeal}
-            joinedDeals={joinedDeals}
-            onBrowse={browseCollection}
-            onOpenReviews={() => openReview(null)}
-            onOpenReview={openReview}
-            filter={filter}
-          />
-
-        </div>
-      </main>
+          </div>
+        </main>
+      )}
       <StoreFooter
         brand={<Brand />}
         onOpenLogin={() => setPanel("login")}
         onBrowseProducts={() => setPanel("all")}
       />
-      {(panel || selected) && (
+      {panel && (
         <div
           className="overlay"
           onClick={() => {
             setPanel(null);
-            setSelected(null);
           }}
         >
           <section
-            className={"modal " + (selected ? "detail" : "")}
+            className="modal"
             role="dialog"
             aria-modal="true"
-            aria-label={selected ? selected.name : "오렌지스토어"}
+            aria-label="오렌지스토어"
           >
             <button
               className="close"
               onClick={() => {
                 setPanel(null);
-                setSelected(null);
               }}
               aria-label="닫기"
             >
               <X />
             </button>
             <div onClick={(e) => e.stopPropagation()}>
-              {selected ? (
-                <>
-                  <img
-                    className="detail-image"
-                    src={selected.image}
-                    alt={selected.name}
-                  />
-                  <div className="detail-body">
-                    <span className="eyebrow">
-                      ORANGE STORE · {selected.category}
-                    </span>
-                    <h2>{selected.name}</h2>
-                    <p>{selected.desc}</p>
-                    <strong className="price">{won(selected.price)}</strong>
-                    <p className="delivery">
-                      무료배송 · 좋은 상품을 정성껏 보내드려요.
-                    </p>
-                    <div className="detail-actions">
-                      <button className="primary" onClick={() => add(selected)}>
-                        <ShoppingCart size={19} />
-                        장바구니 담기
-                      </button>
-                      <button
-                        className="secondary"
-                        onClick={() => toggle(selected.id)}
-                      >
-                        <Heart
-                          size={21}
-                          fill={
-                            liked.includes(selected.id) ? "#ff6a19" : "none"
-                          }
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : panel === "login" ? (
+              {panel === "login" ? (
                 <>
                   <Orange />
                   <h2>오렌지스토어에 오신 것을 환영해요</h2>
@@ -597,20 +742,38 @@ function App() {
                   <h2>이달의 베스트 리뷰</h2>
                   <p>고객님들의 생생한 상품 이야기</p>
                   <div className="lower-modal-reviews">
-                    {(selectedReview ? [selectedReview] : reviews).map((review) => (
-                      <article className="lower-modal-review" key={review.id}>
-                        <img src={review.image} alt={review.productName} />
-                        <div>
-                          <h3>{review.title}</h3>
-                          <span className="lower-review-stars" aria-label={review.rating + "점"}>★★★★★</span>
-                          <p>{review.body}</p>
-                          <small>{review.author} · {review.productName}</small>
-                          <button className="text-action" onClick={() => setSelected(inventory.find((p) => p.id === review.productId))}>
-                            상품 보러가기 →
-                          </button>
-                        </div>
-                      </article>
-                    ))}
+                    {(selectedReview ? [selectedReview] : reviews).map(
+                      (review) => (
+                        <article className="lower-modal-review" key={review.id}>
+                          <img src={review.image} alt={review.productName} />
+                          <div>
+                            <h3>{review.title}</h3>
+                            <span
+                              className="lower-review-stars"
+                              aria-label={review.rating + "점"}
+                            >
+                              ★★★★★
+                            </span>
+                            <p>{review.body}</p>
+                            <small>
+                              {review.author} · {review.productName}
+                            </small>
+                            <button
+                              className="text-action"
+                              onClick={() =>
+                                setSelected(
+                                  inventory.find(
+                                    (p) => p.id === review.productId,
+                                  ),
+                                )
+                              }
+                            >
+                              상품 보러가기 →
+                            </button>
+                          </div>
+                        </article>
+                      ),
+                    )}
                   </div>
                 </>
               ) : panel === "help" ? (
@@ -634,7 +797,9 @@ function App() {
                       ? `장바구니 (${count})`
                       : panel === "favorites"
                         ? `찜한상품 (${liked.length})`
-                        : panel === "collection" ? collection.title : "전체 상품"}
+                        : panel === "collection"
+                          ? collection.title
+                          : "전체 상품"}
                   </h2>
                   <div className="list-products">
                     {(panel === "collection" ? collection.products : inventory)
@@ -647,9 +812,20 @@ function App() {
                       )
                       .map((p) => (
                         <div className="list-product" key={p.id}>
-                          <img src={p.image} alt={p.name} />
+                          <button
+                            className="list-product-photo"
+                            onClick={() => setSelected(p)}
+                            aria-label={p.name + " 상세보기"}
+                          >
+                            <img src={p.image} alt="" />
+                          </button>
                           <div>
-                            <b>{p.name}</b>
+                            <button
+                              className="list-product-title"
+                              onClick={() => setSelected(p)}
+                            >
+                              {p.name}
+                            </button>
                             <strong>{won(p.price)}</strong>
                             {panel === "cart" ? (
                               <div className="quantity">
@@ -686,16 +862,18 @@ function App() {
                               </button>
                             )}
                           </div>
-                          {(panel === "cart" || panel === "favorites") && <button
-                            aria-label="삭제"
-                            onClick={() =>
-                              panel === "cart"
-                                ? setCart((c) => ({ ...c, [p.id]: 0 }))
-                                : toggle(p.id)
-                            }
-                          >
-                            <X size={17} />
-                          </button>}
+                          {(panel === "cart" || panel === "favorites") && (
+                            <button
+                              aria-label="삭제"
+                              onClick={() =>
+                                panel === "cart"
+                                  ? setCart((c) => ({ ...c, [p.id]: 0 }))
+                                  : toggle(p.id)
+                              }
+                            >
+                              <X size={17} />
+                            </button>
+                          )}
                         </div>
                       ))}
                   </div>

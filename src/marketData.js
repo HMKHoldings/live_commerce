@@ -1,4 +1,5 @@
-﻿export const groupDeals = [
+// Demo campaign deadlines; replace with API campaign endsAt values in production.
+export const groupDeals = [
   {
     id: 11,
     name: "제주 햇감귤 5kg",
@@ -8,7 +9,7 @@
     discount: 37,
     image: "/images/oranges.jpg",
     category: "식품",
-    daysLeft: 3,
+    endsAt: "2026-09-10T23:59:59+09:00",
     participants: 482,
     target: 1000,
   },
@@ -21,7 +22,7 @@
     discount: 36,
     image: "/images/beef.jpg",
     category: "식품",
-    daysLeft: 5,
+    endsAt: "2026-09-12T23:59:59+09:00",
     participants: 723,
     target: 1000,
   },
@@ -34,7 +35,7 @@
     discount: 38,
     image: "/images/serum.jpg",
     category: "뷰티",
-    daysLeft: 5,
+    endsAt: "2026-09-12T23:59:59+09:00",
     participants: 640,
     target: 1000,
   },
@@ -47,7 +48,7 @@
     discount: 41,
     image: "/images/toilet-paper.jpg",
     category: "생활",
-    daysLeft: 4,
+    endsAt: "2026-09-11T23:59:59+09:00",
     participants: 911,
     target: 1000,
   },
