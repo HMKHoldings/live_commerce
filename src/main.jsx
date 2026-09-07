@@ -1,3 +1,6 @@
+import StoreLogin from "./StoreLogin";
+import CheckoutForm from "./CheckoutForm";
+import { StoreProvider, useStore } from "./StoreContext";
 import { assetPath } from "./assetPath";
 import ProductDetail from "./ProductDetail";
 import "./sns-live.css";
@@ -27,133 +30,14 @@ import HeroBanner from "./HeroBanner.jsx";
 import LiveVideo from "./LiveVideo.jsx";
 import StoreFooter from "./StoreFooter.jsx";
 import LowerSections from "./LowerSections.jsx";
-import { groupDeals, bestProducts, reviews } from "./marketData.js";
 
-const photo = (id, w = 650) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`;
-const products = [
-  {
-    id: 1,
-    name: "[키친홈] IH 인덕션 프라이팬 세트",
-    desc: "요리하는 즐거움, 키친홈",
-    price: 89000,
-    image: photo("photo-1556911220-bff31c812dba"),
-    platform: "YouTube",
-    views: "12.4만",
-    likes: 1234,
-    comments: 365,
-    category: "생활",
-  },
-  {
-    id: 2,
-    name: "[브라이트] 비타C 세럼",
-    desc: "환해지는 피부의 시작",
-    price: 29900,
-    image: photo("photo-1608571423902-eed4a5ad8108"),
-    platform: "TikTok",
-    views: "8.7만",
-    likes: 2156,
-    comments: 492,
-    category: "뷰티",
-  },
-  {
-    id: 3,
-    name: "[한우명가] 1++ 한우 선물세트",
-    desc: "특별한 날, 특별한 한우",
-    price: 159000,
-    image: photo("photo-1607623814075-e51df1bdc82f"),
-    platform: "네이버 쇼핑라이브",
-    views: "6.1만",
-    likes: 892,
-    comments: 240,
-    category: "식품",
-  },
-  {
-    id: 4,
-    name: "[홈데이] 호텔식 차렵이불",
-    desc: "포근한 오늘, 더 좋은 내일",
-    price: 49900,
-    image: photo("photo-1631049307264-da0ec9d70304"),
-    platform: "Instagram",
-    views: "4.5만",
-    likes: 1021,
-    comments: 318,
-    category: "생활",
-  },
-  {
-    id: 5,
-    name: "[오렌지키친] 에어프라이어",
-    desc: "더 맛있는 일상의 시작",
-    price: 79000,
-    image: photo("photo-1585515320310-259814833e62"),
-    platform: "TikTok",
-    views: "9.8만",
-    likes: 3412,
-    comments: 520,
-    category: "생활",
-  },
-  {
-    id: 6,
-    name: "GAP 인증 설향 딸기 1kg",
-    desc: "달콤한 제철 딸기",
-    price: 17900,
-    image: photo("photo-1464965911861-746a04b4bca6"),
-    rating: "4.8",
-    reviews: "999+",
-    category: "식품",
-  },
-  {
-    id: 7,
-    name: "무농약 샐러드 채소 1kg",
-    desc: "신선함이 가득한 한 끼",
-    price: 12900,
-    image: photo("photo-1540420773420-3366772f4999"),
-    rating: "4.7",
-    reviews: "532",
-    category: "식품",
-  },
-  {
-    id: 8,
-    name: "오렌지 스페셜티 원두 200g",
-    desc: "깊고 부드러운 맛",
-    price: 15900,
-    image: photo("photo-1447933601403-0c6688de566e"),
-    rating: "4.9",
-    reviews: "386",
-    category: "식품",
-  },
-  {
-    id: 9,
-    name: "프리미엄 호텔 타월 10P",
-    desc: "매일이 호텔처럼",
-    price: 28900,
-    image: photo("photo-1600369672770-985fd30004eb"),
-    rating: "4.8",
-    reviews: "621",
-    category: "생활",
-  },
-  {
-    id: 10,
-    name: "하루 한줌 견과세트 30봉",
-    desc: "건강한 습관",
-    price: 23900,
-    image: photo("photo-1599599810769-bcde5a160d32"),
-    rating: "4.8",
-    reviews: "479",
-    category: "식품",
-  },
-];
-const inventory = [
-  ...new Map(
-    [...products, ...groupDeals, ...bestProducts].map((p) => [p.id, p]),
-  ).values(),
-];
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 function Orange({ small = false }) {
+  const { settings } = useStore();
   return (
     <img
       className={"orange-mascot" + (small ? " small" : "")}
-      src={assetPath("/logo/orange_logo.png")}
+      src={settings.logo}
       alt=""
       width="64"
       height="64"
@@ -161,12 +45,13 @@ function Orange({ small = false }) {
   );
 }
 function Brand() {
+  const { settings } = useStore();
   return (
     <a className="brand" href="./" aria-label="오렌지스토어 홈">
       <Orange />
       <span>
-        <small>좋은 상품이 모이는 곳</small>
-        <strong>오렌지스토어</strong>
+        <small>{settings.tagline}</small>
+        <strong>{settings.brandName}</strong>
       </span>
     </a>
   );
@@ -175,7 +60,10 @@ const socialPlatforms = {
   YouTube: { className: "youtube", icon: assetPath("/png/youtube.png") },
   TikTok: { className: "tiktok", icon: assetPath("/png/tiktok.png") },
   Instagram: { className: "instagram", icon: assetPath("/png/instagram.png") },
-  "네이버 쇼핑라이브": { className: "naver", icon: assetPath("/png/naver.png") },
+  "네이버 쇼핑라이브": {
+    className: "naver",
+    icon: assetPath("/png/naver.png"),
+  },
 };
 
 function Platform({ name }) {
@@ -199,6 +87,16 @@ function Platform({ name }) {
   );
 }
 function App() {
+  const {
+    products,
+    inventory,
+    groupDeals,
+    bestProducts,
+    reviews,
+    settings,
+    connected,
+    refresh,
+  } = useStore();
   const [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [liked, setLiked] = useState([]),
@@ -245,6 +143,11 @@ function App() {
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
+  useEffect(() => {
+    const id = new URLSearchParams(location.search).get("product");
+    const current = inventory.find((p) => String(p.id) === id);
+    setSelectedState((previous) => current || (id ? null : previous));
+  }, [inventory]);
   const notify = (s) => {
     setToast(s);
     window.setTimeout(() => setToast(""), 2600);
@@ -628,7 +531,7 @@ function App() {
             </section>
             {active !== "SNS 라이브" && (
               <>
-                <section id="popular">
+                <section id="popular" hidden={settings.showPopular === false}>
                   <div className="section-heading">
                     <h2>지금 인기 상품</h2>
                     <p>지금 가장 사랑받는 상품들을 만나보세요.</p>
@@ -708,35 +611,7 @@ function App() {
                   <Orange />
                   <h2>오렌지스토어에 오신 것을 환영해요</h2>
                   <p>좋은 상품과 새로운 일상을 만나보세요.</p>
-                  <form
-                    className="login-form"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      notify(
-                        "현재 데모 화면입니다. 계정 로그인은 준비 중이에요.",
-                      );
-                    }}
-                  >
-                    <label>
-                      이메일
-                      <input
-                        type="email"
-                        placeholder="hello@example.com"
-                        required
-                      />
-                    </label>
-                    <label>
-                      비밀번호
-                      <input
-                        type="password"
-                        placeholder="비밀번호를 입력해주세요"
-                        minLength={6}
-                        required
-                      />
-                    </label>
-                    <button className="primary">로그인</button>
-                    <small>데모 스토어 · 실제 계정에 연결되지 않습니다.</small>
-                  </form>
+                  <StoreLogin />
                 </>
               ) : panel === "reviews" ? (
                 <>
@@ -897,6 +772,12 @@ function App() {
                   )}
                   {panel === "cart" && count > 0 && (
                     <div className="cart-total">
+                      <CheckoutForm
+                        cart={cart}
+                        onComplete={() => {
+                          notify("주문이 접수되었습니다");
+                        }}
+                      />
                       <span>총 상품금액</span>
                       <strong>
                         {won(
@@ -906,7 +787,7 @@ function App() {
                           ),
                         )}
                       </strong>
-                      <p>데모 스토어로 실제 결제는 진행되지 않습니다.</p>
+                      <p>온라인 결제 없이 주문을 접수할 수 있습니다.</p>
                     </div>
                   )}
                 </>
@@ -924,4 +805,8 @@ function App() {
     </>
   );
 }
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(
+  <StoreProvider>
+    <App />
+  </StoreProvider>,
+);

@@ -1,16 +1,21 @@
 import { assetPath } from "./assetPath";
-import { heroSlides as slides } from "./heroSlides.jsx";
+import { useStore } from "./StoreContext";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
+export default function HeroBanner(props) {
+  const { banners } = useStore();
+  return banners.length ? <HeroCarousel key={banners.map(b => b.id).join(',')} {...props} slides={banners} /> : null;
+}
+function HeroCarousel({ Orange, Platform, onShop, slides }) {
 const total = slides.length;
 const carouselSlides = [
   { slide: slides[total - 1], index: total - 1, clone: true, key: "before" },
-  ...slides.map((slide, index) => ({ slide, index, clone: false, key: slide.theme })),
+  ...slides.map((slide, index) => ({ slide, index, clone: false, key: slide.id || slide.theme })),
   { slide: slides[0], index: 0, clone: true, key: "after" },
 ];
 
-export default function HeroBanner({ Orange, Platform, onShop }) {
+
   const [position, setPosition] = useState(1);
   const [animate, setAnimate] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(

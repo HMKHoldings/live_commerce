@@ -1,12 +1,13 @@
 import { assetPath } from "./assetPath";
 import React, { useEffect, useRef } from "react";
 import { Shirt, Sparkles, Utensils, PanelsTopLeft, ArrowUpRight } from "lucide-react";
-import { menuCategories } from "./menuCategories";
+import { useStore } from "./StoreContext";
 import "./mega-menu.css";
 
 const icons = { fashion: Shirt, beauty: Sparkles, food: Utensils, living: PanelsTopLeft };
 
 export default function MegaMenu({ onClose, onCategory, onCollection }) {
+  const { categories: menuCategories } = useStore();
   const panel = useRef(null);
   const close = useRef(onClose);
   close.current = onClose;
@@ -37,7 +38,7 @@ export default function MegaMenu({ onClose, onCategory, onCollection }) {
     <div className="mega-menu" id="header-categories" ref={panel} aria-label="전체 카테고리">
       <div className="mega-menu-categories">
         {menuCategories.map(group => {
-          const Icon = icons[group.icon];
+          const Icon = icons[group.icon] || PanelsTopLeft;
           return <section className="mega-menu-column" key={group.title}>
             <h3><button type="button" onClick={() => onCategory(group.category)}><Icon size={21} aria-hidden="true" />{group.title}</button></h3>
             <ul>{group.items.map(item => <li key={item}><button type="button" onClick={() => onCollection(item, group.category)}>{item}</button></li>)}</ul>

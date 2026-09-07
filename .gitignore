@@ -3,3 +3,8 @@ dist/
 *.log
 .env.local
 .tmp/
+
+.env
+.env.server
+.env.*.local
+backend/data/

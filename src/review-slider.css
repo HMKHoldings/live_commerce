@@ -28,7 +28,34 @@
 .review-slider-track .lower-review-card:hover { border-color: #ffb884; background: #fffaf6; }
 .review-slider-track .lower-review-card:focus-visible { outline: 2px solid #ff650d; outline-offset: -3px; }
 .review-slider-track .lower-review-arrow { display: none; }
-.review-slider-track .lower-review-copy > strong { white-space: normal; font-size: 15px; }
+.review-slider-track .lower-review-copy {
+  flex: 1;
+  height: 120px;
+  padding-block: 0;
+  justify-content: center;
+}
+.review-slider-track .lower-review-copy > strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.4;
+  max-height: 2.8em;
+  flex-shrink: 0;
+}
+.review-slider-track .lower-review-stars { flex-shrink: 0; }
+.review-slider-track .lower-review-product {
+  margin-top: 6px;
+  line-height: 18px;
+  flex-shrink: 0;
+}
+.review-slider-track .lower-review-author {
+  margin-top: 3px;
+  line-height: 18px;
+}
 @keyframes review-drift {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }

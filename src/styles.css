@@ -1087,3 +1087,9 @@
     .nav-primary .nav-service { margin-left: 0; padding-left: 22px; }
   }
 }
+
+[hidden] { display: none !important; }
+.banner-copy h1 { white-space: pre-line; }
+.managed-promo-image { position: absolute; right: 0; top: 0; height: 100%; width: 40%; object-fit: cover; }
+
+.banner-title { white-space: pre-line; }

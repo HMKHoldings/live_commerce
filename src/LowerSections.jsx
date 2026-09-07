@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DealProgress from "./DealProgress";
 import "./deal-animation.css";
 import { Check, ChevronRight, Heart, Clock3 } from "lucide-react";
-import { bestProducts, collections, groupDeals, reviews } from "./marketData";
+import { useStore } from "./StoreContext";
 
 const won = (value) => `${value.toLocaleString("ko-KR")}원`;
 
@@ -32,6 +32,7 @@ export default function LowerSections({
   onOpenReview,
   filter,
 }) {
+  const { bestProducts, collections, groupDeals, reviews, settings } = useStore();
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
@@ -42,7 +43,7 @@ export default function LowerSections({
 
   return (
     <>
-      <section id="group-buy" aria-labelledby="group-buy-heading">
+      <section hidden={settings.showGroupDeals === false} id="group-buy" aria-labelledby="group-buy-heading">
         <SectionHeading
           id="group-buy-heading"
           title="진행 중인 공동구매"
@@ -113,7 +114,7 @@ export default function LowerSections({
         )}
       </section>
 
-      <section id="collections" aria-labelledby="collections-heading">
+      <section hidden={settings.showCollections === false} id="collections" aria-labelledby="collections-heading">
         <SectionHeading
           id="collections-heading"
           title="함께 보면 좋은 상품"
@@ -124,7 +125,7 @@ export default function LowerSections({
             <button
               type="button"
               key={collection.id}
-              className={`lower-collection ${collection.id}`}
+              className={`lower-collection ${{peach:"seasonal",blue:"lifestyle",pink:"beauty",mint:"warehouse"}[collection.theme] || "seasonal"}`}
               onClick={() => onBrowse({ title: collection.title, products: collection.products })}
               aria-label={`${collection.title} 바로가기`}
             >
@@ -141,7 +142,7 @@ export default function LowerSections({
         </div>
       </section>
 
-      <section id="reviews" aria-labelledby="reviews-heading">
+      <section hidden={settings.showReviews === false} id="reviews" aria-labelledby="reviews-heading">
         <SectionHeading
           id="reviews-heading"
           title="이달의 베스트 리뷰"
@@ -172,7 +173,7 @@ export default function LowerSections({
         </ReviewSlider>
       </section>
 
-      <section id="best" aria-labelledby="best-heading">
+      <section hidden={settings.showBest === false} id="best" aria-labelledby="best-heading">
         <SectionHeading
           id="best-heading"
           title="베스트 상품"

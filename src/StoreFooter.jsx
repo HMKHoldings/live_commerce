@@ -1,3 +1,5 @@
+import { api } from "./storeApi";
+import { useStore } from "./StoreContext";
 import { assetPath } from "./assetPath";
 import PromoCarousel from "./PromoCarousel.jsx";
 import React, { useEffect, useRef, useState } from "react";
@@ -56,7 +58,11 @@ const information = {
 };
 
 export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
+  const { notices, settings, promos, policies, connected } = useStore();
+  const information = Object.fromEntries(policies.map(p => [p.id, p]));
   const [panel, setPanel] = useState(null);
+  const [inquiryError, setInquiryError] = useState("");
+  const [inquiryBusy, setInquiryBusy] = useState(false);
   const [inquiryComplete, setInquiryComplete] = useState(false);
   const dialogRef = useRef(null);
   const close = () => setPanel(null);
@@ -80,7 +86,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
   const title = panel?.type === "notice"
     ? panel.notice.title
     : panel?.type === "information"
-      ? information[panel.key].title
+      ? (information[panel.key]?.title || "안내")
       : panel?.type === "social"
         ? `${panel.name} 채널 안내`
         : {
@@ -95,38 +101,12 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
   return (
     <>
       <div className="store-bottom wrap">
-        <PromoCarousel>
-          <button type="button" className="store-promo store-coupon" onClick={onOpenLogin}>
-            <span className="store-promo-copy">
-              <strong><Gift className="store-promo-gift" aria-hidden="true" /> 신규 회원 전용<br />10,000원 할인 쿠폰</strong>
-              <span className="store-promo-cta">지금 받기 <ChevronRight aria-hidden="true" /></span>
-            </span>
-            <span className="store-coupon-art" aria-hidden="true">
-              <strong>10,000원</strong>
-              <small>WELCOME</small>
-            </span>
-          </button>
-
-          <button type="button" className="store-promo store-kakao" onClick={() => openPanel({ type: "kakao" })}>
-            <span className="store-promo-copy">
-              <strong>카카오톡 채널 추가하고</strong>
-              <span>특별한 혜택을 받아보세요!</span>
-              <span className="store-promo-cta">지금 추가하기 <ChevronRight aria-hidden="true" /></span>
-            </span>
-            <span className="store-kakao-icon" aria-hidden="true"><img src={assetPath("/png/kakao-channel.png")} alt="" width="88" height="88" /></span>
-          </button>
-
-          <button type="button" className="store-promo store-green" onClick={() => openPanel({ type: "sustainable" })}>
-            <span className="store-promo-copy">
-              <strong>지속 가능한 소비</strong>
-              <span>지구를 위한 작은 실천, 오렌지스토어</span>
-              <span className="store-promo-cta">함께해요 <ChevronRight aria-hidden="true" /></span>
-            </span>
-            <span className="store-leaves" aria-hidden="true"><i /><i /><i /></span>
-          </button>
-        </PromoCarousel>
-
-        <section className="store-service" aria-label="공지사항 및 고객센터">
+        {promos.length > 0 && <PromoCarousel key={promos.map(p=>p.id).join(',')}>
+          {promos.map(p => <button key={p.id} type="button" className={"store-promo store-" + p.theme} onClick={() => p.action === 'login' ? onOpenLogin() : openPanel({type:p.action || 'sustainable'})}>
+            <span className="store-promo-copy"><strong>{p.title}</strong><span>{p.description}</span><span className="store-promo-cta">{p.cta}<ChevronRight /></span></span>
+            {p.image ? <img className="managed-promo-image" src={assetPath(p.image)} alt="" /> : p.theme === 'coupon' ? <span className="store-coupon-art"><strong>10,000원</strong><small>WELCOME</small></span> : p.theme === 'kakao' ? <span className="store-kakao-icon"><img src={assetPath('/png/kakao-channel.png')} alt="" /></span> : <span className="store-leaves"><i/><i/><i/></span>}
+          </button>)}
+        </PromoCarousel>}        <section className="store-service" aria-label="공지사항 및 고객센터">
           <div className="store-notices">
             <div className="store-heading">
               <h2>공지사항</h2>
@@ -146,8 +126,8 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
 
           <div className="store-contact">
             <h2>고객센터</h2>
-            <strong>1588-1234</strong>
-            <p>평일 09:00 – 18:00<br />(주말 · 공휴일 휴무)</p>
+            <strong>{settings.phone}</strong>
+            <p>{settings.hours}<br />(주말 · 공휴일 휴무)</p>
           </div>
 
           <div className="store-help-links">
@@ -170,14 +150,14 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
           <div className="store-footer-brand">{brand}</div>
           <div className="store-company">
 
-            <p>(주)오렌지스토어 <span>|</span> 대표이사 김오렌지 <span>|</span> 사업자등록번호 123-45-67890 <span>|</span> 통신판매업신고 제2024-서울강남-01234호</p>
-            <p>서울특별시 강남구 테헤란로 123, 오렌지타워 10층 <span>|</span> 고객센터 1588-1234</p>
-            <small>© 2026 ORANGE STORE. All rights reserved.</small>
+            <p>{settings.company} · {settings.companyInfo}</p>
+            <p>{settings.address} · 고객센터 {settings.phone}</p>
+            <small>{settings.copyright}</small>
           </div>
           <div className="store-social">
             <div className="store-social-links" aria-label="소셜 미디어 채널">
               {socialChannels.map((channel) => (
-                <button type="button" key={channel.name} aria-label={`${channel.name} 채널 안내`} onClick={() => openPanel({ type: "social", name: channel.name })}>
+                <button type="button" key={channel.name} aria-label={`${channel.name} 채널 안내`} onClick={() => settings[channel.name.toLowerCase()] ? window.open(settings[channel.name.toLowerCase()], "_blank", "noopener,noreferrer") : openPanel({ type: "social", name: channel.name })}>
                   <img src={channel.image} alt="" width="26" height="26" loading="lazy" />
                 </button>
               ))}
@@ -200,13 +180,13 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
 
           {panel?.type === "sustainable" && <><p>우리의 작은 선택이 내일을 바꿔요. 일상에서 함께 실천해 보세요.</p><ul className="store-dialog-list"><li>필요한 만큼 구매해 음식물 쓰레기를 줄여요.</li><li>일회용품 대신 오래 쓸 수 있는 생활용품을 골라요.</li><li>포장재는 소재별로 분리해 배출해요.</li></ul><button type="button" className="store-dialog-action" onClick={browse}>상품 둘러보기 <ChevronRight aria-hidden="true" /></button></>}
 
-          {panel?.type === "inquiry" && <><p className="store-dialog-note">문의 화면을 체험해 보세요. 입력한 내용은 전송되거나 저장되지 않습니다.</p><form className="store-inquiry-form" onSubmit={(event) => { event.preventDefault(); setInquiryComplete(true); event.currentTarget.reset(); }}><label>이메일<input type="email" name="email" autoComplete="email" placeholder="example@email.com" required /></label><label>문의 내용<textarea name="message" placeholder="궁금한 내용을 입력해 주세요." rows="4" required /></label><button type="submit" className="store-dialog-action">문의 작성 체험</button>{inquiryComplete && <p className="store-form-success" role="status">문의 작성을 체험했어요. 실제로 접수되거나 전송된 내용은 없습니다.</p>}</form></>}
+          {panel?.type === "inquiry" && <><p className="store-dialog-note">입력한 이메일과 문의 내용은 관리자에게 전달됩니다.</p><form className="store-inquiry-form" onSubmit={async (event) => { event.preventDefault(); if(inquiryBusy)return; const form=event.currentTarget; const data=new FormData(form); setInquiryBusy(true); setInquiryError(''); try { if(!connected)throw Error('문의 서버에 연결할 수 없습니다.'); await api('/contact',{method:'POST',body:{email:data.get('email'),body:data.get('message')}});setInquiryComplete(true);form.reset(); } catch(error){setInquiryError(error.message);} finally{setInquiryBusy(false);} }}><label>이메일<input type="email" name="email" autoComplete="email" placeholder="example@email.com" required /></label><label>문의 내용<textarea name="message" placeholder="궁금한 내용을 입력해 주세요." rows="4" required /></label><button type="submit" className="store-dialog-action">{inquiryBusy ? "접수 중…" : "문의 접수"}</button>{inquiryError && <p role="alert">{inquiryError}</p>}{inquiryComplete && <p className="store-form-success" role="status">문의가 접수되었습니다.</p>}</form></>}
 
           {panel?.type === "faq" && <div className="store-faq"><details open><summary>실제로 상품을 주문할 수 있나요?</summary><p>현재는 데모 쇼핑몰입니다. 상품 탐색과 장바구니를 체험할 수 있으며, 실제 결제와 주문은 진행되지 않습니다.</p></details><details><summary>배송 현황은 어디서 확인하나요?</summary><p>정식 서비스에서는 배송조회에서 확인할 수 있어요. 현재는 실제 주문과 배송 정보가 연결되지 않았습니다.</p></details><details><summary>신규 회원 쿠폰은 어떻게 받나요?</summary><p>신규 회원 배너에서 로그인 화면을 열어볼 수 있어요. 현재는 데모로 실제 회원가입과 쿠폰 발급은 진행되지 않습니다.</p></details><details><summary>고객센터 운영 시간이 궁금해요.</summary><p>평일 09:00–18:00로 안내하고 있으며 주말과 공휴일은 휴무입니다. 현재 실제 상담 서비스는 연결되지 않았습니다.</p></details></div>}
 
           {panel?.type === "tracking" && <><p>조회할 배송 내역이 없습니다.</p><p className="store-dialog-note">현재는 데모 쇼핑몰로 실제 주문이 생성되지 않으며, 배송 정보도 연결되지 않았습니다.</p><button type="button" className="store-dialog-action" onClick={browse}>상품 둘러보기 <ChevronRight aria-hidden="true" /></button></>}
 
-          {panel?.type === "information" && <p>{information[panel.key].body}</p>}
+          {panel?.type === "information" && <p>{(information[panel.key]?.body || "안내 내용이 준비 중입니다.")}</p>}
 
           {panel?.type === "social" && <><p>오렌지스토어 {panel.name} 채널은 준비 중입니다. 공식 계정이 연결되면 라이브 소식과 추천 상품을 만나볼 수 있어요.</p><p className="store-dialog-note">현재 연결된 공식 채널이 없습니다.</p></>}
         </div>

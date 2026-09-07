@@ -72,8 +72,8 @@ export default function LiveVideo({ product, Platform, onOpen }) {
     <div className="product-image live-video-frame">
       <video
         ref={videoRef}
-        src={loaded ? assetPath(`/videos/${clip}.mp4`) : undefined}
-        poster={assetPath(`/videos/${clip}.jpg`)}
+        src={loaded ? (product.videoUrl || assetPath(`/videos/${clip}.mp4`)) : undefined}
+        poster={product.poster || assetPath(`/videos/${clip}.jpg`)}
         muted={muted}
         loop
         playsInline
