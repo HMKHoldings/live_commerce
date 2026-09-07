@@ -1,4 +1,4 @@
-# Orange Market
+# Orange Store
 
 React va zamonaviy CSS yordamida yaratilgan, berilgan rasmga asoslangan responsive bosh sahifa.
 

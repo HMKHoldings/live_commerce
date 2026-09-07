@@ -137,7 +137,7 @@ export default function HeroBanner({ Orange, Platform, onShop }) {
       ref={carouselRef}
       role="region"
       aria-roledescription="carousel"
-      aria-label="오렌지 마켓 추천 배너"
+      aria-label="오렌지스토어 추천 배너"
       tabIndex={0}
       onKeyDown={handleKeyDown}
       onFocusCapture={() => setFocusPaused(true)}
@@ -207,7 +207,7 @@ export default function HeroBanner({ Orange, Platform, onShop }) {
                       <div className="banner-bag" aria-hidden="true">
                         <span className="banner-bag-handle" />
                         <Orange small />
-                        <b>오렌지 마켓</b>
+                        <b>오렌지스토어</b>
                       </div>
                       <div className="banner-phone">
                         <span className="banner-phone-notch" />
@@ -218,7 +218,7 @@ export default function HeroBanner({ Orange, Platform, onShop }) {
                           </button>
                         </div>
                       </div>
-                      <p className="banner-art-note">좋은 상품은<br />언제나 여기,<br />오렌지 마켓!</p>
+                      <p className="banner-art-note">좋은 상품은<br />언제나 여기,<br />오렌지스토어!</p>
                     </>
                   ) : (
                     <>

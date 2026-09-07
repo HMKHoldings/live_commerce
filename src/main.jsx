@@ -15,6 +15,7 @@ import {
   Check,
 } from "lucide-react";
 import "./styles.css";
+import "./mascot.css";
 import "./lower-sections.css";
 import "./store-footer.css";
 import "./hero-banner.css";
@@ -142,19 +143,22 @@ const inventory = [...new Map([...products, ...groupDeals, ...bestProducts].map(
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 function Orange({ small = false }) {
   return (
-    <span className={"orange-symbol " + (small ? "small" : "")}>
-      <i />
-      <b />
-    </span>
+    <img
+      className={"orange-mascot" + (small ? " small" : "")}
+      src="/logo/orange_logo.png"
+      alt=""
+      width="64"
+      height="64"
+    />
   );
 }
 function Brand() {
   return (
-    <a className="brand" href="./" aria-label="오렌지 마켓 홈">
+    <a className="brand" href="./" aria-label="오렌지스토어 홈">
       <Orange />
       <span>
         <small>좋은 상품이 모이는 곳</small>
-        <strong>오렌지 마켓</strong>
+        <strong>오렌지스토어</strong>
       </span>
     </a>
   );
@@ -368,7 +372,7 @@ function App() {
               ].map((n) => (
                 <button
                   key={n}
-                  className={active === n ? "active" : ""}
+                  className={[active === n ? "active" : "", n === "공유창고" ? "nav-service" : "", n === "신상품" ? "nav-shopping-end" : ""].filter(Boolean).join(" ")}
                   onClick={() =>
                     n === "고객센터" ? setPanel("help") : navigate(n)
                   }
@@ -437,7 +441,7 @@ function App() {
                     : active}
               </h2>
               <p>
-                지금 SNS에서 화제인 그 상품! 오렌지 마켓에서 바로 만나보세요.
+                지금 SNS에서 화제인 그 상품! 오렌지스토어에서 바로 만나보세요.
               </p>
               <button
                 onClick={() => {
@@ -504,7 +508,7 @@ function App() {
             className={"modal " + (selected ? "detail" : "")}
             role="dialog"
             aria-modal="true"
-            aria-label={selected ? selected.name : "오렌지 마켓"}
+            aria-label={selected ? selected.name : "오렌지스토어"}
           >
             <button
               className="close"
@@ -526,7 +530,7 @@ function App() {
                   />
                   <div className="detail-body">
                     <span className="eyebrow">
-                      ORANGE MARKET · {selected.category}
+                      ORANGE STORE · {selected.category}
                     </span>
                     <h2>{selected.name}</h2>
                     <p>{selected.desc}</p>
@@ -556,7 +560,7 @@ function App() {
               ) : panel === "login" ? (
                 <>
                   <Orange />
-                  <h2>오렌지 마켓에 오신 것을 환영해요</h2>
+                  <h2>오렌지스토어에 오신 것을 환영해요</h2>
                   <p>좋은 상품과 새로운 일상을 만나보세요.</p>
                   <form
                     className="login-form"
@@ -612,7 +616,7 @@ function App() {
               ) : panel === "help" ? (
                 <>
                   <h2>무엇을 도와드릴까요?</h2>
-                  <p>오렌지 마켓 고객센터</p>
+                  <p>오렌지스토어 고객센터</p>
                   <div className="help-box">
                     <b>주문 및 배송 안내</b>
                     <p>상품 상세 페이지에서 배송 정보를 확인할 수 있어요.</p>

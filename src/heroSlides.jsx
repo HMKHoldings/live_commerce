@@ -6,8 +6,8 @@ export const heroSlides = [
     category: "전체",
     label: "SNS 라이브 쇼핑",
     eyebrow: <>SNS에서 만난 그 <em>상품,</em></>,
-    title: <><span>좋아하는 <em>SNS 라이브</em>를 보고,</span><br /><span><em>오렌지 마켓</em>에서 바로 쇼핑하세요!</span></>,
-    description: "SNS 속 핫한 상품을, 오렌지 마켓에서 더 편하고 안전하게 만나보세요.",
+    title: <><span>좋아하는 <em>SNS 라이브</em>를 보고,</span><br /><span><em>오렌지스토어</em>에서 바로 쇼핑하세요!</span></>,
+    description: "SNS 속 핫한 상품을, 오렌지스토어에서 더 편하고 안전하게 만나보세요.",
     cta: "지금 쇼핑하기",
   },
   {

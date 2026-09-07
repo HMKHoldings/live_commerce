@@ -1,16 +1,17 @@
-# Live preview footage
+﻿# Active live preview footage
 
-Downloaded from Pexels on 2026-09-06 under the [Pexels license](https://www.pexels.com/license/).
-These are illustrative stock previews, not endorsements or actual broadcasts of the listed products. Cards are labeled “샘플 영상” (sample video).
+Downloaded from Pexels on 2026-09-06 and 2026-09-07 under the [Pexels license](https://www.pexels.com/license/).
 
-| Local file | Original |
-| --- | --- |
-| cookware.mp4 | https://www.pexels.com/video/a-girl-making-a-cooking-vlog-7963319/ |
-| skincare.mp4 | https://www.pexels.com/video/a-young-woman-talking-while-showing-a-skincare-product-8075696/ |
-| food.mp4 | https://www.pexels.com/video/woman-presenting-beauty-products-8075701/ |
-| home.mp4 | https://www.pexels.com/video/a-woman-blogging-while-doing-online-selling-12433256/ |
-| kitchen.mp4 | https://www.pexels.com/video/a-woman-showing-her-skin-care-products-8075152/ |
+These are illustrative sample videos, not endorsements or actual broadcasts of the products listed in the demo. Presenter nationality is not asserted.
 
-Clips are trimmed to at most 14 seconds, cropped to 540×810, and encoded as H.264 MP4 at 24 fps with fast-start metadata. Matching JPEG posters are extracted from each video. Audio, where present in the original, is retained; clips start muted. Silent clips have no sound toggle.
+| Card | Video | Source | Segment |
+| --- | --- | --- | --- |
+| 1 | fashion-presenter.mp4 | https://www.pexels.com/video/a-woman-doing-online-selling-12433201/ | First 12 seconds |
+| 2 | seated-serum-review.mp4 | https://www.pexels.com/video/a-woman-doing-a-product-review-4912133/ | From 7 seconds, up to 10 seconds |
+| 3 | shirt-product-presenter.mp4 | https://www.pexels.com/video/a-woman-showing-her-skin-care-products-8075152/ | From 7 seconds, up to 12 seconds |
+| 4 | seated-makeup-demo.mp4 | https://www.pexels.com/video/women-doing-a-makeup-vlog-6944273/ | First 10 seconds |
+| 5 | seated-cosmetics-review.mp4 | https://www.pexels.com/video/a-woman-making-a-product-review-7514332/ | First 10 seconds |
 
-Updated presenter selection: every preview features a woman demonstrating food, skincare, or clothing. Nationality and Korean-language speech are not verified. Category filenames identify demo card slots, not the products shown in the stock footage.
+Each MP4 has a matching JPEG poster with the same basename. Videos use 640x960 H.264 at 24 fps with fast-start metadata. Original audio is retained where present; previews start muted. Card 4 features two seated women demonstrating makeup together.
+
+The active mapping is in `src/LiveVideo.jsx`. Unused preview videos and their posters were removed from this directory.

@@ -1,4 +1,4 @@
-﻿import React, { Children, useEffect, useRef, useState } from "react";
+import React, { Children, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import "./promo-carousel.css";
 
@@ -92,7 +92,7 @@ export default function PromoCarousel({ children }) {
     <section
       ref={root}
       className="promo-carousel"
-      aria-label="오렌지 마켓 혜택"
+      aria-label="오렌지스토어 혜택"
       aria-roledescription="캐러셀"
       onPointerEnter={(event) => {
         if (event.pointerType === "mouse") setHovered(true);

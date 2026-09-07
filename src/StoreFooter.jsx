@@ -6,7 +6,7 @@ const notices = [
   {
     title: "[이벤트] 5월 가정의 달 특별 할인 이벤트 안내",
     date: "2024.05.01",
-    body: "소중한 가족에게 마음을 전하는 선물을 만나보세요. 식품부터 생활용품까지, 오렌지 마켓의 다양한 상품을 한자리에서 둘러볼 수 있어요.",
+    body: "소중한 가족에게 마음을 전하는 선물을 만나보세요. 식품부터 생활용품까지, 오렌지스토어의 다양한 상품을 한자리에서 둘러볼 수 있어요.",
   },
   {
     title: "[안내] 일부 지역 배송 지연 안내",
@@ -30,7 +30,7 @@ const socialChannels = [
 const information = {
   terms: {
     title: "이용약관 안내",
-    body: "오렌지 마켓은 쇼핑몰 화면을 체험하는 데모입니다. 회원가입, 주문, 결제는 실제로 처리되지 않습니다. 정식 서비스의 이용약관은 운영 시 별도로 안내될 예정입니다.",
+    body: "오렌지스토어은 쇼핑몰 화면을 체험하는 데모입니다. 회원가입, 주문, 결제는 실제로 처리되지 않습니다. 정식 서비스의 이용약관은 운영 시 별도로 안내될 예정입니다.",
   },
   privacy: {
     title: "개인정보처리방침 안내",
@@ -85,7 +85,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
             inquiry: "1:1 문의",
             faq: "자주 묻는 질문",
             tracking: "배송 조회",
-          }[panel?.type] || "오렌지 마켓 안내";
+          }[panel?.type] || "오렌지스토어 안내";
 
   return (
     <>
@@ -114,7 +114,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
           <button type="button" className="store-promo store-green" onClick={() => openPanel({ type: "sustainable" })}>
             <span className="store-promo-copy">
               <strong>지속 가능한 소비</strong>
-              <span>지구를 위한 작은 실천, 오렌지 마켓</span>
+              <span>지구를 위한 작은 실천, 오렌지스토어</span>
               <span className="store-promo-cta">함께해요 <ChevronRight aria-hidden="true" /></span>
             </span>
             <span className="store-leaves" aria-hidden="true"><i /><i /><i /></span>
@@ -162,9 +162,9 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
                 <button key={key} type="button" onClick={() => openPanel({ type: "information", key })}>{label}</button>
               ))}
             </nav>
-            <p>(주)오렌지마켓 <span>|</span> 대표이사 김오렌지 <span>|</span> 사업자등록번호 123-45-67890 <span>|</span> 통신판매업신고 제2024-서울강남-01234호</p>
+            <p>(주)오렌지스토어 <span>|</span> 대표이사 김오렌지 <span>|</span> 사업자등록번호 123-45-67890 <span>|</span> 통신판매업신고 제2024-서울강남-01234호</p>
             <p>서울특별시 강남구 테헤란로 123, 오렌지타워 10층 <span>|</span> 고객센터 1588-1234</p>
-            <small>© 2026 ORANGE MARKET. All rights reserved.</small>
+            <small>© 2026 ORANGE STORE. All rights reserved.</small>
           </div>
           <div className="store-social">
             <div className="store-social-links" aria-label="소셜 미디어 채널">
@@ -174,7 +174,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
                 </button>
               ))}
             </div>
-            <p>일상이 더 특별해지는<br /><strong>오렌지 마켓</strong></p>
+            <p>일상이 더 특별해지는<br /><strong>오렌지스토어</strong></p>
           </div>
         </div>
       </footer>
@@ -188,7 +188,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
 
           {panel?.type === "notice" && <><p className="store-dialog-note">{panel.notice.date} · 데모 공지</p><p>{panel.notice.body}</p></>}
 
-          {panel?.type === "kakao" && <><p>오렌지 마켓의 카카오톡 채널을 준비하고 있어요. 공식 채널이 연결되면 새로운 소식과 혜택을 안내해 드릴게요.</p><p className="store-dialog-note">현재는 데모 화면으로 채널 추가가 진행되지 않습니다.</p></>}
+          {panel?.type === "kakao" && <><p>오렌지스토어의 카카오톡 채널을 준비하고 있어요. 공식 채널이 연결되면 새로운 소식과 혜택을 안내해 드릴게요.</p><p className="store-dialog-note">현재는 데모 화면으로 채널 추가가 진행되지 않습니다.</p></>}
 
           {panel?.type === "sustainable" && <><p>우리의 작은 선택이 내일을 바꿔요. 일상에서 함께 실천해 보세요.</p><ul className="store-dialog-list"><li>필요한 만큼 구매해 음식물 쓰레기를 줄여요.</li><li>일회용품 대신 오래 쓸 수 있는 생활용품을 골라요.</li><li>포장재는 소재별로 분리해 배출해요.</li></ul><button type="button" className="store-dialog-action" onClick={browse}>상품 둘러보기 <ChevronRight aria-hidden="true" /></button></>}
 
@@ -200,7 +200,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
 
           {panel?.type === "information" && <p>{information[panel.key].body}</p>}
 
-          {panel?.type === "social" && <><p>오렌지 마켓 {panel.name} 채널은 준비 중입니다. 공식 계정이 연결되면 라이브 소식과 추천 상품을 만나볼 수 있어요.</p><p className="store-dialog-note">현재 연결된 공식 채널이 없습니다.</p></>}
+          {panel?.type === "social" && <><p>오렌지스토어 {panel.name} 채널은 준비 중입니다. 공식 계정이 연결되면 라이브 소식과 추천 상품을 만나볼 수 있어요.</p><p className="store-dialog-note">현재 연결된 공식 채널이 없습니다.</p></>}
         </div>
       </dialog>
     </>

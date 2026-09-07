@@ -18,3 +18,9 @@ Local demo assets used by the added homepage sections. Images are served from `/
 - `pans.webp`: https://http2.mlstatic.com/D_NQ_NP_688836-MLA102446810127_122025-O.webp
 - `nuts.jpg`: https://www.nutsinbulk.ie/files/items/mixed/mixed_nuts_with_peanuts.jpg
 
+
+## Orange Store mascot
+
+- Asset: `orange-mascot.png`
+- Generated with the built-in image_gen tool for this project.
+- Prompt: Create an original friendly orange fruit mascot for an ecommerce logo. A round bright orange with subtle peel texture, simple large cheerful cartoon eyes and a small warm smile, one fresh green leaf and short stem. Polished soft 3D illustration, welcoming and clean, easy to recognize at 60px. This is a new original character, no references to existing characters. Single isolated fruit, no body or limbs, no text, no scenery. True transparent alpha background, square canvas, full fruit and leaf visible filling about 90% of frame.

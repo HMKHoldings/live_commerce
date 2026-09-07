@@ -3,11 +3,11 @@ import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import "./live-video.css";
 
 const clips = {
-  1: "cookware",
-  2: "skincare",
-  3: "food",
-  4: "home",
-  5: "kitchen",
+  1: "fashion-presenter",
+  2: "seated-serum-review",
+  3: "shirt-product-presenter",
+  4: "seated-makeup-demo",
+  5: "seated-cosmetics-review",
 };
 
 export default function LiveVideo({ product, Platform, onOpen }) {
