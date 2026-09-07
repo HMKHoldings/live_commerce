@@ -1,3 +1,4 @@
+import { assetPath } from "./assetPath";
 import ProductDetail from "./ProductDetail";
 import "./sns-live.css";
 import MegaMenu from "./MegaMenu";
@@ -152,7 +153,7 @@ function Orange({ small = false }) {
   return (
     <img
       className={"orange-mascot" + (small ? " small" : "")}
-      src="/logo/orange_logo.png"
+      src={assetPath("/logo/orange_logo.png")}
       alt=""
       width="64"
       height="64"
@@ -171,10 +172,10 @@ function Brand() {
   );
 }
 const socialPlatforms = {
-  YouTube: { className: "youtube", icon: "/png/youtube.png" },
-  TikTok: { className: "tiktok", icon: "/png/tiktok.png" },
-  Instagram: { className: "instagram", icon: "/png/instagram.png" },
-  "네이버 쇼핑라이브": { className: "naver", icon: "/png/naver.png" },
+  YouTube: { className: "youtube", icon: assetPath("/png/youtube.png") },
+  TikTok: { className: "tiktok", icon: assetPath("/png/tiktok.png") },
+  Instagram: { className: "instagram", icon: assetPath("/png/instagram.png") },
+  "네이버 쇼핑라이브": { className: "naver", icon: assetPath("/png/naver.png") },
 };
 
 function Platform({ name }) {

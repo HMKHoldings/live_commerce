@@ -1,3 +1,4 @@
+import { assetPath } from "./assetPath";
 import { heroSlides as slides } from "./heroSlides.jsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
@@ -203,7 +204,7 @@ export default function HeroBanner({ Orange, Platform, onShop }) {
                 <div className="banner-art">
                   {slide.theme === "orange" ? (
                     <>
-                      <img className="banner-photo" src="/images/oranges.jpg" alt="싱싱한 오렌지" draggable="false" />
+                      <img className="banner-photo" src={assetPath("/images/oranges.jpg")} alt="싱싱한 오렌지" draggable="false" />
                       <div className="banner-bag" aria-hidden="true">
                         <span className="banner-bag-handle" />
                         <Orange small />

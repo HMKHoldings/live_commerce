@@ -1,3 +1,4 @@
+import { assetPath } from "./assetPath";
 import PromoCarousel from "./PromoCarousel.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import { BadgeHelp, ChevronRight, Gift, MessageCircle, Truck, X } from "lucide-react";
@@ -21,10 +22,10 @@ const notices = [
 ];
 
 const socialChannels = [
-  { name: "YouTube", image: "/png/youtube.png" },
-  { name: "Instagram", image: "/png/instagram.png" },
-  { name: "TikTok", image: "/png/tiktok.png" },
-  { name: "Naver", image: "/png/naver.png" },
+  { name: "YouTube", image: assetPath("/png/youtube.png") },
+  { name: "Instagram", image: assetPath("/png/instagram.png") },
+  { name: "TikTok", image: assetPath("/png/tiktok.png") },
+  { name: "Naver", image: assetPath("/png/naver.png") },
 ];
 
 const information = {
@@ -112,7 +113,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
               <span>특별한 혜택을 받아보세요!</span>
               <span className="store-promo-cta">지금 추가하기 <ChevronRight aria-hidden="true" /></span>
             </span>
-            <span className="store-kakao-icon" aria-hidden="true"><img src="/png/kakao-channel.png" alt="" width="88" height="88" /></span>
+            <span className="store-kakao-icon" aria-hidden="true"><img src={assetPath("/png/kakao-channel.png")} alt="" width="88" height="88" /></span>
           </button>
 
           <button type="button" className="store-promo store-green" onClick={() => openPanel({ type: "sustainable" })}>

@@ -1,3 +1,4 @@
+import { assetPath } from "./assetPath";
 import React, { useEffect, useRef, useState } from "react";
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import "./live-video.css";
@@ -71,8 +72,8 @@ export default function LiveVideo({ product, Platform, onOpen }) {
     <div className="product-image live-video-frame">
       <video
         ref={videoRef}
-        src={loaded ? `/videos/${clip}.mp4` : undefined}
-        poster={`/videos/${clip}.jpg`}
+        src={loaded ? assetPath(`/videos/${clip}.mp4`) : undefined}
+        poster={assetPath(`/videos/${clip}.jpg`)}
         muted={muted}
         loop
         playsInline
