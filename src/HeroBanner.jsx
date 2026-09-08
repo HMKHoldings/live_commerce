@@ -5,16 +5,26 @@ import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 export default function HeroBanner(props) {
   const { banners } = useStore();
-  return banners.length ? <HeroCarousel key={banners.map(b => b.id).join(',')} {...props} slides={banners} /> : null;
+  return banners.length ? (
+    <HeroCarousel
+      key={banners.map((b) => b.id).join(",")}
+      {...props}
+      slides={banners}
+    />
+  ) : null;
 }
 function HeroCarousel({ Orange, Platform, onShop, slides }) {
-const total = slides.length;
-const carouselSlides = [
-  { slide: slides[total - 1], index: total - 1, clone: true, key: "before" },
-  ...slides.map((slide, index) => ({ slide, index, clone: false, key: slide.id || slide.theme })),
-  { slide: slides[0], index: 0, clone: true, key: "after" },
-];
-
+  const total = slides.length;
+  const carouselSlides = [
+    { slide: slides[total - 1], index: total - 1, clone: true, key: "before" },
+    ...slides.map((slide, index) => ({
+      slide,
+      index,
+      clone: false,
+      key: slide.id || slide.theme,
+    })),
+    { slide: slides[0], index: 0, clone: true, key: "after" },
+  ];
 
   const [position, setPosition] = useState(1);
   const [animate, setAnimate] = useState(true);
@@ -45,40 +55,50 @@ const carouselSlides = [
       setAnimate(false);
       positionRef.current = next;
       setPosition(next);
-      jumpFrames.current = [requestAnimationFrame(() => {
-        jumpFrames.current.push(requestAnimationFrame(() => {
-          setAnimate(true);
-          movingRef.current = false;
-          jumpFrames.current = [];
-        }));
-      })];
+      jumpFrames.current = [
+        requestAnimationFrame(() => {
+          jumpFrames.current.push(
+            requestAnimationFrame(() => {
+              setAnimate(true);
+              movingRef.current = false;
+              jumpFrames.current = [];
+            }),
+          );
+        }),
+      ];
     } else {
       movingRef.current = false;
     }
   }, []);
 
-  const goTo = useCallback((next, manual = true) => {
-    if (manual) setNavigation((value) => value + 1);
-    if (movingRef.current || next === positionRef.current) return;
+  const goTo = useCallback(
+    (next, manual = true) => {
+      if (manual) setNavigation((value) => value + 1);
+      if (movingRef.current || next === positionRef.current) return;
 
-    if (reducedMotion) {
-      const normalized = ((next - 1 + total) % total) + 1;
-      positionRef.current = normalized;
-      setPosition(normalized);
-      return;
-    }
+      if (reducedMotion) {
+        const normalized = ((next - 1 + total) % total) + 1;
+        positionRef.current = normalized;
+        setPosition(normalized);
+        return;
+      }
 
-    movingRef.current = true;
-    positionRef.current = next;
-    setPosition(next);
-    // Also recover if a browser cancels transitionend after switching tabs.
-    window.clearTimeout(transitionTimer.current);
-    transitionTimer.current = window.setTimeout(finishTransition, 1100);
-  }, [finishTransition, reducedMotion]);
+      movingRef.current = true;
+      positionRef.current = next;
+      setPosition(next);
+      // Also recover if a browser cancels transitionend after switching tabs.
+      window.clearTimeout(transitionTimer.current);
+      transitionTimer.current = window.setTimeout(finishTransition, 1100);
+    },
+    [finishTransition, reducedMotion],
+  );
 
-  const step = useCallback((direction, manual = true) => {
-    goTo(positionRef.current + direction, manual);
-  }, [goTo]);
+  const step = useCallback(
+    (direction, manual = true) => {
+      goTo(positionRef.current + direction, manual);
+    },
+    [goTo],
+  );
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -89,7 +109,8 @@ const carouselSlides = [
     };
     const updateVisibility = () => setHidden(document.hidden);
     const pauseOnPointerEnter = (event) => {
-      if (event.pointerType === "mouse" || event.pointerType === "pen") setHovered(true);
+      if (event.pointerType === "mouse" || event.pointerType === "pen")
+        setHovered(true);
     };
     const resumeOnPointerLeave = () => setHovered(false);
     // Listen on the region itself: replacing a hovered Play/Pause SVG can
@@ -148,14 +169,18 @@ const carouselSlides = [
       onKeyDown={handleKeyDown}
       onFocusCapture={() => setFocusPaused(true)}
       onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setFocusPaused(false);
+        if (!event.currentTarget.contains(event.relatedTarget))
+          setFocusPaused(false);
       }}
       onTouchStart={(event) => {
-        touchStart.current = event.touches.length === 1
-          ? { x: event.touches[0].clientX, y: event.touches[0].clientY }
-          : null;
+        touchStart.current =
+          event.touches.length === 1
+            ? { x: event.touches[0].clientX, y: event.touches[0].clientY }
+            : null;
       }}
-      onTouchCancel={() => { touchStart.current = null; }}
+      onTouchCancel={() => {
+        touchStart.current = null;
+      }}
       onTouchEnd={(event) => {
         if (!touchStart.current || !event.changedTouches.length) return;
         const dx = event.changedTouches[0].clientX - touchStart.current.x;
@@ -174,7 +199,11 @@ const carouselSlides = [
           ...(!animate || reducedMotion ? { transition: "none" } : {}),
         }}
         onTransitionEnd={(event) => {
-          if (event.target === event.currentTarget && event.propertyName === "transform") finishTransition();
+          if (
+            event.target === event.currentTarget &&
+            event.propertyName === "transform"
+          )
+            finishTransition();
         }}
       >
         {carouselSlides.map(({ slide, index, clone, key }, trackIndex) => {
@@ -196,20 +225,45 @@ const carouselSlides = [
                   <Heading className="banner-title">{slide.title}</Heading>
                   {slide.theme === "orange" && (
                     <div className="banner-platforms">
-                      {["TikTok", "YouTube", "네이버 쇼핑라이브", "Instagram"].map((name) => (
+                      {[
+                        "TikTok",
+                        "YouTube",
+                        "네이버 쇼핑라이브",
+                        "Instagram",
+                      ].map((name) => (
                         <Platform key={name} name={name} />
                       ))}
                     </div>
                   )}
                   <p className="banner-description">{slide.description}</p>
-                  <button className="banner-cta" type="button" onClick={() => onShop(slide.category)}>
-                    {slide.cta}<ChevronRight size={18} aria-hidden="true" />
+                  <button
+                    className="banner-cta"
+                    type="button"
+                    onClick={() => onShop(slide.category)}
+                  >
+                    {slide.cta}
+                    <ChevronRight size={18} aria-hidden="true" />
                   </button>
                 </div>
                 <div className="banner-art">
                   {slide.theme === "orange" ? (
                     <>
-                      <img className="banner-photo" src={assetPath("/images/oranges.jpg")} alt="싱싱한 오렌지" draggable="false" />
+                      <div className="banner-commerce-art" aria-hidden="true">
+                        <span className="banner-orbit banner-orbit-one" />
+                        <span className="banner-orbit banner-orbit-two" />
+                        <div className="banner-floating-card card-delivery">
+                          <small>FREE DELIVERY</small>
+                          <strong>오늘도 무료배송</strong>
+                        </div>
+                        <div className="banner-floating-card card-pick">
+                          <small>ORANGE PICK</small>
+                          <strong>매일 새로운 발견</strong>
+                        </div>
+                        <div className="banner-package">
+                          <span>ORANGE</span>
+                          <b>STORE</b>
+                        </div>
+                      </div>
                       <div className="banner-bag" aria-hidden="true">
                         <span className="banner-bag-handle" />
                         <Orange small />
@@ -218,18 +272,43 @@ const carouselSlides = [
                       <div className="banner-phone">
                         <span className="banner-phone-notch" />
                         <div className="banner-phone-screen">
-                          <span lang="en">Good<br />Products<br />Better<br />Life</span>
+                          <span lang="en">
+                            Good
+                            <br />
+                            Products
+                            <br />
+                            Better
+                            <br />
+                            Life
+                          </span>
                           <button type="button" onClick={() => onShop("전체")}>
-                            지금 쇼핑하기<ChevronRight size={14} aria-hidden="true" />
+                            지금 쇼핑하기
+                            <ChevronRight size={14} aria-hidden="true" />
                           </button>
                         </div>
                       </div>
-                      <p className="banner-art-note">좋은 상품은<br />언제나 여기,<br />오렌지스토어!</p>
+                      <p className="banner-art-note">
+                        좋은 상품은
+                        <br />
+                        언제나 여기,
+                        <br />
+                        오렌지스토어!
+                      </p>
                     </>
                   ) : (
                     <>
-                      <img className="banner-feature-image" src={slide.image} alt={slide.imageAlt} draggable="false" />
-                      <img className="banner-inset-image" src={slide.inset} alt={slide.insetAlt} draggable="false" />
+                      <img
+                        className="banner-feature-image"
+                        src={slide.image}
+                        alt={slide.imageAlt}
+                        draggable="false"
+                      />
+                      <img
+                        className="banner-inset-image"
+                        src={slide.inset}
+                        alt={slide.insetAlt}
+                        draggable="false"
+                      />
                       <div className="banner-art-label">
                         <small>{slide.artEyebrow}</small>
                         <strong>{slide.artTitle}</strong>
@@ -242,10 +321,20 @@ const carouselSlides = [
           );
         })}
       </div>
-      <button className="banner-arrow prev" type="button" onClick={() => step(-1)} aria-label="이전 배너">
+      <button
+        className="banner-arrow prev"
+        type="button"
+        onClick={() => step(-1)}
+        aria-label="이전 배너"
+      >
         <ChevronLeft aria-hidden="true" />
       </button>
-      <button className="banner-arrow next" type="button" onClick={() => step(1)} aria-label="다음 배너">
+      <button
+        className="banner-arrow next"
+        type="button"
+        onClick={() => step(1)}
+        aria-label="다음 배너"
+      >
         <ChevronRight aria-hidden="true" />
       </button>
       <div className="banner-controls">
@@ -261,8 +350,13 @@ const carouselSlides = [
             />
           ))}
         </div>
-        <span className="banner-count" aria-live={playing ? "off" : "polite"} aria-atomic="true">
-          <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(total).padStart(2, "0")}
+        <span
+          className="banner-count"
+          aria-live={playing ? "off" : "polite"}
+          aria-atomic="true"
+        >
+          <strong>{String(active + 1).padStart(2, "0")}</strong> /{" "}
+          {String(total).padStart(2, "0")}
         </span>
         <button
           className="banner-playback"
@@ -270,7 +364,11 @@ const carouselSlides = [
           onClick={togglePlayback}
           aria-label={paused ? "배너 자동 재생" : "배너 자동 재생 일시 정지"}
         >
-          {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}
+          {paused ? (
+            <Play size={15} aria-hidden="true" />
+          ) : (
+            <Pause size={15} aria-hidden="true" />
+          )}
         </button>
       </div>
     </section>

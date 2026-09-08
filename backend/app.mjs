@@ -1,3 +1,4 @@
+import {createRecoveryMailer} from './services/recovery-mail.mjs';
 import {createRateLimiter} from './middleware/rate-limit.mjs';
 import http from "node:http";
 import {createHash} from 'node:crypto';
@@ -16,6 +17,7 @@ export function createApplication(
     production = false,
     base = "/live_commerce/",
     dist = "dist",
+    recoveryMailer = createRecoveryMailer(),
   } = {},
 ) {
   mkdirSync(uploads, { recursive: true });
@@ -94,7 +96,7 @@ export function createApplication(
           throw httpError(403, "Invalid session token");
       };
       if (path === "/api/health") return send(200, { ok: true });
-      if(await dispatchApi({req,res,path,send,json,body,db,list,get,insert,audit,validate,limited,session,requireAdmin,production,uploads})) return;
+      if(await dispatchApi({req,res,path,send,json,body,db,list,get,insert,audit,validate,limited,session,requireAdmin,production,uploads,recoveryMailer})) return;
       if (path.startsWith("/api/")) throw httpError(404, "Not found");
       const isUpload = path.startsWith("/uploads/");
       const root = resolve(isUpload ? uploads : dist);

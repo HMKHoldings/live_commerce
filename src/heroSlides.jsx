@@ -6,9 +6,24 @@ export const heroSlides = [
     theme: "orange",
     category: "전체",
     label: "SNS 라이브 쇼핑",
-    eyebrow: <>SNS에서 만난 그 <em>상품,</em></>,
-    title: <><span>좋아하는 <em>SNS 라이브</em>를 보고,</span><br /><span><em>오렌지스토어</em>에서 바로 쇼핑하세요!</span></>,
-    description: "SNS 속 핫한 상품을, 오렌지스토어에서 더 편하고 안전하게 만나보세요.",
+    eyebrow: (
+      <>
+        SNS에서 만난 그 <em>상품,</em>
+      </>
+    ),
+    title: (
+      <>
+        <span>
+          좋아하는 <em>SNS 라이브</em>를 보고,
+        </span>
+        <br />
+        <span>
+          <em>오렌지스토어</em>에서 바로 쇼핑하세요!
+        </span>
+      </>
+    ),
+    description:
+      "SNS 속 핫한 상품을, 오렌지스토어에서 더 편하고 안전하게 만나보세요.",
     cta: "지금 쇼핑하기",
   },
   {
@@ -16,8 +31,15 @@ export const heroSlides = [
     category: "식품",
     label: "제철 식품",
     eyebrow: "FRESH PICKS · 오늘의 신선함",
-    title: <>제철의 맛을 <em>가득 담아,</em><br /><em>신선한 일상</em>을 만나보세요!</>,
-    description: "싱싱한 채소부터 달콤한 제철 과일까지, 우리 집 식탁을 더 맛있게.",
+    title: (
+      <>
+        제철의 맛을 <em>가득 담아,</em>
+        <br />
+        <em>신선한 일상</em>을 만나보세요!
+      </>
+    ),
+    description:
+      "싱싱한 채소부터 달콤한 제철 과일까지, 우리 집 식탁을 더 맛있게.",
     cta: "제철 식품 둘러보기",
     image: assetPath("/images/fresh-produce.jpg"),
     imageAlt: "싱싱한 제철 채소와 과일",
@@ -31,7 +53,13 @@ export const heroSlides = [
     category: "생활",
     label: "라이프스타일",
     eyebrow: "LIFE & HOME · 나를 위한 공간",
-    title: <>매일 머무는 공간에<br /><em>기분 좋은 변화</em>를 더해요.</>,
+    title: (
+      <>
+        매일 머무는 공간에
+        <br />
+        <em>기분 좋은 변화</em>를 더해요.
+      </>
+    ),
     description: "포근한 침구와 감각적인 생활용품으로, 평범한 하루를 특별하게.",
     cta: "라이프스타일 둘러보기",
     image: assetPath("/images/lifestyle-tea.jpg"),
@@ -46,8 +74,15 @@ export const heroSlides = [
     category: "뷰티",
     label: "뷰티 케어",
     eyebrow: "BEAUTY MOMENT · 오늘 더 빛나는 나",
-    title: <>나를 아끼는 작은 습관,<br /><em>매일 더 빛나는</em> 뷰티 케어.</>,
-    description: "산뜻한 스킨케어부터 촉촉한 세럼까지, 나에게 꼭 맞는 아름다움.",
+    title: (
+      <>
+        나를 아끼는 작은 습관,
+        <br />
+        <em>매일 더 빛나는</em> 뷰티 케어.
+      </>
+    ),
+    description:
+      "산뜻한 스킨케어부터 촉촉한 세럼까지, 나에게 꼭 맞는 아름다움.",
     cta: "뷰티 상품 둘러보기",
     image: assetPath("/images/pink-skincare.png"),
     imageAlt: "핑크빛 배경 위의 스킨케어 제품",

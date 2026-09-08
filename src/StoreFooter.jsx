@@ -57,7 +57,7 @@ const information = {
   },
 };
 
-export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
+export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, showExtras = true }) {
   const { notices, settings, promos, policies, connected } = useStore();
   const information = Object.fromEntries(policies.map(p => [p.id, p]));
   const [panel, setPanel] = useState(null);
@@ -100,7 +100,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
 
   return (
     <>
-      <div className="store-bottom wrap">
+      {showExtras && <div className="store-bottom wrap">
         {promos.length > 0 && <PromoCarousel key={promos.map(p=>p.id).join(',')}>
           {promos.map(p => <button key={p.id} type="button" className={"store-promo store-" + p.theme} onClick={() => p.action === 'login' ? onOpenLogin() : openPanel({type:p.action || 'sustainable'})}>
             <span className="store-promo-copy"><strong>{p.title}</strong><span>{p.description}</span><span className="store-promo-cta">{p.cta}<ChevronRight /></span></span>
@@ -136,8 +136,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
             <button type="button" onClick={() => openPanel({ type: "tracking" })}><Truck aria-hidden="true" /><span>배송조회</span></button>
           </div>
         </section>
-      </div>
-
+      </div>}
       <nav className="store-footer-bar" aria-label="회사 및 이용 안내">
         <div className="wrap store-footer-bar-inner">
           {[["about", "회사소개"], ["partnership", "제휴문의"], ["seller", "입점신청"], ["terms", "이용약관"], ["privacy", "개인정보처리방침"], ["contact", "고객센터"]].map(([key, label]) => (
@@ -151,7 +150,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts }) {
           <div className="store-company">
 
             <p>{settings.company} · {settings.companyInfo}</p>
-            <p>{settings.address} · 고객센터 {settings.phone}</p>
+            <p>{settings.address} · 대표전화 {settings.phone}</p>
             <small>{settings.copyright}</small>
           </div>
           <div className="store-social">

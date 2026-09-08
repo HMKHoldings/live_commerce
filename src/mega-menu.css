@@ -44,3 +44,38 @@
   .mega-menu-column li button { padding-block: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .mega-menu { animation: none; } }
+
+
+/* Keep static promo banners aligned beside the category columns. */
+.mega-menu {
+  grid-template-columns: minmax(0, 1fr) 420px;
+  align-items: start;
+  column-gap: 26px;
+}
+.mega-menu-categories { min-width: 0; }
+.mega-menu-promos {
+  width: 420px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-self: start;
+}
+.mega-menu-promo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  cursor: default;
+}
+.mega-menu-promo > img { display: block; }
+@media (max-width: 1250px) {
+  .mega-menu { grid-template-columns: minmax(0, 1fr) 350px; gap: 20px; }
+  .mega-menu-promos { width: 350px; gap: 12px; }
+  .mega-menu-promo > span { inset: 17px 12px auto; }
+  .mega-menu-promo strong { font-size: 20px; }
+}
+@media (max-width: 900px) {
+  .mega-menu { grid-template-columns: 1fr; }
+  .mega-menu-promos { width: min(100%, 440px); max-width: none; }
+}
+@media (max-width: 640px) {
+  .mega-menu-promos { width: 100%; }
+}

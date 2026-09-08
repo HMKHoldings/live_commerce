@@ -114,7 +114,7 @@ export default function LowerSections({
         )}
       </section>
 
-      <section hidden={settings.showCollections === false} id="collections" aria-labelledby="collections-heading">
+      <section className="lower-collections-band" hidden={settings.showCollections === false} id="collections" aria-labelledby="collections-heading">
         <SectionHeading
           id="collections-heading"
           title="함께 보면 좋은 상품"
@@ -178,7 +178,7 @@ export default function LowerSections({
           id="best-heading"
           title="베스트 상품"
           description="지금 가장 많이 사랑받는 상품들"
-          onMore={() => onBrowse({ title: "베스트 상품", products: bestProducts })}
+          onMore={() => onBrowse({ kind: "best", title: "베스트 상품", products: bestProducts })}
         />
         <div className="product-grid">
           {visibleBest.map((product) => {

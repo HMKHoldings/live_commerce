@@ -452,3 +452,68 @@
     .lower-modal-review img { width: 72px; height: 95px; }
   }
 }
+
+/* Full-width background separates the collection row from nearby sections. */
+.lower-collections-band {
+  position: relative;
+  padding-block: 42px 46px;
+  margin-block: 52px 32px;
+  background: #fff7ef;
+  box-shadow: 0 0 0 100vmax #fff7ef;
+  clip-path: inset(0 -100vmax);
+}
+.lower-collections-band::before,
+.lower-collections-band::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background: #f6e7d9;
+}
+.lower-collections-band::before { top: 0; }
+.lower-collections-band::after { bottom: 0; }
+@media (max-width: 640px) {
+  .lower-collections-band {
+    padding-block: 30px 34px;
+    margin-block: 34px 24px;
+  }
+}
+
+
+/* Large two-column collection banners. */
+.lower-collections-band .lower-collection-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.lower-collections-band .lower-collection {
+  height: 320px;
+  padding: 38px 42px;
+  border-radius: 10px;
+}
+.lower-collections-band .lower-collection > img { width: 58%; }
+.lower-collections-band .lower-collection-copy { gap: 9px; }
+.lower-collections-band .lower-collection-copy > strong {
+  font-size: 40px;
+  letter-spacing: -1.4px;
+}
+.lower-collections-band .lower-collection-copy > span:not(.lower-collection-cta),
+.lower-collections-band .lower-collection-copy > p { font-size: 18px; }
+.lower-collections-band .lower-collection-cta {
+  margin-top: 16px;
+  padding: 10px 18px;
+  font-size: 16px;
+}
+@media (max-width: 950px) {
+  .lower-collections-band .lower-collection { height: 250px; padding: 28px; }
+  .lower-collections-band .lower-collection-copy > strong { font-size: 31px; }
+}
+@media (max-width: 640px) {
+  .lower-collections-band .lower-collection-grid { grid-template-columns: 1fr; }
+  .lower-collections-band .lower-collection { height: 210px; padding: 24px 20px; }
+  .lower-collections-band .lower-collection-copy > strong { font-size: 27px; }
+  .lower-collections-band .lower-collection-copy > span:not(.lower-collection-cta),
+  .lower-collections-band .lower-collection-copy > p { font-size: 14px; }
+  .lower-collections-band .lower-collection-cta { margin-top: 10px; padding: 7px 12px; font-size: 13px; }
+}

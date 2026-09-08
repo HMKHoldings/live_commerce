@@ -1,0 +1,9 @@
+.account-menu{position:relative;display:flex;align-items:center;z-index:60}
+.account-trigger{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;cursor:pointer;color:inherit;font:inherit;font-size:12px}
+.account-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:8px;width:226px;z-index:61}
+.account-dropdown>div{display:grid;gap:10px;border:1px solid #858585;border-radius:12px;padding:12px;background:#fff;box-shadow:0 6px 20px #0000000d}
+.account-dropdown button{display:block;width:100%;padding:12px;border:1px solid #e3e3e3;background:#fff;border-radius:8px;color:#20242a;font-size:16px;font-weight:500;cursor:pointer;text-align:center}
+.account-dropdown button:hover{color:#ff701b;background:#fff6ef;border-color:#ffbc90}
+.account-menu button:focus-visible{outline:2px solid #ff701b;outline-offset:2px}
+@media(min-width:1440px){.account-trigger{font-size:14px;gap:6px;min-width:52px}}
+@media(max-width:640px){.account-dropdown{left:auto;right:-65px;transform:none;width:210px}}

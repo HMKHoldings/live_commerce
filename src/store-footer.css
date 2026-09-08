@@ -342,3 +342,21 @@
   .store-footer-bar button { font-size: 14px; padding-inline: 6px; }
   .store-footer-bar button:nth-child(3) { border-right: 0; }
 }
+/* Keep the storefront footer at the viewport bottom on short pages. */
+#root:has(> .store-footer) {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+#root:has(> .store-footer) > header,
+#root:has(> .store-footer) > main,
+#root:has(> .store-footer) > .store-footer-bar,
+#root:has(> .store-footer) > .store-footer {
+  flex-shrink: 0;
+}
+#root:has(> .store-footer) > .store-bottom,
+#root:has(> .store-footer):not(:has(> .store-bottom)) > .store-footer-bar {
+  margin-top: auto;
+}
+#root:has(> .store-footer) > .store-bottom { flex-shrink: 0; }

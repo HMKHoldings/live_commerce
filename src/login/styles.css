@@ -1,0 +1,45 @@
+.login-page{width:min(360px,calc(100% - 40px));margin:65px auto 80px}.login-page h1{font-size:24px;margin:0 0 20px;padding-bottom:11px;border-bottom:3px solid #333;line-height:1.2}.login-field{display:block;position:relative;margin-bottom:10px}.login-field>input{display:block;width:100%;height:65px;border:1px solid #aaa;padding:0 14px;border-radius:0;background:#fff;color:#303030}.login-field>input::placeholder{color:#888}.login-field>input:focus{outline:2px solid #222;outline-offset:-2px;border-radius:3px}.login-password>input{padding-right:45px}.login-password>button{position:absolute;right:0;top:0;height:65px;width:42px;border:0;background:transparent;display:grid;place-items:center;color:#414141}.login-submit{height:58px;background:#f5681a;color:white;font-size:20px;font-weight:700;width:100%;border:0;margin-bottom:7px}.login-submit:disabled{opacity:.65;cursor:wait}.login-remember{display:flex;align-items:center;gap:6px;color:#929292;font-size:13px}.login-remember input{width:19px;height:19px;margin:0;accent-color:#f5681a}.login-links{display:flex;justify-content:center;align-items:center;margin-top:35px;border-block:0}.login-links a,.login-links button{border:0;background:none;padding:0 19px;color:#333;font-size:14px;text-decoration:none;white-space:nowrap;line-height:18px}.login-links>*+*{border-left:1px solid #bbb}.login-links>*:first-child{padding-left:0}.login-links>*:last-child{padding-right:0}.login-error,.login-help{font-size:13px;line-height:1.6;padding:12px;background:#fff4f2;color:#b53e32}.login-help{color:#666;background:#f6f6f6}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}button:focus-visible,a:focus-visible,input[type=checkbox]:focus-visible{outline:2px solid #f5681a;outline-offset:3px}@media(max-width:400px){.login-page{margin-top:40px}.login-links a,.login-links button{padding-inline:13px;font-size:13px}}
+
+.login-page{min-height:460px;color:#303030;font-family:Arial,'Noto Sans KR',sans-serif}.login-page input{font:inherit}.login-page button{cursor:pointer}
+
+/* Center the form within the space between the header and footer. */
+.auth-page #root > .login-page {
+  flex: 1 0 auto;
+  min-height: 460px;
+  margin: 0 auto;
+  padding-block: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.auth-page .login-page > * { flex-shrink: 0; }
+@media (max-width: 400px) {
+  .auth-page #root > .login-page { padding-block: 32px; }
+}
+.recovery-page{width:min(420px,calc(100% - 40px))}
+.recovery-back{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;color:#737373;font-size:13px;padding:8px 0;margin-bottom:19px}
+.recovery-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e5e5;margin-bottom:22px}
+.recovery-tabs button{padding:14px 8px;color:#777;background:#fafafa;border-bottom:2px solid transparent;font-size:15px}
+.recovery-tabs button[aria-pressed=true]{background:#fff7f1;color:#e86015;border-bottom-color:#f5681a;font-weight:700}
+.recovery-description{font-size:14px;line-height:1.7;color:#777;margin-bottom:18px}
+.recovery-field{display:block;margin:0 0 17px;font-size:14px;font-weight:600;color:#444}
+.recovery-field input{display:block;width:100%;min-width:0;height:54px;margin-top:8px;padding:0 13px;border:1px solid #bbb;background:white;color:#333;font-size:15px;font-weight:400}
+.recovery-field input:focus{outline:2px solid #ef894f;outline-offset:-2px}
+.recovery-code,.recovery-password{position:relative}
+.recovery-code input{padding-right:75px;font-size:20px;letter-spacing:4px}
+.recovery-code>span{position:absolute;right:14px;top:18px;color:#e86015;font-size:14px;font-variant-numeric:tabular-nums}
+.recovery-password input{padding-right:46px}
+.recovery-password button{position:absolute;right:0;top:0;height:54px;width:44px;display:grid;place-items:center}
+.recovery-email{display:flex;gap:8px;align-items:center;background:#fff7f1;padding:13px;color:#b55220;border-radius:5px;font-size:13px;margin-bottom:12px}
+.recovery-email span{overflow-wrap:anywhere;min-width:0;flex:1}
+.recovery-email button{flex-shrink:0;font-size:12px;text-decoration:underline}
+.recovery-page .login-help,.recovery-page .login-error{margin-bottom:16px}
+.recovery-resend{display:block;margin:-5px 0 20px auto;font-size:12px;color:#777;text-decoration:underline;padding:6px}
+.recovery-page button:disabled{opacity:.55;cursor:wait}
+.recovery-success{text-align:center;padding:18px 0}
+.recovery-success>svg{color:#f5681a;margin-bottom:18px}
+.recovery-success h2{font-size:21px;margin-bottom:12px}
+.recovery-success p{font-size:14px;color:#777;margin-bottom:24px}
+.recovery-ids{display:grid;gap:10px}
+.recovery-ids button{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:19px;background:#fff7f1;border:1px solid #ffccae;border-radius:5px;color:#333;font-size:18px;font-weight:600}
+.recovery-ids button span{color:#e86015;font-size:13px}

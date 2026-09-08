@@ -1,4 +1,4 @@
-﻿@layer reset,base,layout,components,responsive;
+@layer reset,base,layout,components,responsive;
 @layer reset {
   * {
     box-sizing: border-box;
@@ -190,12 +190,31 @@
     font-weight: 500;
   }
   .section-heading > button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 5px;
     margin-left: auto;
-    font-size: 11px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid #f3c8ad;
+    border-radius: 7px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 600;
     white-space: nowrap;
-    color: #787b77;
+    color: #b94b0d;
+  }
+
+  .section-heading > button:hover {
+    background: #fff;
+    border-color: #edaa80;
+    color: #a43c05;
+  }
+
+  .section-heading > button svg {
+    width: 18px;
+    height: 18px;
   }
 
 
@@ -872,7 +891,7 @@
       font-size: 10px;
     }
     .section-heading > button {
-      font-size: 10px;
+      font-size: 14px;
     }
     .product-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -987,7 +1006,7 @@
     .section-heading { gap: 24px; margin-bottom: 19px; }
     .section-heading h2 { font-size: 28px; }
     .section-heading p { font-size: 14px; }
-    .section-heading > button { font-size: 13px; }
+    .section-heading > button { font-size: 14px; }
     .product-image { height: clamp(180px, 13.8vw, 215px); border-radius: 8px; }
     .product-image.short { height: clamp(155px, 11.5vw, 180px); border-radius: 6px; }
     .product-name { font-size: clamp(15px, 1.05vw, 17px); margin-top: 11px; }
@@ -1032,7 +1051,7 @@
     .catalog section + section { margin-top: 34px; }
     .section-heading h2 { font-size: 25px; }
     .section-heading p { font-size: 12px; }
-    .section-heading > button { font-size: 12px; }
+    .section-heading > button { font-size: 14px; }
     .product-image { height: 185px; }
     .product-image.short { height: 163px; }
     .product-name { font-size: 15px; }
@@ -1049,7 +1068,7 @@
     .nav-primary button { font-size: 13px; }
     .section-heading h2 { font-size: 22px; }
     .section-heading p { font-size: 11px; }
-    .section-heading > button { font-size: 11px; }
+    .section-heading > button { font-size: 14px; }
     .product-image { height: 151px; }
     .product-image.short { height: 138px; }
     .product-name { font-size: 13px; }
@@ -1093,3 +1112,28 @@
 .managed-promo-image { position: absolute; right: 0; top: 0; height: 100%; width: 40%; object-fit: cover; }
 
 .banner-title { white-space: pre-line; }
+
+/* Fit the longer storefront name across desktop and mobile headers. */
+.header-main .brand { gap: 9px; }
+.header-main .brand strong {
+  font-size: clamp(25px, 2.35vw, 34px);
+  font-weight: 400;
+  letter-spacing: -1px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.store-footer-brand .brand strong { font-size: 24px; letter-spacing: -1px; white-space: normal; }
+
+@font-face {
+  font-family: "Orange Brand";
+  src: url("../public/fonts/jua-brand.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.header-main .brand strong,
+.store-footer-brand .brand strong {
+  font-family: "Orange Brand", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+}
