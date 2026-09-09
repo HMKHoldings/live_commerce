@@ -1,10 +1,10 @@
 import AccountRecovery from "./AccountRecovery";
 import {App} from '../main';
-import {StoreProvider} from '../StoreContext';
+import {StoreProvider} from '../context/StoreContext';
 import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Eye, EyeOff} from 'lucide-react';
-import {api, API_ENABLED, setCsrf} from '../storeApi';
+import {api, API_ENABLED, setCsrf} from '../api/storeApi';
 import './styles.css';
 
 function remembered(){try{return localStorage.getItem('orange-remembered-username')||'';}catch{return '';}}

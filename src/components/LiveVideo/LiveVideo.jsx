@@ -1,7 +1,7 @@
-import { assetPath } from "./assetPath";
+import { assetPath } from "../../utils/assetPath";
 import React, { useEffect, useRef, useState } from "react";
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
-import "./live-video.css";
+import "./styles.css";
 
 const clips = {
   1: "fashion-presenter",

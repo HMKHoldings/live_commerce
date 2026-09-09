@@ -1,7 +1,7 @@
 import React,{createContext,useContext,useEffect,useState,useCallback,useMemo} from 'react';
-import fallback from './data/storefront.json';
-import { assetPath } from './assetPath';
-import { api,API_ENABLED } from './storeApi';
+import fallback from '../data/storefront.json';
+import { assetPath } from '../utils/assetPath';
+import { api,API_ENABLED } from '../api/storeApi';
 const Context=createContext(null);
 const numericId=id=>/^\d+$/.test(String(id))?Number(id):id;
 function normalize(data){

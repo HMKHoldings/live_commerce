@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { ChevronLeft, Play, Star } from "lucide-react";
-import "./product-catalog.css";
+import "./styles.css";
 
 export default function ProductCatalog({ collection, onSelect, onBack }) {
   const [category, setCategory] = useState("전체");

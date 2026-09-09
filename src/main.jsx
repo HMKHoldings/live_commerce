@@ -1,14 +1,14 @@
-import CartPage from "./CartPage";
-import {api, setCsrf} from './storeApi';
-import ProductCatalog from "./ProductCatalog";
-import AccountMenu from "./AccountMenu";
-import StoreLogin from "./StoreLogin";
-import CheckoutForm from "./CheckoutForm";
-import { StoreProvider, useStore } from "./StoreContext";
-import { assetPath } from "./assetPath";
-import ProductDetail from "./ProductDetail";
-import "./sns-live.css";
-import MegaMenu from "./MegaMenu";
+import CartPage from "./components/CartPage/CartPage";
+import {api, setCsrf} from './api/storeApi';
+import ProductCatalog from "./components/ProductCatalog/ProductCatalog";
+import AccountMenu from "./components/AccountMenu/AccountMenu";
+import StoreLogin from "./components/StoreLogin/StoreLogin";
+import CheckoutForm from "./components/CheckoutForm/CheckoutForm";
+import { StoreProvider, useStore } from "./context/StoreContext";
+import { assetPath } from "./utils/assetPath";
+import ProductDetail from "./components/ProductDetail/ProductDetail";
+import "./styles/sns-live.css";
+import MegaMenu from "./components/MegaMenu/MegaMenu";
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -25,15 +25,15 @@ import {
   Minus,
   Check,
 } from "lucide-react";
-import "./styles.css";
-import "./mascot.css";
-import "./lower-sections.css";
-import "./store-footer.css";
-import "./hero-banner.css";
-import HeroBanner from "./HeroBanner.jsx";
-import LiveVideo from "./LiveVideo.jsx";
-import StoreFooter from "./StoreFooter.jsx";
-import LowerSections from "./LowerSections.jsx";
+import "./styles/global.css";
+import "./styles/mascot.css";
+
+
+
+import HeroBanner from "./components/HeroBanner/HeroBanner.jsx";
+import LiveVideo from "./components/LiveVideo/LiveVideo.jsx";
+import StoreFooter from "./components/StoreFooter/StoreFooter.jsx";
+import LowerSections from "./components/LowerSections/LowerSections.jsx";
 
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 function Orange({ small = false }) {

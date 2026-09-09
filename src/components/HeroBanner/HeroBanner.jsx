@@ -1,6 +1,7 @@
-import { assetPath } from "./assetPath";
-import { useStore } from "./StoreContext";
+import { assetPath } from "../../utils/assetPath";
+import { useStore } from "../../context/StoreContext";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import "./styles.css";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 export default function HeroBanner(props) {

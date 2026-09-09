@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ShoppingBag, Package, Users, MessageCircle, ArrowUpRight, Gift, BarChart3, Video, Settings, Bell} from 'lucide-react';
-import {assetPath} from '../assetPath';
+import {assetPath} from '../utils/assetPath';
 const money=n=>Number(n||0).toLocaleString('ko-KR');
 const statuses={new:'신규 주문',processing:'배송 준비',shipped:'배송중',completed:'완료',cancelled:'취소'};
 function Panel({title,children,onMore,className=''}){return <section className={`dash-panel ${className}`}><header><h2>{title}</h2>{onMore&&<button onClick={onMore}>전체보기 <ArrowUpRight size={13}/></button>}</header>{children}</section>}

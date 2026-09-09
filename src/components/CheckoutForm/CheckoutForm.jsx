@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import { api } from "./storeApi";
-import { useStore } from "./StoreContext";
+import { api } from "../../api/storeApi";
+import { useStore } from "../../context/StoreContext";
 export default function CheckoutForm({ cart, onComplete }) {
   const requestId = useRef(crypto.randomUUID());
   const { connected, refresh } = useStore();

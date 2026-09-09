@@ -1,7 +1,7 @@
-﻿import React, {useState} from 'react';
+import React, {useState} from 'react';
 import {ShoppingCart, Minus, Plus, CheckCircle2} from 'lucide-react';
-import CheckoutForm from './CheckoutForm';
-import './cart-page.css';
+import CheckoutForm from '../CheckoutForm/CheckoutForm';
+import './styles.css';
 const won=n=>n.toLocaleString('ko-KR')+'원';
 export default function CartPage({cart,products,onChange,onSelect,onBack,onLike,liked}) {
  const [excluded,setExcluded]=useState([]),[checkout,setCheckout]=useState(null),[completed,setCompleted]=useState(null);

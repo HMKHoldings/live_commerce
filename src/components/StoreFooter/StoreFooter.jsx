@@ -1,7 +1,8 @@
-import { api } from "./storeApi";
-import { useStore } from "./StoreContext";
-import { assetPath } from "./assetPath";
-import PromoCarousel from "./PromoCarousel.jsx";
+import { api } from "../../api/storeApi";
+import { useStore } from "../../context/StoreContext";
+import { assetPath } from "../../utils/assetPath";
+import PromoCarousel from "../PromoCarousel/PromoCarousel.jsx";
+import "./styles.css";
 import React, { useEffect, useRef, useState } from "react";
 import { BadgeHelp, ChevronRight, Gift, MessageCircle, Truck, X } from "lucide-react";
 

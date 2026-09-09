@@ -1,7 +1,7 @@
-﻿import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import {UserRound} from 'lucide-react';
-import {api,setCsrf} from './storeApi';
-import './account-menu.css';
+import {api,setCsrf} from '../../api/storeApi';
+import './styles.css';
 export default function AccountMenu(){
  const [open,setOpen]=useState(false),[user,setUser]=useState(null),[error,setError]=useState('');
  useEffect(()=>{const refresh=()=>api('/customer/me').then(s=>{setUser(s.user);setCsrf(s.csrf);}).catch(()=>setUser(null));refresh();window.addEventListener('customer-updated',refresh);return()=>window.removeEventListener('customer-updated',refresh);},[]);

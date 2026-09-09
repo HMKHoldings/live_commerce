@@ -6,8 +6,8 @@ import {
   ShoppingCart, TicketPercent, Truck,
 } from "lucide-react";
 import {App} from "../main";
-import {StoreProvider, useStore} from "../StoreContext";
-import {api, API_ENABLED} from "../storeApi";
+import {StoreProvider, useStore} from "../context/StoreContext";
+import {api, API_ENABLED} from "../api/storeApi";
 import "./styles.css";
 
 const faqs = [

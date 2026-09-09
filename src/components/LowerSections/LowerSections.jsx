@@ -1,9 +1,10 @@
-import ReviewSlider from "./ReviewSlider";
+import ReviewSlider from "../ReviewSlider/ReviewSlider";
 import React, { useEffect, useState } from "react";
-import DealProgress from "./DealProgress";
-import "./deal-animation.css";
+import DealProgress from "../Deals/DealProgress";
+import "../Deals/animation.css";
+import "./styles.css";
 import { Check, ChevronRight, Heart, Clock3 } from "lucide-react";
-import { useStore } from "./StoreContext";
+import { useStore } from "../../context/StoreContext";
 
 const won = (value) => `${value.toLocaleString("ko-KR")}원`;
 

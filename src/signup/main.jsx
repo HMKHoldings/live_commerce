@@ -1,6 +1,6 @@
-import {api, setCsrf} from '../storeApi';
+import {api, setCsrf} from '../api/storeApi';
 ﻿import {App} from '../main';
-import {StoreProvider} from '../StoreContext';
+import {StoreProvider} from '../context/StoreContext';
 import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Pencil, UserRound, ChevronRight} from 'lucide-react';

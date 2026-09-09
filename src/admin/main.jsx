@@ -2,8 +2,8 @@ import Dashboard from './Dashboard';
 import {LayoutDashboard,Package,ShoppingBag,MessageCircle,Gift,FileText,Settings,Menu,Search,ExternalLink,LogOut} from 'lucide-react';
 import React,{useEffect,useState,useRef} from 'react';
 import {createRoot} from 'react-dom/client';
-import {api,setCsrf} from '../storeApi';
-import {assetPath} from '../assetPath';
+import {api,setCsrf} from '../api/storeApi';
+import {assetPath} from '../utils/assetPath';
 import {modules,labels,defaults,numeric,media,large} from './schema';
 import './styles.css';
 

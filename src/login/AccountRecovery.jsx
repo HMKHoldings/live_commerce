@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ArrowLeft, CheckCircle2, Eye, EyeOff, Mail} from 'lucide-react';
-import {api} from '../storeApi';
+import {api} from '../api/storeApi';
 
 export default function AccountRecovery({mode, onMode, onBack, onChooseUsername}) {
   const [stage, setStage] = useState('request');

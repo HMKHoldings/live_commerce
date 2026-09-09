@@ -1,10 +1,10 @@
-import { useStore } from "./StoreContext";
-import { api } from "./storeApi";
-import DealDetailStatus from "./DealDetailStatus";
+import { useStore } from "../../context/StoreContext";
+import { api } from "../../api/storeApi";
+import DealDetailStatus from "../Deals/DealDetailStatus";
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Share2, Heart, ShoppingCart, CreditCard, MessageCircle, Minus, Plus, ChevronDown } from "lucide-react";
-import { productDetails } from "./productDetails";
-import "./product-detail.css";
+import { productDetails } from "../../data/productDetails";
+import "./styles.css";
 
 const won = value => `${value.toLocaleString("ko-KR")}원`;
 

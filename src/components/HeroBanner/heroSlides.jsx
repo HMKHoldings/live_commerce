@@ -1,4 +1,4 @@
-import { assetPath } from "./assetPath";
+import { assetPath } from "../../utils/assetPath";
 import React from "react";
 
 export const heroSlides = [

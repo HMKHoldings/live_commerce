@@ -1,8 +1,8 @@
-import { assetPath } from "./assetPath";
+import { assetPath } from "../../utils/assetPath";
 import React, { useEffect, useRef } from "react";
 import { Shirt, Sparkles, Utensils, PanelsTopLeft, ArrowUpRight } from "lucide-react";
-import { useStore } from "./StoreContext";
-import "./mega-menu.css";
+import { useStore } from "../../context/StoreContext";
+import "./styles.css";
 
 const icons = { fashion: Shirt, beauty: Sparkles, food: Utensils, living: PanelsTopLeft };
 

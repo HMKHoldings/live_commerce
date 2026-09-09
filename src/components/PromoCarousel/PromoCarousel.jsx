@@ -1,6 +1,6 @@
 import React, { Children, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import "./promo-carousel.css";
+import "./styles.css";
 
 export default function PromoCarousel({ children }) {
   const slides = Children.toArray(children);

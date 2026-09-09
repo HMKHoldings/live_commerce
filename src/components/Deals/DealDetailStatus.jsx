@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Clock3 } from "lucide-react";
 import DealProgress from "./DealProgress";
-import "./deal-animation.css";
-import "./deal-detail-status.css";
+import "./animation.css";
+import "./status.css";
 
 export default function DealDetailStatus({ deal, joined }) {
   const [now, setNow] = useState(Date.now);

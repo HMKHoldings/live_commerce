@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api, API_ENABLED, setCsrf } from './storeApi';
+import { api, API_ENABLED, setCsrf } from '../../api/storeApi';
 
 export default function StoreLogin() {
   const [busy, setBusy] = useState(false);

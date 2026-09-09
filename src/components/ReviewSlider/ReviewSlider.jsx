@@ -1,5 +1,5 @@
 import React, { Children, cloneElement, useEffect, useRef } from "react";
-import "./review-slider.css";
+import "./styles.css";
 
 export default function ReviewSlider({ children }) {
   const viewport = useRef(null);

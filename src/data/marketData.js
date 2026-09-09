@@ -1,4 +1,4 @@
-import { assetPath } from "./assetPath";
+import { assetPath } from "../utils/assetPath";
 // Demo campaign deadlines; replace with API campaign endsAt values in production.
 export const groupDeals = [
   {

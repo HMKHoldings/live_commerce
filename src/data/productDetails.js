@@ -1,4 +1,4 @@
-import { assetPath } from "./assetPath";
+import { assetPath } from "../utils/assetPath";
 // Only known pack descriptions are offered; supplier specifications can be added here.
 export const productDetails = {
   1: { option: "IH 인덕션 프라이팬 세트", image: assetPath("/images/pans.webp") },
