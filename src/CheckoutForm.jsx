@@ -37,7 +37,7 @@ export default function CheckoutForm({ cart, onComplete }) {
           });
           setOrder(result);
           await refresh();
-          onComplete();
+          onComplete(result);
         } catch (e) {
           setError(e.message);
         } finally {

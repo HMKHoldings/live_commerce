@@ -1,3 +1,4 @@
+import CartPage from "./CartPage";
 import {api, setCsrf} from './storeApi';
 import ProductCatalog from "./ProductCatalog";
 import AccountMenu from "./AccountMenu";
@@ -181,6 +182,7 @@ export function App({children}) {
     setCart((c) => ({ ...c, [p.id]: (c[p.id] || 0) + quantity }));
     notify("장바구니에 상품을 담았어요");
   };
+  useEffect(() => { if (panel === "cart") window.scrollTo({top: 0, behavior: "instant"}); }, [panel]);
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   const joinDeal = (deal) => {
     if (joinedDeals.includes(deal.id)) return;
@@ -208,6 +210,7 @@ export function App({children}) {
         .toLowerCase()
         .includes(search.toLowerCase()));
   const browseBannerCategory = (nextCategory) => {
+    setPanel(null);
     setCollection(null);
     setCategory(nextCategory);
     setSearch("");
@@ -222,6 +225,14 @@ export function App({children}) {
     });
   };
   const navigate = (name) => {
+    if (name === "신상품") {
+      if (selected) setSelected(null);
+      setActive(name);
+      setMenu(false);
+      browseCollection({kind: "new", title: "신상품", products: inventory});
+      return;
+    }
+    setPanel(null);
     if (name === "베스트") {
       if (selected) setSelected(null);
       setActive(name);
@@ -447,7 +458,9 @@ export function App({children}) {
           </div>
         </nav>
       </header>
-      {selected ? (
+      {panel === "cart" ? (
+        <CartPage cart={cart} products={inventory} onChange={setCart} onSelect={setSelected} onBack={() => setPanel(null)} onLike={toggle} liked={liked} />
+      ) : selected ? (
         <ProductDetail
           key={selected.id}
           product={selected}
@@ -466,7 +479,7 @@ export function App({children}) {
           notify={notify}
         />
       ) : collection ? (
-        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection} onSelect={setSelected} onBack={() => {setCollection(null);setActive("쇼핑");}} />
+        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} onBack={() => {setCollection(null);setActive("쇼핑");}} />
       ) : children ? children : (
         <main>
           {active !== "SNS 라이브" && (
@@ -616,7 +629,7 @@ export function App({children}) {
         onOpenLogin={() => window.location.assign(import.meta.env.BASE_URL+'login.html')}
         onBrowseProducts={() => setPanel("all")}
       />
-      {panel && (
+      {panel && panel !== "cart" && (
         <div
           className="overlay"
           onClick={() => {

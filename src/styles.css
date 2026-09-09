@@ -1137,3 +1137,50 @@
   font-weight: 400;
   letter-spacing: -0.5px;
 }
+/* Product thumbnails are nested inside their detail buttons. */
+.modal .list-product {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: 16px;
+  min-width: 0;
+}
+.modal .list-product-photo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.modal .list-product-photo > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.modal .list-product > div { min-width: 0; }
+.modal .list-product-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  padding: 0;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.modal .list-product > button:last-child:not(.list-product-photo) {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+}
+@media (max-width: 640px) {
+  .modal .list-product { grid-template-columns: 76px minmax(0, 1fr) auto; gap: 10px; }
+  .modal .list-product-photo { width: 76px; height: 76px; }
+  .modal .list-product-title { font-size: 13px; }
+}
