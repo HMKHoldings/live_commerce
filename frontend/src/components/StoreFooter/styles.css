@@ -153,7 +153,7 @@
   .store-company > small { display: block; margin-top: 2px; color: #989e90; font-size: 11px; line-height: 1.6; }
   .store-social { text-align: right; }
   .store-social-links { display: flex; align-items: center; justify-content: flex-end; gap: 19px; margin-bottom: 15px; }
-  .store-social-links button { display: grid; place-items: center; padding: 0; width: 29px; height: 29px; }
+  .store-social-links a { display: grid; place-items: center; padding: 0; width: 29px; height: 29px; }
   .store-social-links img { width: 25px; height: 25px; object-fit: contain; }
   .store-social > p { font-size: 12px; color: #9da392; line-height: 1.5; }
   .store-social > strong { display: block; font-size: 13px; color: #777f6d; line-height: 1.5; }
@@ -309,7 +309,7 @@
   .store-company > p { font-size: 13px; line-height: 1.9; color: #7b8274; }
   .store-company > small { font-size: 12px; margin-top: 7px; color: #7b8274; }
   .store-social-links { gap: 18px; margin-bottom: 18px; }
-  .store-social-links button { width: 36px; height: 36px; }
+  .store-social-links a { width: 36px; height: 36px; }
   .store-social-links img { width: 30px; height: 30px; }
   .store-social > p { font-size: 14px; color: #7b8274; }
   .store-social > strong { font-size: 15px; }

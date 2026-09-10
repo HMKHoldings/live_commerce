@@ -5,7 +5,7 @@
 Node.js 22.18+ is required (SQLite is provided by Node). Existing homepage data is seeded once into SQLite.
 
 1. `npm install`
-2. `npm run admin:create -- owner` — enter and confirm a password of at least 12 characters. Input is hidden. There is no default password.
+2. `npm run admin:create -- owner` — enter and confirm a password of 6–128 characters. Input is hidden. There is no default password.
 3. In one terminal: `npm run server`
 4. In another terminal: `npm run dev`
 5. Open `http://localhost:5173/admin.html` and sign in. Storefront: `http://localhost:5173/`.
@@ -30,7 +30,7 @@ The admin controls content within the existing layouts, not arbitrary React/CSS 
 
 ## Data and authentication
 
-`backend/data/store.sqlite` and `backend/data/uploads/` contain persistent application data and are gitignored. Database seed: `backend/seed.json`; static offline fallback: `src/data/storefront.json`. Editing seed files does not overwrite an existing database.
+`backend/data/store.sqlite` and `backend/data/uploads/` contain persistent application data and are gitignored. Database seed: `backend/seed.json`; static offline fallback: `frontend/src/data/storefront.json`. Editing seed files does not overwrite an existing database.
 
 Passwords use salted scrypt hashes. Sessions are server-side, expire after eight hours, and use HttpOnly cookies. Admin mutations require a session CSRF token and an allowed Origin. Conflicting edits return HTTP 409 instead of overwriting another editor. Admin accounts are provisioned through the server CLI only.
 
@@ -54,6 +54,6 @@ Until a backend URL is configured, GitHub Pages continues showing the static sna
 - `npm run test:server` covers auth, CSRF/origin checks, version conflicts, publication, moderation, server-priced orders and persistence.
 - `npm run build` builds storefront and admin entry points.
 
-Architecture: `backend/models/` (SQLite storage and validation), `backend/controllers/` (request handling), `backend/routes/api.mjs` (API routing), `backend/app.mjs` (HTTP middleware and static files), `src/StoreContext.jsx` (public content), `src/admin/` (management UI).
+Architecture: `backend/models/` (SQLite storage and validation), `backend/controllers/` (request handling), `backend/routes/api.mjs` (API routing), `backend/app.mjs` (HTTP middleware and static files), `frontend/src/context/StoreContext.jsx` (public content), `frontend/src/admin/` (management UI).
 
 The React storefront and admin UI form the View layer. Run backend commands from the repository root; persistent data is in `backend/data/`.

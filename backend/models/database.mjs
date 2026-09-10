@@ -56,15 +56,32 @@ export function openDatabase(
   return db;
 }
 export function createAdmin(db, username, password) {
-  if (!/^[a-zA-Z0-9@._-]{3,100}$/.test(username) || password.length < 12)
+  if (
+    !/^[a-zA-Z0-9@._-]{3,100}$/.test(username) ||
+    password.length < 6 ||
+    password.length > 128
+  )
     throw new Error(
-      "Username: 3–100 characters. Password: at least 12 characters.",
+      "Username: 3–100 characters. Password: 6–128 characters.",
     );
+  const existing = db
+    .prepare("SELECT id FROM admins WHERE username=?")
+    .get(username);
   const salt = randomBytes(24).toString("hex");
   const hash = scryptSync(password, salt, 64).toString("hex");
-  db.prepare("INSERT INTO admins(username,salt,hash) VALUES(?,?,?)").run(
-    username,
-    salt,
-    hash,
-  );
+  db.exec("BEGIN");
+  try {
+    db.prepare(
+      "INSERT INTO admins(username,salt,hash) VALUES(?,?,?) ON CONFLICT(username) DO UPDATE SET salt=excluded.salt,hash=excluded.hash",
+    ).run(username, salt, hash);
+    const admin = db
+      .prepare("SELECT id FROM admins WHERE username=?")
+      .get(username);
+    db.prepare("DELETE FROM sessions WHERE admin_id=?").run(admin.id);
+    db.exec("COMMIT");
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+  return Boolean(existing);
 }

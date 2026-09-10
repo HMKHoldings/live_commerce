@@ -1,4 +1,4 @@
-﻿# Active live preview footage
+# Active live preview footage
 
 Downloaded from Pexels on 2026-09-06 and 2026-09-07 under the [Pexels license](https://www.pexels.com/license/).
 
@@ -14,4 +14,6 @@ These are illustrative sample videos, not endorsements or actual broadcasts of t
 
 Each MP4 has a matching JPEG poster with the same basename. Videos use 640x960 H.264 at 24 fps with fast-start metadata. Original audio is retained where present; previews start muted. Card 4 features two seated women demonstrating makeup together.
 
-The active mapping is in `src/LiveVideo.jsx`. Unused preview videos and their posters were removed from this directory.
+The active mapping is in `frontend/src/LiveVideo.jsx`. Unused preview videos and their posters were removed from this directory.
+- `smiling-gift-presenter.mp4` / `smiling-gift-presenter.jpg`: Pexels video 8347366 by ROMAN ODINTSOV, free to use under the Pexels license.
+- `shopping-bags-presenter.mp4` / `shopping-bags-presenter.jpg`: Pexels video 5889736 by Max Fischer, free to use under the Pexels license.

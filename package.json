@@ -4,9 +4,10 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite --host 0.0.0.0",
-        "build": "vite build",
-        "preview": "vite preview --host 0.0.0.0",
+        "dev": "node scripts/dev.mjs",
+        "dev:web": "vite --config frontend/vite.config.js --host 0.0.0.0",
+        "build": "vite build --config frontend/vite.config.js",
+        "preview": "vite preview --config frontend/vite.config.js --host 0.0.0.0",
         "server": "node --env-file-if-exists=.env.server backend/index.mjs",
         "admin:create": "node --env-file-if-exists=.env.server backend/create-admin.mjs",
         "test:server": "node --test backend/tests/*.test.mjs",

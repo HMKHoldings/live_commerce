@@ -8,27 +8,27 @@ import { BadgeHelp, ChevronRight, Gift, MessageCircle, Truck, X } from "lucide-r
 
 const notices = [
   {
-    title: "[이벤트] 5월 가정의 달 특별 할인 이벤트 안내",
-    date: "2024.05.01",
+    title: "[이벤트] 9월 특별 할인 이벤트 안내",
+    date: "2026.09.10",
     body: "소중한 가족에게 마음을 전하는 선물을 만나보세요. 식품부터 생활용품까지, 오렌지스토어의 다양한 상품을 한자리에서 둘러볼 수 있어요.",
   },
   {
     title: "[안내] 일부 지역 배송 지연 안내",
-    date: "2024.04.28",
+    date: "2026.09.08",
     body: "배송 일정은 지역과 상품에 따라 달라질 수 있습니다. 실제 서비스에서는 주문 내역에서 상품별 배송 현황과 배송 예정일을 확인할 수 있어요.",
   },
   {
-    title: "[당첨자 발표] 4월 리뷰 이벤트 당첨자 안내",
-    date: "2024.04.25",
+    title: "[당첨자 발표] 9월 리뷰 이벤트 당첨자 안내",
+    date: "2026.09.05",
     body: "소중한 구매 후기를 남겨주신 모든 분께 감사드립니다. 실제 서비스에서는 당첨자에게 개별 안내를 보내드려요. 현재 화면의 리뷰와 이벤트는 디자인 미리보기용 예시입니다.",
   },
 ];
 
 const socialChannels = [
-  { name: "YouTube", image: assetPath("/png/youtube.png") },
-  { name: "Instagram", image: assetPath("/png/instagram.png") },
-  { name: "TikTok", image: assetPath("/png/tiktok.png") },
-  { name: "Naver", image: assetPath("/png/naver.png") },
+  { name: "YouTube", key: "youtube", url: "https://www.youtube.com/", image: assetPath("/png/youtube.png") },
+  { name: "Instagram", key: "instagram", url: "https://www.instagram.com/", image: assetPath("/png/instagram.png") },
+  { name: "TikTok", key: "tiktok", url: "https://www.tiktok.com/", image: assetPath("/png/tiktok.png") },
+  { name: "Naver", key: "naver", url: "https://www.naver.com/", image: assetPath("/png/naver.png") },
 ];
 
 const information = {
@@ -157,9 +157,15 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, show
           <div className="store-social">
             <div className="store-social-links" aria-label="소셜 미디어 채널">
               {socialChannels.map((channel) => (
-                <button type="button" key={channel.name} aria-label={`${channel.name} 채널 안내`} onClick={() => settings[channel.name.toLowerCase()] ? window.open(settings[channel.name.toLowerCase()], "_blank", "noopener,noreferrer") : openPanel({ type: "social", name: channel.name })}>
+                <a
+                  key={channel.name}
+                  href={settings[channel.key] || channel.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={channel.name + " channel"}
+                >
                   <img src={channel.image} alt="" width="26" height="26" loading="lazy" />
-                </button>
+                </a>
               ))}
             </div>
             <p>일상이 더 특별해지는<br /><strong>오렌지스토어</strong></p>

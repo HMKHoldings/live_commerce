@@ -225,6 +225,20 @@ export function App({children}) {
     });
   };
   const navigate = (name) => {
+    if (name === "공동구매") {
+      if (selected) setSelected(null);
+      setActive(name);
+      setMenu(false);
+      browseCollection({
+        kind: "group-deals",
+        title: "진행 중인 공동구매",
+        description: "마감 전인 공동구매 상품을 확인하고 참여해보세요.",
+        products: groupDeals.filter(
+          (deal) => Date.parse(deal.endsAt) > Date.now(),
+        ),
+      });
+      return;
+    }
     if (name === "신상품") {
       if (selected) setSelected(null);
       setActive(name);
@@ -479,7 +493,7 @@ export function App({children}) {
           notify={notify}
         />
       ) : collection ? (
-        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} onBack={() => {setCollection(null);setActive("쇼핑");}} />
+        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} joinedDeals={joinedDeals} onBack={() => {setCollection(null);setActive("쇼핑");}} />
       ) : children ? children : (
         <main>
           {active !== "SNS 라이브" && (

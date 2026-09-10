@@ -39,7 +39,10 @@ export default function LowerSections({
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, []);
-  const visibleDeals = groupDeals.filter(filter);
+  const activeDeals = groupDeals.filter(
+    (deal) => Date.parse(deal.endsAt) > now,
+  );
+  const visibleDeals = activeDeals.filter(filter);
   const visibleBest = bestProducts.filter(filter);
 
   return (
@@ -49,7 +52,7 @@ export default function LowerSections({
           id="group-buy-heading"
           title="진행 중인 공동구매"
           description="함께 구매할수록 더 합리적인 가격!"
-          onMore={() => onBrowse({ title: "진행 중인 공동구매", products: groupDeals })}
+          onMore={() => onBrowse({ title: "진행 중인 공동구매", products: activeDeals })}
         />
         <div className="lower-deal-grid">
           {visibleDeals.map((deal) => {
