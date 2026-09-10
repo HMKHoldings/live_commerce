@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   BarChart3, Boxes, ExternalLink, FileText, Gift, LayoutDashboard,
-  MessageCircle, Package, Settings, ShoppingCart, Users, Video,
+  ChevronDown, MessageCircle, Package, Settings, ShoppingCart, Users, Video,
 } from "lucide-react";
 import { assetPath } from "../utils/assetPath";
 
@@ -42,7 +42,11 @@ export default function AdminSidebar({ section, navigate }) {
     }
     return "";
   };
+  const groupForSection = (nextSection) => groups.find((group) =>
+    group.items.some(([target]) => target === nextSection)
+  )?.title || "";
   const [activeItem, setActiveItem] = useState(() => firstItemForSection(section));
+  const [openGroup, setOpenGroup] = useState(() => groupForSection(section));
 
   useEffect(() => {
     const current = groups
@@ -53,6 +57,7 @@ export default function AdminSidebar({ section, navigate }) {
       .find((item) => item.id === activeItem);
     if (section === "dashboard" || current?.target !== section) {
       setActiveItem(firstItemForSection(section));
+      setOpenGroup(groupForSection(section));
     }
   }, [section]);
 
@@ -72,9 +77,11 @@ export default function AdminSidebar({ section, navigate }) {
           <LayoutDashboard size={17} /> 대시보드
         </button>
         {groups.map(({ icon: Icon, title, items }) => (
-          <div className="admin-nav-group" key={title}>
-            <div><Icon size={15} />{title}</div>
-            {items.map(([target, label, action]) => (
+          <div className={"admin-nav-group " + (openGroup === title ? "open" : "")} key={title}>
+            <button className="admin-nav-heading" type="button" aria-expanded={openGroup === title} onClick={() => setOpenGroup(current => current === title ? "" : title)}>
+              <Icon size={15} /><span>{title}</span><ChevronDown className="admin-nav-chevron" size={15} />
+            </button>
+            {openGroup === title && items.map(([target, label, action]) => (
               <button key={title + label} className={activeItem === title + ":" + label ? "active" : ""} onClick={() => open(target, title + ":" + label, action)}>
                 {label}
               </button>
