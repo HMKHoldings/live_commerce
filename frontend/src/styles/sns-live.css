@@ -12,3 +12,31 @@
   .sns-platforms { gap: 8px; }
   .sns-platforms button { font-size: 12px; padding: 8px 12px; }
 }
+
+@media (max-width: 640px) {
+  #live .product-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(230px, 76vw, 300px);
+    gap: 14px;
+    padding: 2px 2px 14px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: #ffc5a4 transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #live .product-grid > * {
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  #live .product-image {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}

@@ -423,7 +423,21 @@
   }
 
   @media (max-width: 640px) {
-    .lower-deal-grid { gap: 16px 12px; }
+    .lower-deal-grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: clamp(220px, 78vw, 300px);
+      gap: 12px;
+      padding: 2px 2px 12px;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 2px;
+      scrollbar-width: thin;
+      scrollbar-color: #ffc5a4 transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+    .lower-deal-card { scroll-snap-align: start; scroll-snap-stop: always; }
     .lower-deal-card { padding: 5px; }
     .lower-deal-image { height: 126px; }
     .lower-deal-badge,

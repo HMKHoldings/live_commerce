@@ -9,7 +9,7 @@ import { assetPath } from "./utils/assetPath";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import "./styles/sns-live.css";
 import MegaMenu from "./components/MegaMenu/MegaMenu";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Search,
@@ -122,13 +122,6 @@ export function App({children}) {
     [collection, setCollection] = useState(null),
     [selectedReview, setSelectedReview] = useState(null);
   const [customerId,setCustomerId] = useState(null);
-  const primaryNavRef = useRef(null);
-  const scrollPrimaryNav = () => {
-    const nav = primaryNavRef.current;
-    if (!nav) return;
-    const atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 8;
-    nav.scrollTo({ left: atEnd ? 0 : nav.scrollLeft + nav.clientWidth * .72, behavior: "smooth" });
-  };
   const [savingLike,setSavingLike] = useState(false);
   useEffect(() => {
     const syncCustomer=()=>api('/customer/me').then(result=>{
@@ -232,20 +225,6 @@ export function App({children}) {
     });
   };
   const navigate = (name) => {
-    if (name === "공동구매") {
-      if (selected) setSelected(null);
-      setActive(name);
-      setMenu(false);
-      browseCollection({
-        kind: "group-deals",
-        title: "진행 중인 공동구매",
-        description: "마감 전인 공동구매 상품을 확인하고 참여해보세요.",
-        products: groupDeals.filter(
-          (deal) => Date.parse(deal.endsAt) > Date.now(),
-        ),
-      });
-      return;
-    }
     if (name === "신상품") {
       if (selected) setSelected(null);
       setActive(name);
@@ -402,7 +381,7 @@ export function App({children}) {
             >
               {menu ? <X /> : <Menu />}
             </button>
-            <div className="nav-primary" ref={primaryNavRef}>
+            <div className="nav-primary">
               {[
                 "쇼핑",
                 "공동구매",
@@ -429,9 +408,6 @@ export function App({children}) {
                 </button>
               ))}
             </div>
-            <button className="nav-scroll-more" type="button" onClick={scrollPrimaryNav} aria-label="다음 메뉴 보기">
-              <ChevronRight size={19} />
-            </button>
             <div className="nav-secondary">
               {["오늘의 특가", "브랜드관", "기획전"].map((n) => (
                 <button key={n} onClick={() => navigate(n)}>
@@ -503,7 +479,7 @@ export function App({children}) {
           notify={notify}
         />
       ) : collection ? (
-        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} joinedDeals={joinedDeals} onBack={() => {setCollection(null);setActive("쇼핑");}} />
+        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} onBack={() => {setCollection(null);setActive("쇼핑");}} />
       ) : children ? children : (
         <main>
           {active !== "SNS 라이브" && (

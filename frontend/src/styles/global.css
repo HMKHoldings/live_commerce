@@ -1184,3 +1184,62 @@
   .modal .list-product-photo { width: 76px; height: 76px; }
   .modal .list-product-title { font-size: 13px; }
 }
+@media (max-width: 640px) {
+  .nav-inner {
+    width: 100%;
+    max-width: 100%;
+    gap: 0;
+    overflow: visible;
+  }
+
+  .menu-button {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 44px;
+    padding-right: 12px;
+    background: #fff;
+  }
+
+  .nav-primary {
+    min-width: 0;
+    flex: 1 1 0;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 0 22px 0 14px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-primary::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-primary button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+.nav-scroll-more { display: none; }
+
+@media (max-width: 640px) {
+  .nav-scroll-more {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    width: 38px;
+    height: 43px;
+    flex: 0 0 38px;
+    place-items: center;
+    padding: 0;
+    border-left: 1px solid #ececec;
+    background: linear-gradient(90deg,#ffffffd9,#fff 35%);
+    color: #ff641c;
+  }
+
+  .nav-scroll-more:active {
+    background: #fff2e9;
+  }
+}
