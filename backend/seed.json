@@ -97,6 +97,8 @@
       "name": "에어프라이어 5L",
       "desc": "간편하고 맛있는 요리",
       "price": 79000,
+      "originalPrice": 99000,
+      "discount": 20,
       "image": "/images/air-fryer.jpg",
       "platform": "TikTok",
       "views": "9.8만",
@@ -116,13 +118,18 @@
       "poster": "/videos/seated-cosmetics-review.jpg",
       "origin": "",
       "specifications": "",
-      "shipping": ""
+      "shipping": "",
+      "target": 1200,
+      "participants": 684,
+      "endsAt": "2026-09-14T23:59:59+09:00"
     },
     {
       "id": "6",
       "name": "GAP 인증 설향 딸기 1kg",
       "desc": "달콤한 제철 과일",
       "price": 17900,
+      "originalPrice": 25000,
+      "discount": 28,
       "image": "/images/strawberries.jpg",
       "rating": "4.8",
       "reviews": "999+",
@@ -138,7 +145,10 @@
       "poster": "",
       "origin": "",
       "specifications": "",
-      "shipping": ""
+      "shipping": "",
+      "target": 900,
+      "participants": 537,
+      "endsAt": "2026-09-15T23:59:59+09:00"
     },
     {
       "id": "7",
@@ -209,6 +219,8 @@
       "name": "하루 한줌 견과세트 30봉",
       "desc": "건강한 습관",
       "price": 23900,
+      "originalPrice": 35000,
+      "discount": 32,
       "image": "/images/nuts.jpg",
       "rating": "4.8",
       "reviews": "479",
@@ -223,7 +235,10 @@
       "poster": "",
       "origin": "",
       "specifications": "",
-      "shipping": ""
+      "shipping": "",
+      "target": 1100,
+      "participants": 826,
+      "endsAt": "2026-09-16T23:59:59+09:00"
     },
     {
       "id": "11",

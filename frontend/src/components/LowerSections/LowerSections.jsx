@@ -1,9 +1,9 @@
 import ReviewSlider from "../ReviewSlider/ReviewSlider";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DealProgress from "../Deals/DealProgress";
 import "../Deals/animation.css";
 import "./styles.css";
-import { Check, ChevronRight, Heart, Clock3 } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Heart, Clock3 } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
 
 const won = (value) => `${value.toLocaleString("ko-KR")}원`;
@@ -35,6 +35,12 @@ export default function LowerSections({
 }) {
   const { bestProducts, collections, groupDeals, reviews, settings } = useStore();
   const [now, setNow] = useState(Date.now);
+  const dealGridRef = useRef(null);
+  const scrollDeals = (direction) => {
+    const grid = dealGridRef.current;
+    if (!grid) return;
+    grid.scrollBy({ left: direction * grid.clientWidth * .82, behavior: "smooth" });
+  };
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
@@ -54,7 +60,11 @@ export default function LowerSections({
           description="함께 구매할수록 더 합리적인 가격!"
           onMore={() => onBrowse({ title: "진행 중인 공동구매", products: activeDeals })}
         />
-        <div className="lower-deal-grid">
+        <div className="lower-deal-controls" aria-label="공동구매 상품 이동">
+          <button type="button" onClick={() => scrollDeals(-1)} aria-label="이전 공동구매 상품"><ChevronLeft size={20} /></button>
+          <button type="button" onClick={() => scrollDeals(1)} aria-label="다음 공동구매 상품"><ChevronRight size={20} /></button>
+        </div>
+        <div className="lower-deal-grid" ref={dealGridRef}>
           {visibleDeals.map((deal) => {
             const remaining = Math.max(0, Math.ceil((Date.parse(deal.endsAt) - now) / 1000));
             const expired = remaining === 0;

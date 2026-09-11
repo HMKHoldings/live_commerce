@@ -531,3 +531,39 @@
   .lower-collections-band .lower-collection-copy > p { font-size: 14px; }
   .lower-collections-band .lower-collection-cta { margin-top: 10px; padding: 7px 12px; font-size: 13px; }
 }
+
+#group-buy { position: relative; }
+.lower-deal-controls { position: absolute; z-index: 2; top: -4px; right: 86px; display: flex; gap: 7px; }
+.lower-deal-controls button { display: grid; width: 38px; height: 38px; place-items: center; padding: 0; border: 1px solid #ffd0b7; border-radius: 50%; background: #fff; color: #f5681a; box-shadow: 0 2px 7px #5f2b1012; }
+.lower-deal-controls button:hover { background: #fff4ed; }
+
+@media (min-width: 951px) {
+  .lower-deal-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 60px) / 4);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lower-deal-grid::-webkit-scrollbar { display: none; }
+  .lower-deal-card { scroll-snap-align: start; scroll-snap-stop: always; }
+}
+
+@media (min-width: 641px) and (max-width: 950px) {
+  .lower-deal-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 20px) / 2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .lower-deal-card { scroll-snap-align: start; }
+}
+
+@media (max-width: 640px) {
+  .lower-deal-controls { display: none; }
+}
