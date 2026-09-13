@@ -61,9 +61,9 @@ export default function AdminSidebar({ section, navigate }) {
     }
   }, [section]);
 
-  const open = (target, id, action) => {
+  const open = (target, id, action, view) => {
     setActiveItem(id);
-    navigate(target, action);
+    navigate(target, action, view, id.split(':').slice(1).join(':'));
   };
 
   return (
@@ -76,13 +76,13 @@ export default function AdminSidebar({ section, navigate }) {
         <button className={activeItem === "dashboard" ? "active" : ""} onClick={() => open("dashboard", "dashboard")}>
           <LayoutDashboard size={17} /> 대시보드
         </button>
-        {groups.map(({ icon: Icon, title, items }) => (
+        {groups.map(({ icon: Icon, title, items }, groupIndex) => (
           <div className={"admin-nav-group " + (openGroup === title ? "open" : "")} key={title}>
             <button className="admin-nav-heading" type="button" aria-expanded={openGroup === title} onClick={() => setOpenGroup(current => current === title ? "" : title)}>
               <Icon size={15} /><span>{title}</span><ChevronDown className="admin-nav-chevron" size={15} />
             </button>
-            {openGroup === title && items.map(([target, label, action]) => (
-              <button key={title + label} className={activeItem === title + ":" + label ? "active" : ""} onClick={() => open(target, title + ":" + label, action)}>
+            {openGroup === title && items.map(([target, label, action], itemIndex) => (
+              <button key={title + label} className={activeItem === title + ":" + label ? "active" : ""} onClick={() => open(target, title + ":" + label, action, `${groupIndex}:${itemIndex}`)}>
                 {label}
               </button>
             ))}
