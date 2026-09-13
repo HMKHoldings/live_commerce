@@ -22,9 +22,11 @@ test('customer signup, session isolation, profile, favorites, orders and logout'
   assert.equal((await request('/customer/addresses','POST',{name:'Updated',phone:'01012345678',address:'Test address'},a)).status,200);
   const products=(await request('/content')).data.products;const p=products.find(p=>p.stock>0);
   assert.equal((await request('/customer/favorites','PUT',{ids:[p.id]},a)).status,200);
+  const review=await request('/reviews','POST',{productId:p.id,title:'Useful product',body:'This product worked well.',rating:5},a);assert.equal(review.status,201);
+  const ownReviews=(await request('/customer/me','GET',undefined,a)).data.reviews;assert.equal(ownReviews.length,1);assert.equal(ownReviews[0].userId,me.data.user.id);assert.equal(ownReviews[0].author,'Updated');assert.equal(ownReviews[0].productName,p.name);
   const order=await request('/orders','POST',{requestId:'customer-order-test-123',customer:{name:'Updated',phone:'01012345678',address:'Test address'},items:[{productId:p.id,quantity:1}]},a);assert.equal(order.status,201);
   const own=await request('/customer/me','GET',undefined,a);assert.equal(own.data.orders.length,1);assert.equal(own.data.addresses.length,1);assert.deepEqual(own.data.favorites,[String(p.id)]);
-  const second=await request('/customer/signup','POST',{...input,username:'shopper_two'});const b={cookie:second.cookie,csrf:second.data.csrf};const other=await request('/customer/me','GET',undefined,b);assert.equal(other.data.orders.length,0);assert.equal(other.data.addresses.length,0);assert.equal(other.data.favorites.length,0);
+  const second=await request('/customer/signup','POST',{...input,username:'shopper_two'});const b={cookie:second.cookie,csrf:second.data.csrf};const other=await request('/customer/me','GET',undefined,b);assert.equal(other.data.orders.length,0);assert.equal(other.data.addresses.length,0);assert.equal(other.data.favorites.length,0);assert.equal(other.data.reviews.length,0);
   assert.equal((await request('/customer/inquiries','POST',{title:'Shipping question',body:'When will it ship?'},a)).status,200);
   assert.equal((await request('/customer/me','GET',undefined,a)).data.inquiries.length,1);assert.equal((await request('/customer/me','GET',undefined,b)).data.inquiries.length,0);
   assert.equal((await request('/customer/password','PUT',{current:'wrong',password:'new-password-12345'},a)).status,400);

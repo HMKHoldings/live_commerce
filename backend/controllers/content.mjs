@@ -1,7 +1,8 @@
 import {randomUUID} from 'node:crypto';
 import {resources} from '../models/database.mjs';
 import {httpError} from '../utils/http.mjs';
-export async function contentController({req,path,send,json,list,get,insert,validate,limited}) {
+import {customerSession} from './customer.mjs';
+export async function contentController({req,path,send,json,db,list,get,insert,validate,limited}) {
       if (path === "/api/content" && req.method === "GET") {
         const result = {};
         for (const resource of resources.filter(
@@ -38,8 +39,12 @@ export async function contentController({req,path,send,json,list,get,insert,vali
         limited(`submission:${req.socket.remoteAddress}`, 10);
         const data = await json();
         const resource = path.slice(5);
+        const customer = customerSession(req, db);
+        if (customer && req.headers['x-csrf-token'] !== customer.csrf)
+          throw httpError(403, 'Invalid session token');
+        const product = get("products", data.productId);
         if (
-          !get("products", data.productId) ||
+          !product ||
           typeof data.body !== "string" ||
           !data.body.trim() ||
           data.body.length > 2000
@@ -54,6 +59,11 @@ export async function contentController({req,path,send,json,list,get,insert,vali
           status: "pending",
           date: new Date().toISOString().slice(0, 10),
           rating: Number(data.rating ?? 5),
+          ...(customer ? {
+            userId: customer.user_id,
+            author: customer.name,
+            productName: product.name,
+          } : {}),
         };
         validate(resource, item);
         insert(resource, item);
