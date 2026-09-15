@@ -22,6 +22,8 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import SalesTrendChart from "./SalesTrendChart";
+import "./dashboard-modern.css";
 
 const money = (value) => Number(value || 0).toLocaleString("ko-KR");
 const orderStatuses = {
@@ -86,13 +88,6 @@ export default function Dashboard({ data, navigate }) {
       .reduce((sum, order) => sum + Number(order.total || 0), 0);
     return { label: compactDate(date), value };
   });
-  const chartMax = Math.max(...timeline.map((item) => item.value), 1);
-  const chartPoints = timeline.map((item, index) => {
-    const x = 54 + (index * 626) / Math.max(1, period - 1);
-    const y = 184 - (item.value / chartMax) * 142;
-    return x + "," + y;
-  }).join(" ");
-
   const statusCounts = Object.keys(orderStatuses).map((status) => ({
     status,
     count: orders.filter((order) => order.status === status).length,
@@ -141,7 +136,7 @@ export default function Dashboard({ data, navigate }) {
         </div>
         <div className="dashboard-range">
           <span><CalendarDays size={16} /> {compactDate(cutoff)} ~ {compactDate(now)}</span>
-          <button onClick={() => setPeriod(1)}>오늘</button>
+          <button className={period === 1 ? "active" : ""} onClick={() => setPeriod(1)}>오늘</button>
           {[7, 30, 90, 365].map((days) => (
             <button className={period === days ? "active" : ""} key={days} onClick={() => setPeriod(days)}>
               {days === 7 ? "7일" : days === 30 ? "30일" : days === 90 ? "3개월" : "1년"}
@@ -161,20 +156,7 @@ export default function Dashboard({ data, navigate }) {
 
       <div className="dashboard-analytics">
         <Panel title="매출 추이" className="sales-panel">
-          <div className="chart-legend"><i /> 매출액</div>
-          <svg className="sales-chart" viewBox="0 0 730 225" role="img" aria-label="기간별 매출 추이">
-            <defs><linearGradient id="sales-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff6b22" stopOpacity=".25" /><stop offset="1" stopColor="#ff6b22" stopOpacity=".02" /></linearGradient></defs>
-            {[0, 1, 2, 3].map((row) => <line key={row} x1="54" y1={42 + row * 47} x2="680" y2={42 + row * 47} stroke="#e9edf1" />)}
-            <polygon points={"54,184 " + chartPoints + " 680,184"} fill="url(#sales-fill)" />
-            <polyline points={chartPoints} fill="none" stroke="#ff641c" strokeWidth="3" />
-            {timeline.map((item, index) => {
-              const step = Math.max(1, Math.ceil(period / 8));
-              if (index % step !== 0 && index !== period - 1) return null;
-              const x = 54 + (index * 626) / Math.max(1, period - 1);
-              const y = 184 - (item.value / chartMax) * 142;
-              return <g key={index}><circle cx={x} cy={y} r="4" fill="#ff641c" /><text x={x} y="211" textAnchor="middle">{item.label}</text></g>;
-            })}
-          </svg>
+          <SalesTrendChart timeline={timeline} />
         </Panel>
 
         <Panel title="주문 상태" action={() => navigate("orders")} className="status-panel">

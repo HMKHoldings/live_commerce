@@ -1,0 +1,24 @@
+ADMIN PANEL KIRISH MA'LUMOTLARI
+
+Local admin panel linki:
+http://localhost:5173/admin.html
+
+Backend orqali ochiladigan link:
+http://localhost:3111/live_commerce/admin.html
+
+Internetdagi sahifa:
+https://hmkholdings.github.io/live_commerce/admin.html
+
+Admin ID (tavsiya):
+owner
+Ufc1997121314$
+
+Admin paroli:
+Hozircha standart parol yo'q. Parolni terminalda quyidagi buyruq bilan yarating:
+npm run admin:create -- owner
+
+Eslatma:
+- Avval serverni `npm run dev` buyrug'i bilan ishga tushiring.
+- Parol kiritilganda terminalda belgilar ko'rinmaydi — bu normal holat.
+- Parol 6–128 ta belgidan iborat bo'lishi kerak.
+- Internetdagi admin sahifa ishlashi uchun backend internetga joylangan va VITE_API_URL sozlangan bo'lishi kerak.
