@@ -11,3 +11,19 @@
 .admin-banner-preview strong{max-width:520px;margin-bottom:7px;font-size:22px;line-height:1.35;white-space:pre-line}
 .admin-banner-preview small{max-width:520px;color:#fff;font-size:12px;line-height:1.55}
 .admin-banner-preview i{position:absolute;right:16px;top:16px;padding:6px 9px;border-radius:20px;background:#ffffff26;font-size:10px;font-style:normal}
+
+/* Admin editors open as centered dialogs instead of right-side drawers. */
+.admin-editor-backdrop{align-items:center;justify-content:center;padding:24px}
+.admin-editor{width:min(920px,calc(100vw - 48px));height:auto;max-height:calc(100dvh - 48px);border-radius:20px;box-shadow:0 28px 90px #10201738}
+@media(max-width:640px){.admin-editor-backdrop{align-items:center;padding:10px}.admin-editor{width:100%;max-height:calc(100dvh - 20px);border-radius:15px}}
+
+
+.admin-editor{scrollbar-color:#aeb8b2 transparent;scrollbar-width:thin}
+.admin-editor::-webkit-scrollbar{width:11px}
+.admin-editor::-webkit-scrollbar-track{margin-block:18px;background:transparent}
+.admin-editor::-webkit-scrollbar-thumb{border:3px solid transparent;border-radius:999px;background:#aeb8b2;background-clip:content-box}
+.admin-editor::-webkit-scrollbar-button{display:none;width:0;height:0}
+
+
+.admin-editor{clip-path:inset(0 round 20px);box-shadow:none;filter:drop-shadow(0 28px 45px #10201738)}
+@media(max-width:640px){.admin-editor{clip-path:inset(0 round 15px)}}

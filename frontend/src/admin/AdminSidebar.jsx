@@ -26,7 +26,7 @@ const groups = [
     ["banners", "배너 관리"], ["collections", "메인 페이지 관리"], ["promos", "팝업 관리"],
   ]},
   { icon: BarChart3, title: "통계/리포트", items: [
-    ["orders", "매출 통계"], ["products", "상품 분석"], ["orders", "회원 분석"], ["audit", "유입 분석"],
+    ["orders", "매출 통계"], ["products", "상품 분석"], ["orders", "회원 분석"], ["audit", "활동 기록"],
   ]},
   { icon: Settings, title: "설정", items: [
     ["settings", "사이트 설정"], ["audit", "관리자 계정 관리"],

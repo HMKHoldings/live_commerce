@@ -1,0 +1,43 @@
+.order-editor{width:min(820px,100%);padding:0;background:#f7f9f8}.order-editor-heading{display:flex;align-items:flex-start;justify-content:space-between;padding:25px 28px 21px;border-bottom:1px solid #e4e9e6;background:#fff}.order-editor-heading small{color:#f06423;font-size:9px;font-weight:800;letter-spacing:1.5px}.order-editor-heading h2{margin:5px 0 5px;font-size:24px}.order-editor-heading p{margin:0;color:#849089;font-size:11px}.order-editor-heading>button{display:grid;width:40px;height:40px;padding:0;place-items:center}.order-editor>.admin-error{margin:18px 22px 0}.order-editor-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;padding:18px 22px}.order-editor-summary>div{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:2px 10px;padding:15px;border:1px solid #e2e8e5;border-radius:14px;background:#fff}.order-editor-summary span{display:grid;grid-row:1/3;width:39px;height:39px;place-items:center;border-radius:11px;background:#fff0e8;color:#f36320}.order-editor-summary small{color:#849089;font-size:9px}.order-editor-summary strong{font-size:13px}.order-editor-summary .payment-paid{color:#278d4d}.order-editor-summary .payment-unpaid{color:#b17714}.order-editor-section{margin:0 22px 16px;overflow:hidden;border:1px solid #e1e7e4;border-radius:15px;background:#fff}.order-editor-section>header{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid #ebefed;background:#fbfcfb;color:#f06423}.order-editor-section h3{margin:0 0 3px;color:#35423c;font-size:14px}.order-editor-section header p{margin:0;color:#8d9792;font-size:9px}.order-customer{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:0;padding:6px 18px 14px}.order-customer>div{display:grid;gap:5px;padding:12px 8px;border-bottom:1px solid #edf1ef}.order-customer .wide{grid-column:1/-1}.order-customer dt{display:flex;align-items:center;gap:5px;color:#89958f;font-size:9px}.order-customer dd{margin:0;color:#3c4942;font-size:12px;font-weight:650}.order-editor-items{padding:4px 18px}.order-editor-items article{display:grid;grid-template-columns:25px minmax(0,1fr) auto auto;align-items:center;gap:11px;padding:13px 4px;border-bottom:1px solid #edf1ef}.order-editor-items article>span{display:grid;width:24px;height:24px;place-items:center;border-radius:7px;background:#fff0e8;color:#ef5d19;font-size:9px;font-weight:800}.order-editor-items article>div{display:grid;gap:3px}.order-editor-items article strong{font-size:11px}.order-editor-items article small{color:#909a95;font-size:8px}.order-editor-items article em{color:#748079;font-size:10px;font-style:normal}.order-editor-items article>b{min-width:80px;font-size:11px;text-align:right}.order-editor-items>p{padding:25px;text-align:center;color:#89958f}.order-editor-total{display:flex;align-items:center;justify-content:flex-end;gap:20px;padding:15px 22px;background:#fff8f3}.order-editor-total span{color:#776b63;font-size:11px}.order-editor-total strong{color:#ef5d19;font-size:18px}.order-editor-section.editable{border-color:#ffd8c4}.order-editor-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px}.order-editor-fields label{display:grid;gap:7px;color:#536159;font-size:10px;font-weight:700}.order-editor-fields input,.order-editor-fields select{width:100%;height:44px}.order-editor-footer{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 22px;border-top:1px solid #e2e7e4;background:#fffffff2;backdrop-filter:blur(10px)}.order-editor-footer>span{color:#89958f;font-size:9px}.order-editor-footer>div{display:flex;gap:8px}.order-editor-footer button{min-height:42px}@media(max-width:640px){.order-editor-summary{grid-template-columns:1fr}.order-customer,.order-editor-fields{grid-template-columns:1fr}.order-customer .wide{grid-column:auto}.order-editor-items article{grid-template-columns:25px minmax(0,1fr) auto}.order-editor-items article>em{display:none}.order-editor-footer{align-items:stretch;flex-direction:column}.order-editor-footer>span{display:none}.order-editor-footer>div{display:grid;grid-template-columns:1fr 1fr}}
+
+
+/* Larger, softer typography for the order detail drawer. */
+@media(min-width:641px){
+  .order-editor{width:min(920px,100%);color:#46534d}
+  .order-editor-heading{padding:30px 34px 25px}
+  .order-editor-heading small{font-size:10px}
+  .order-editor-heading h2{margin-top:7px;color:#34413b;font-size:28px;font-weight:700;letter-spacing:-.6px}
+  .order-editor-heading p{font-size:13px}
+  .order-editor-heading>button{width:46px;height:46px}
+  .order-editor-summary{gap:14px;padding:22px 28px}
+  .order-editor-summary>div{min-height:102px;padding:19px;gap:4px 13px}
+  .order-editor-summary span{width:48px;height:48px;border-radius:13px}
+  .order-editor-summary span svg{width:22px;height:22px}
+  .order-editor-summary small{font-size:11px;font-weight:500}
+  .order-editor-summary strong{color:#46534d;font-size:15px;font-weight:650;line-height:1.45}
+  .order-editor-section{margin:0 28px 20px;border-radius:17px}
+  .order-editor-section>header{gap:12px;padding:19px 22px}
+  .order-editor-section>header>svg{width:21px;height:21px}
+  .order-editor-section h3{font-size:17px;font-weight:650}
+  .order-editor-section header p{font-size:11px}
+  .order-customer{padding:8px 22px 18px}
+  .order-customer>div{gap:7px;padding:16px 10px}
+  .order-customer dt{font-size:11px;font-weight:500}
+  .order-customer dd{color:#46534d;font-size:14px;font-weight:550}
+  .order-editor-items{padding:6px 22px}
+  .order-editor-items article{grid-template-columns:31px minmax(0,1fr) auto auto;gap:14px;padding:17px 5px}
+  .order-editor-items article>span{width:30px;height:30px;font-size:11px}
+  .order-editor-items article strong{color:#46534d;font-size:14px;font-weight:600}
+  .order-editor-items article small{font-size:10px}
+  .order-editor-items article em{font-size:12px}
+  .order-editor-items article>b{min-width:95px;color:#46534d;font-size:13px;font-weight:650}
+  .order-editor-total{gap:25px;padding:19px 27px}
+  .order-editor-total span{font-size:13px}
+  .order-editor-total strong{font-size:22px;font-weight:700}
+  .order-editor-fields{gap:17px;padding:22px}
+  .order-editor-fields label{gap:9px;font-size:12px;font-weight:600}
+  .order-editor-fields input,.order-editor-fields select{height:50px;padding-inline:14px;font-size:13px}
+  .order-editor-footer{padding:20px 28px}
+  .order-editor-footer>span{font-size:11px}
+  .order-editor-footer button{min-height:47px;padding-inline:18px;font-size:13px;font-weight:600}
+}

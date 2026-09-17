@@ -92,6 +92,7 @@ export const defaults = {
     image: "",
     option: "",
     origin: "",
+    brandName: "",
     specifications: "",
     shipping: "",
     platform: "",

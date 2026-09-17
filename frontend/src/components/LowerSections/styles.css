@@ -533,7 +533,7 @@
 }
 
 #group-buy { position: relative; }
-.lower-deal-controls { position: absolute; z-index: 2; top: -4px; right: 86px; display: flex; gap: 7px; }
+.lower-deal-controls { position: absolute; z-index: 2; top: -4px; right: 108px; display: flex; gap: 7px; }
 .lower-deal-controls button { display: grid; width: 38px; height: 38px; place-items: center; padding: 0; border: 1px solid #ffd0b7; border-radius: 50%; background: #fff; color: #f5681a; box-shadow: 0 2px 7px #5f2b1012; }
 .lower-deal-controls button:hover { background: #fff4ed; }
 
