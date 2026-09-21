@@ -1,13 +1,13 @@
-import {createRecoveryMailer} from './services/recovery-mail.mjs';
-import {createRateLimiter} from './middleware/rate-limit.mjs';
+import { createRecoveryMailer } from "./services/recovery-mail.mjs";
+import { createRateLimiter } from "./middleware/rate-limit.mjs";
 import http from "node:http";
-import {createHash} from 'node:crypto';
+import { createHash } from "node:crypto";
 import { mkdirSync, createReadStream, statSync } from "node:fs";
 import { resolve, extname, sep } from "node:path";
-import {createRecordModel} from './models/records.mjs';
-import {createValidator} from './models/validation.mjs';
-import {dispatchApi} from './routes/api.mjs';
-import {httpError} from './utils/http.mjs';
+import { createRecordModel } from "./models/records.mjs";
+import { createValidator } from "./models/validation.mjs";
+import { dispatchApi } from "./routes/api.mjs";
+import { httpError } from "./utils/http.mjs";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 export function createApplication(
   db,
@@ -21,7 +21,7 @@ export function createApplication(
   } = {},
 ) {
   mkdirSync(uploads, { recursive: true });
-  const {list,get,audit,insert} = createRecordModel(db);
+  const { list, get, audit, insert } = createRecordModel(db);
   const limited = createRateLimiter();
   const validate = createValidator(get);
   return http.createServer(async (req, res) => {
@@ -96,7 +96,29 @@ export function createApplication(
           throw httpError(403, "Invalid session token");
       };
       if (path === "/api/health") return send(200, { ok: true });
-      if(await dispatchApi({req,res,path,send,json,body,db,list,get,insert,audit,validate,limited,session,requireAdmin,production,uploads,recoveryMailer})) return;
+      if (
+        await dispatchApi({
+          req,
+          res,
+          path,
+          send,
+          json,
+          body,
+          db,
+          list,
+          get,
+          insert,
+          audit,
+          validate,
+          limited,
+          session,
+          requireAdmin,
+          production,
+          uploads,
+          recoveryMailer,
+        })
+      )
+        return;
       if (path.startsWith("/api/")) throw httpError(404, "Not found");
       const isUpload = path.startsWith("/uploads/");
       const root = resolve(isUpload ? uploads : dist);

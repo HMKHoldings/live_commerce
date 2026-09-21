@@ -67,6 +67,11 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, show
   const [inquiryComplete, setInquiryComplete] = useState(false);
   const dialogRef = useRef(null);
   const close = () => setPanel(null);
+  const noticesUrl = `${import.meta.env.BASE_URL}notices.html`;
+  const openNoticesPage = (notice) => {
+    const id = notice?.id || notice?.date || notice?.title;
+    location.assign(id ? `${noticesUrl}?id=${encodeURIComponent(id)}` : noticesUrl);
+  };
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -111,12 +116,12 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, show
           <div className="store-notices">
             <div className="store-heading">
               <h2>공지사항</h2>
-              <button type="button" onClick={() => openPanel({ type: "notices" })}>더보기 <ChevronRight aria-hidden="true" /></button>
+              <button type="button" onClick={() => openNoticesPage()}>더보기 <ChevronRight aria-hidden="true" /></button>
             </div>
             <ul className="store-notice-list">
               {notices.map((notice) => (
                 <li key={notice.date}>
-                  <button type="button" onClick={() => openPanel({ type: "notice", notice })}>
+                  <button type="button" onClick={() => openNoticesPage(notice)}>
                     <span>{notice.title}</span>
                     <time dateTime={notice.date.replaceAll(".", "-")}>{notice.date}</time>
                   </button>
@@ -178,7 +183,7 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, show
         <div className="store-dialog-body">
           <h2 id="store-dialog-title">{title}</h2>
 
-          {panel?.type === "notices" && <ul className="store-dialog-list">{notices.map((notice) => <li key={notice.date}><button type="button" onClick={() => openPanel({ type: "notice", notice })}><span>{notice.title}</span><time dateTime={notice.date.replaceAll(".", "-")}>{notice.date}</time><ChevronRight aria-hidden="true" /></button></li>)}</ul>}
+          {panel?.type === "notices" && <ul className="store-dialog-list">{notices.map((notice) => <li key={notice.date}><button type="button" onClick={() => openNoticesPage(notice)}><span>{notice.title}</span><time dateTime={notice.date.replaceAll(".", "-")}>{notice.date}</time><ChevronRight aria-hidden="true" /></button></li>)}</ul>}
 
           {panel?.type === "notice" && <><p className="store-dialog-note">{panel.notice.date} · 데모 공지</p><p>{panel.notice.body}</p></>}
 

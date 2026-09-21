@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => ({
         signup: resolve(frontendRoot, "signup.html"),
         login: resolve(frontendRoot, "login.html"),
         customerCenter: resolve(frontendRoot, "customer-center.html"),
+        notices: resolve(frontendRoot, "notices.html"),
       },
     },
   },

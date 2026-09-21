@@ -115,7 +115,7 @@
     height: 17px;
     font-style: normal;
   }
-  nav {
+  header > nav {
     border-block: 1px solid var(--border);
   }
   .nav-inner {

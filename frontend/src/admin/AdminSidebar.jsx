@@ -7,7 +7,7 @@ import { assetPath } from "../utils/assetPath";
 
 const groups = [
   { icon: Package, title: "상품 관리", items: [
-    ["products", "상품 목록"], ["products", "상품 등록", "create"], ["categories", "카테고리 관리"],
+    ["products", "상품 목록"], ["products", "상품 등록"], ["categories", "카테고리 관리"],
     ["products", "브랜드 관리"], ["products", "상품 옵션 관리"], ["reviews", "리뷰 관리"],
   ]},
   { icon: ShoppingCart, title: "주문/배송 관리", items: [
@@ -20,10 +20,11 @@ const groups = [
     ["products", "공동구매 상품"], ["products", "진행중인 공동구매"], ["products", "종료된 공동구매"], ["orders", "참여자 관리"],
   ]},
   { icon: Video, title: "라이브커머스 관리", items: [
-    ["products", "라이브 일정"], ["products", "라이브 상품"], ["orders", "라이브 통계"], ["settings", "SNS 연동 관리"],
+    ["products", "라이브 상품 등록", "createLive"], ["products", "라이브 상품 목록"], ["orders", "라이브 통계"], ["settings", "SNS 연동 관리"],
   ]},
   { icon: FileText, title: "콘텐츠 관리", items: [
     ["banners", "배너 관리"], ["collections", "메인 페이지 관리"], ["promos", "팝업 관리"],
+    ["notices", "공지사항 관리"],
   ]},
   { icon: BarChart3, title: "통계/리포트", items: [
     ["orders", "매출 통계"], ["products", "상품 분석"], ["orders", "회원 분석"], ["audit", "활동 기록"],

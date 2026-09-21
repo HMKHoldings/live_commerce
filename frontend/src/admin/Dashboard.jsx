@@ -111,8 +111,8 @@ export default function Dashboard({ data, navigate }) {
     [Eye, "상품 조회수", money(pageViews) + "회", "등록 상품 누적", "purple"],
   ];
   const actions = [
-    [Package, "상품 등록", "새로운 상품을 등록하세요", "products", "peach"],
-    [Video, "라이브 일정 등록", "SNS 라이브 상품을 관리하세요", "products", "mint"],
+    [Package, "상품 등록", "새로운 상품을 등록하세요", "products", "peach", undefined, "0:1"],
+    [Video, "라이브 상품 등록", "SNS 영상과 상품을 연결하세요", "products", "mint", "createLive", "4:0"],
     [Users, "공동구매 생성", "새로운 공동구매를 시작하세요", "products", "sky"],
     [Image, "배너 관리", "메인 배너를 설정하세요", "banners", "pink"],
   ];
@@ -186,8 +186,8 @@ export default function Dashboard({ data, navigate }) {
       </div>
 
       <div className="dashboard-actions">
-        {actions.map(([Icon, title, text, target, tone]) => (
-          <button className={tone} key={title} onClick={() => navigate(target)}>
+        {actions.map(([Icon, title, text, target, tone, action, view]) => (
+          <button className={tone} key={title} onClick={() => navigate(target, action, view, action ? title : undefined)}>
             <span><Icon size={29} /></span><div><strong>{title}</strong><small>{text}</small></div><i><ArrowRight size={18} /></i>
           </button>
         ))}

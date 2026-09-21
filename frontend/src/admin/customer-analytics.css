@@ -65,3 +65,62 @@
 .customer-chart-legend span i{width:9px;height:9px;border-radius:3px;background:#7b78d2}
 .customer-chart-legend small{color:#99a39e;font-size:8px}
 @media(max-width:620px){.customer-chart-legend{align-items:flex-start;flex-direction:column}}
+
+/* readable customer analytics */
+.customer-analysis-page{width:100%;max-width:none;margin:0;gap:22px;font-size:14px}
+.customer-hero-top{padding:22px 25px 20px}
+.customer-hero-title>span{width:48px;height:48px}
+.customer-hero-title small{font-size:11px}
+.customer-hero-title h2{font-size:22px}
+.customer-hero-title p{font-size:13px;line-height:1.55}
+.customer-hero-actions>div button{min-width:54px;padding:9px 12px;font-size:13px}
+.customer-hero-actions>button{height:44px;font-size:13px}
+.customer-hero-summary{gap:12px;padding:16px 20px 20px}
+.customer-hero-summary>button,.customer-hero-summary>div button{min-height:92px;padding:17px 18px}
+.customer-hero-summary>button small,.customer-hero-summary>button span,.customer-hero-summary>div span{font-size:12px}
+.customer-hero-summary>button strong{font-size:29px}
+.customer-hero-summary>div b{font-size:18px}
+.customer-analysis-guide{flex-wrap:wrap;gap:12px 22px;padding:16px 20px;font-size:12px;line-height:1.55}
+.customer-analysis-guide>b{font-size:13px}
+.customer-analysis-kpis{gap:18px}
+.customer-analysis-kpis>button{min-height:126px;padding:22px}
+.customer-analysis-kpis>button>span{width:54px;height:54px;flex-basis:54px}
+.customer-analysis-kpis small{font-size:12px}
+.customer-analysis-kpis strong{font-size:22px}
+.customer-analysis-kpis p{font-size:11px;line-height:1.45}
+.customer-analysis-card{padding:24px}
+.customer-analysis-card h3{font-size:18px}
+.customer-analysis-card header p{font-size:12px;line-height:1.5}
+.customer-analysis-card header>b,.customer-analysis-card header>span{font-size:11px}
+.customer-analysis-main{grid-template-columns:minmax(560px,1.35fr) minmax(380px,.65fr);gap:18px}
+.customer-bars small{font-size:9px}
+.customer-bars i b{font-size:10px}
+.customer-chart-legend{font-size:11px}
+.customer-chart-legend small{font-size:10px}
+.customer-segment-donut{width:165px;height:165px}
+.customer-segment-donut>div{width:102px;height:102px}
+.customer-segment-donut strong{font-size:28px}
+.customer-segment-donut small{font-size:11px}
+.customer-segment-body button{grid-template-columns:minmax(105px,1fr) auto 34px;padding:10px;font-size:12px}
+.customer-analysis-lower{align-items:start;gap:18px}
+.customer-top>button{grid-template-columns:30px 44px minmax(0,1fr) auto;padding:13px 7px}
+.customer-top>button>b{width:28px;height:28px;font-size:12px}
+.customer-initial{width:42px;height:42px}
+.customer-top strong,.customer-top>button>span:last-child{font-size:13px}
+.customer-top small{font-size:11px}
+.customer-opportunity>div{gap:11px}
+.customer-opportunity>div>button{padding:15px}
+.customer-opportunity b{font-size:13px}
+.customer-opportunity small{font-size:11px;line-height:1.5}
+.customer-detail>header{padding:23px 25px}
+.customer-filters{padding:16px 24px}
+.customer-filters label,.customer-filters select{height:44px;font-size:13px}
+.customer-table-wrap th{padding:14px 17px;font-size:11px}
+.customer-table-wrap td{padding:15px 17px;font-size:13px}
+.customer-cell small{font-size:11px}
+.customer-segment{font-size:11px}
+.customer-expanded small{font-size:11px}
+.customer-expanded b{font-size:13px}
+.customer-empty span{font-size:12px}
+@media(max-width:1400px){.customer-analysis-main,.customer-analysis-lower{grid-template-columns:1fr}.customer-analysis-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.customer-analysis-page{gap:16px}.customer-analysis-kpis{grid-template-columns:1fr}.customer-analysis-guide{display:grid}.customer-analysis-card{padding:18px}.customer-hero-summary{grid-template-columns:1fr}.customer-expanded td>div{grid-template-columns:1fr}}

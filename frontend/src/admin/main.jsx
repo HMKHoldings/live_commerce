@@ -12,6 +12,7 @@ import SiteSettings from './SiteSettings';
 import SalesAnalytics from './SalesAnalytics';
 import ProductAnalytics from './ProductAnalytics';
 import CustomerAnalytics from './CustomerAnalytics';
+import BannerEditor from './BannerEditor';
 import ActivityLog from './ActivityLog';
 import BrandManager from './BrandManager';
 import OrderList from './OrderList';
@@ -22,6 +23,7 @@ const statusLabels={draft:'임시저장',published:'게시중',hidden:'숨김',p
 
 function Admin(){
   const loadId=useRef(0);
+  const preserveEditorOnNavigation=useRef(false);
   const [menuOpen,setMenuOpen]=useState(false);
   const navigate=(key,action,nextView,nextTitle)=>{
     if(editor&&!confirm('저장하지 않은 편집을 닫을까요?'))return;
@@ -30,9 +32,10 @@ function Admin(){
     setViewTitle(nextTitle||'');
     setMenuOpen(false);
     setError('');
-    if(action==='create'&&defaults[key]){
+    preserveEditorOnNavigation.current=action==='create'||action==='createLive';
+    if(preserveEditorOnNavigation.current&&defaults[key]){
       setIsNew(true);
-      setEditor({...defaults[key],id:''});
+      setEditor({...defaults[key],id:'',...(action==='createLive'?{platform:'YouTube'}:{})});
     }else{
       setEditor(null);
     }
@@ -56,7 +59,7 @@ function Admin(){
       setLoadedSection(section);
     }catch(e){setError(e.message);if(e.status===401)setUser(null);}
   };
-  useEffect(()=>{if(user){setEditor(null);setSearch('');setFilter('');setPage(0);load();}},[section,view,user]);
+  useEffect(()=>{if(user){if(!preserveEditorOnNavigation.current)setEditor(null);preserveEditorOnNavigation.current=false;setSearch('');setFilter('');setPage(0);load();}},[section,view,user]);
   const login=async event=>{event.preventDefault();setBusy(true);setError('');try{const data=Object.fromEntries(new FormData(event.currentTarget));const session=await api('/auth/login',{method:'POST',body:data});setCsrf(session.csrf);setUser(session);}catch(e){setError(e.message);}finally{setBusy(false);}};
   const save=async event=>{
     event.preventDefault();setBusy(true);setError('');
@@ -87,9 +90,9 @@ function Admin(){
     {section==='products'&&view==='6:1'&&<ProductAnalytics products={loadedSection===section?rows:[]} loaded={loadedSection===section}/>}
     {section==='orders'&&view==='6:2'&&<CustomerAnalytics orders={loadedSection===section?rows:[]} loaded={loadedSection===section}/>}
     {section==='audit'&&<ActivityLog rows={loadedSection===section?rows:[]} loaded={loadedSection===section}/>}
-    {section!=='dashboard'&&section!=='audit'&&!(section==='products'&&(view==='products'||view==='0:0'||view==='0:3'))&&!(section==='orders'&&(view==='orders'||view==='1:0'))&&!(section==='settings'&&(view==='settings'||view==='7:0'))&&!(section==='orders'&&view==='6:0')&&!(section==='products'&&view==='6:1')&&!(section==='orders'&&view==='6:2')&&<section className="admin-table-panel"><div className="admin-toolbar"><input aria-label="검색" placeholder="상품명, 제목, ID 검색" value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}/><select aria-label="상태 필터" value={filter} onChange={e=>{setFilter(e.target.value);setPage(0);}}><option value="">전체 상태</option>{[...new Set(rows.map(r=>r.status).filter(Boolean))].map(status=><option key={status}>{status}</option>)}</select>{defaults[section]&&<button className="admin-primary" onClick={()=>{setIsNew(true);setEditor({...defaults[section],id:''});setError('');}}>+ 새 항목</button>}</div><div className="admin-table-scroll"><table><thead><tr><th>항목</th><th>ID</th><th>상태 / 요약</th><th>관리</th></tr></thead><tbody>{visible.slice(page*20,(page+1)*20).map(row=><tr key={row.id}><td><div className="admin-record-title">{row.image&&<img src={assetPath(row.image)} alt=""/>}<span>{row.name||row.title||row.brandName||row.customer?.name||row.action||row.id}{row.price!==undefined&&<small>{Number(row.price).toLocaleString()}원 · 재고 {row.stock}</small>}</span></div></td><td><code>{row.id}</code></td><td><span className={`admin-status ${row.status}`}>{row.status||row.resource||'설정'}</span>{row.total!==undefined&&<small>{row.total.toLocaleString()}원 · {row.paymentStatus}</small>}</td><td>{!['dashboard','audit'].includes(section)?<div className="admin-row-actions"><button onClick={()=>{setIsNew(false);setEditor(structuredClone(row));setError('');}}>수정</button>{!['settings','orders'].includes(section)&&<button className="admin-danger" onClick={()=>remove(row)}>삭제</button>}</div>:<span>{row.created||row.createdAt}</span>}</td></tr>)}</tbody></table>{!visible.length&&<p className="admin-empty">{loadedSection===section ? "등록된 항목이 없습니다." : "불러오는 중…"}</p>}</div><div className="admin-pagination"><span>{visible.length}개 항목</span><button disabled={!page} onClick={()=>setPage(p=>p-1)}>이전</button><span>{page+1}</span><button disabled={(page+1)*20>=visible.length} onClick={()=>setPage(p=>p+1)}>다음</button></div></section>}
+    {section!=='dashboard'&&section!=='audit'&&!(section==='products'&&(view==='products'||view==='0:0'||view==='0:3'))&&!(section==='orders'&&(view==='orders'||view==='1:0'))&&!(section==='settings'&&(view==='settings'||view==='7:0'))&&!(section==='orders'&&view==='6:0')&&!(section==='products'&&view==='6:1')&&!(section==='orders'&&view==='6:2')&&<section className="admin-table-panel"><div className="admin-toolbar"><input aria-label="검색" placeholder={section==="banners"?"배너 이름, 제목 검색":"상품명, 제목, ID 검색"} value={search} onChange={e=>{setSearch(e.target.value);setPage(0);}}/><select aria-label="상태 필터" value={filter} onChange={e=>{setFilter(e.target.value);setPage(0);}}><option value="">전체 상태</option>{[...new Set(rows.map(r=>r.status).filter(Boolean))].map(status=><option key={status}>{status}</option>)}</select>{defaults[section]&&<button className="admin-primary" onClick={()=>{setIsNew(true);setEditor({...defaults[section],id:''});setError('');}}>+ 새 항목</button>}</div><div className="admin-table-scroll"><table><thead><tr><th>항목</th><th>ID</th><th>상태 / 요약</th><th>관리</th></tr></thead><tbody>{visible.slice(page*20,(page+1)*20).map(row=><tr key={row.id}><td><div className="admin-record-title">{row.image&&<img src={assetPath(row.image)} alt=""/>}<span>{section==="banners"?(row.label||row.title||row.id):(row.name||row.title||row.brandName||row.customer?.name||row.action||row.id)}{section==="banners"&&row.title&&<small>{row.title}</small>}{row.price!==undefined&&<small>{Number(row.price).toLocaleString()}원 · 재고 {row.stock}</small>}</span></div></td><td><code>{row.id}</code></td><td><span className={`admin-status ${row.status}`}>{statusLabels[row.status]||row.status||row.resource||'설정'}</span>{row.total!==undefined&&<small>{row.total.toLocaleString()}원 · {row.paymentStatus}</small>}</td><td>{!['dashboard','audit'].includes(section)?<div className="admin-row-actions"><button onClick={()=>{setIsNew(false);setEditor(structuredClone(row));setError('');}}>수정</button>{!['settings','orders'].includes(section)&&<button className="admin-danger" onClick={()=>remove(row)}>삭제</button>}</div>:<span>{row.created||row.createdAt}</span>}</td></tr>)}</tbody></table>{!visible.length&&<p className="admin-empty">{loadedSection===section ? "등록된 항목이 없습니다." : "불러오는 중…"}</p>}</div><div className="admin-pagination"><span>{visible.length}개 항목</span><button disabled={!page} onClick={()=>setPage(p=>p-1)}>이전</button><span>{page+1}</span><button disabled={(page+1)*20>=visible.length} onClick={()=>setPage(p=>p+1)}>다음</button></div></section>}
     {editor&&section==='orders'&&<OrderEditor order={editor} setOrder={setEditor} busy={busy} error={error} onSave={save} onClose={()=>{if(confirm('편집을 닫을까요?'))setEditor(null);}}/>}
-    {editor&&section!=='orders'&&<div className="admin-editor-backdrop"><section className="admin-editor" role="dialog" aria-modal="true" aria-labelledby="editor-title"><div className="admin-editor-heading"><div><small>{title}</small><h2 id="editor-title">{isNew?'새 항목 만들기':'내용 수정'}</h2></div><button aria-label="편집 닫기" onClick={()=>{if(confirm('편집을 닫을까요?'))setEditor(null);}}>×</button></div>{error&&<p className="admin-error" role="alert">{error}</p>}{section==='banners'&&<div className={'admin-banner-preview theme-'+(editor.theme||'fresh')} style={editor.image?{backgroundImage:`linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.05)),url("${assetPath(editor.image)}")`}:undefined}><span>현재 배너 미리보기</span><strong>{editor.title||editor.label||'메인 배너'}</strong><small>{editor.description||editor.eyebrow||'이미지를 선택하면 바로 미리보기에 표시됩니다.'}</small>{!editor.image&&<i>테마 기반 디자인</i>}</div>}<form onSubmit={save}><div className="admin-fields">{Object.entries({...defaults[section],...editor}).filter(([key])=>key!=='_version').map(([key,value])=>{
+    {editor&&section!=='orders'&&<div className="admin-editor-backdrop"><section className="admin-editor" role="dialog" aria-modal="true" aria-labelledby="editor-title"><div className="admin-editor-heading"><div><small>{title}</small><h2 id="editor-title">{isNew&&section==='products'&&view==='4:0'?'라이브 상품 등록':isNew?'새 항목 만들기':'내용 수정'}</h2></div><button aria-label="편집 닫기" onClick={()=>{if(confirm('편집을 닫을까요?'))setEditor(null);}}>×</button></div>{error&&<p className="admin-error" role="alert">{error}</p>}{section==="products"&&view==="4:0"&&<p className="admin-info">SNS 채널과 동영상 URL을 입력해 라이브 상품을 등록하세요. 현재는 방송 날짜를 예약하는 기능이 아니라 영상이 연결된 상품 등록 기능입니다.</p>}<form onSubmit={save}><div className="admin-fields">{section==="banners"&&<BannerEditor banner={editor} setBanner={setEditor} upload={upload} busy={busy} isNew={isNew}/>} {(section==="banners"?[]:Object.entries({...defaults[section],...editor})).filter(([key])=>key!=='_version').map(([key,value])=>{
       const update=next=>setEditor(old=>({...old,[key]:next}));
       const readOnly=(key==='id'&&!isNew)||(section==='orders'&&!['status','tracking'].includes(key));
       if(typeof value==='boolean')return <label className="admin-checkbox" key={key}><input type="checkbox" checked={value} onChange={e=>update(e.target.checked)}/>{labels[key]||key}</label>;
