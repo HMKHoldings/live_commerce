@@ -12,7 +12,7 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 export function createApplication(
   db,
   {
-    origins = ["http://localhost:5173", "http://localhost:3111"],
+    origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "http://localhost:3111", "http://127.0.0.1:3111"],
     uploads = "backend/data/uploads",
     production = false,
     base = "/live_commerce/",

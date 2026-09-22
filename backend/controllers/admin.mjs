@@ -1,4 +1,4 @@
-import {randomUUID} from 'node:crypto';
+import {randomUUID,randomBytes,scryptSync} from 'node:crypto';
 import {writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {resources} from '../models/database.mjs';
@@ -11,6 +11,47 @@ export async function adminController({req,path,send,json,body,db,list,get,inser
             200,
             db.prepare("SELECT * FROM audit ORDER BY id DESC LIMIT 200").all(),
           );
+        const accountMatch = path.match(/^\/api\/admin\/accounts(?:\/(\d+))?$/);
+        if (accountMatch) {
+          const accountId = accountMatch[1] ? Number(accountMatch[1]) : null;
+          if (req.method === 'GET' && !accountId)
+            return send(200, db.prepare('SELECT id,username FROM admins ORDER BY id').all());
+          if (req.method === 'POST' && !accountId) {
+            const data = await json();
+            const username = String(data.username || '').trim();
+            const password = data.password;
+            if (!/^[a-zA-Z0-9@._-]{3,100}$/.test(username) || typeof password !== 'string' || password.length < 8 || password.length > 128)
+              throw httpError(400, '아이디는 3~100자, 비밀번호는 8~128자로 입력하세요.');
+            if (db.prepare('SELECT 1 FROM admins WHERE username=?').get(username)) throw httpError(409, '이미 사용 중인 아이디입니다.');
+            const salt = randomBytes(24).toString('hex');
+            const hash = scryptSync(password, salt, 64).toString('hex');
+            const result = db.prepare('INSERT INTO admins(username,salt,hash) VALUES(?,?,?)').run(username,salt,hash);
+            audit(session.username,'create','admin-account',username);
+            return send(201,{id:Number(result.lastInsertRowid),username});
+          }
+          if (req.method === 'PUT' && accountId) {
+            const target = db.prepare('SELECT id,username FROM admins WHERE id=?').get(accountId);
+            if (!target) throw httpError(404,'관리자 계정을 찾을 수 없습니다.');
+            const {password} = await json();
+            if (typeof password !== 'string' || password.length < 8 || password.length > 128) throw httpError(400,'비밀번호는 8~128자로 입력하세요.');
+            const salt = randomBytes(24).toString('hex');
+            const hash = scryptSync(password,salt,64).toString('hex');
+            db.prepare('UPDATE admins SET salt=?,hash=? WHERE id=?').run(salt,hash,accountId);
+            db.prepare('DELETE FROM sessions WHERE admin_id=? AND token<>?').run(accountId,session.token);
+            audit(session.username,'update','admin-account',target.username);
+            return send(200,{ok:true});
+          }
+          if (req.method === 'DELETE' && accountId) {
+            if (accountId === session.admin_id) throw httpError(400,'현재 로그인한 계정은 삭제할 수 없습니다.');
+            const target = db.prepare('SELECT id,username FROM admins WHERE id=?').get(accountId);
+            if (!target) throw httpError(404,'관리자 계정을 찾을 수 없습니다.');
+            db.prepare('DELETE FROM sessions WHERE admin_id=?').run(accountId);
+            db.prepare('DELETE FROM admins WHERE id=?').run(accountId);
+            audit(session.username,'delete','admin-account',target.username);
+            return send(200,{ok:true});
+          }
+          throw httpError(405,'Method not allowed');
+        }
         if (path === "/api/admin/upload" && req.method === "POST") {
           const type = req.headers["content-type"];
           const types = {

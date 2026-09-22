@@ -36,11 +36,11 @@ export async function authController({req,res,path,send,json,db,limited,session,
           "Set-Cookie",
           `orange_session=${token}; HttpOnly; Path=/; SameSite=${production ? "None" : "Lax"}; Max-Age=28800${production ? "; Secure" : ""}`,
         );
-        return send(200, { username: admin.username, csrf });
+        return send(200, { id: admin.id, username: admin.username, csrf });
       }
       if (path === "/api/auth/me") {
         requireAdmin();
-        return send(200, { username: session.username, csrf: session.csrf });
+        return send(200, { id: session.admin_id, username: session.username, csrf: session.csrf });
       }
       if (path === "/api/auth/logout" && req.method === "POST") {
         requireAdmin();

@@ -3,7 +3,7 @@ import { createApplication } from "./app.mjs";
 const db = openDatabase();
 const production = process.env.NODE_ENV === "production";
 const origins = (
-  process.env.ALLOWED_ORIGINS || "http://localhost:5173,http://localhost:5174,http://localhost:3111"
+  process.env.ALLOWED_ORIGINS || "http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174,http://localhost:3111,http://127.0.0.1:3111"
 )
   .split(",")
   .map((s) => s.trim());

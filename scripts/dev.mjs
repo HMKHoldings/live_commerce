@@ -35,7 +35,7 @@ processes.push(
       "--config",
       "frontend/vite.config.js",
       "--host",
-      "0.0.0.0",
+      "127.0.0.1",
     ],
     { stdio: "inherit" },
   ),
