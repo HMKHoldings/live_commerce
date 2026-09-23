@@ -5,11 +5,12 @@ export async function ordersController({req,path,send,json,db,list,get,insert,li
       if (path === "/api/orders" && req.method === "POST") {
         limited(`order:${req.socket.remoteAddress}`, 6);
         const account=customerSession(req,db);
-        if(account&&req.headers['x-csrf-token']!==account.csrf)throw httpError(403,'Invalid session token');
+        if(!account)throw httpError(401,'로그인이 필요합니다.');
+        if(req.headers['x-csrf-token']!==account.csrf)throw httpError(403,'Invalid session token');
         const data = await json();
         if(typeof data.requestId !== 'string' || !/^[a-zA-Z0-9-]{16,100}$/.test(data.requestId)) throw httpError(400,'Invalid request ID');
         const previous=list('orders').find(o=>o.requestId===data.requestId);
-        if(previous && previous.userId !== (account?.user_id ?? null))throw httpError(409,'Request ID already used');
+        if(previous && previous.userId !== account.user_id)throw httpError(409,'Request ID already used');
         if(previous)return send(200,{id:previous.id,total:previous.total,paymentStatus:previous.paymentStatus});
 
         if (
@@ -64,7 +65,7 @@ export async function ordersController({req,path,send,json,db,list,get,insert,li
           }
           const order = {
             requestId: data.requestId,
-            userId: account?.user_id ?? null,
+            userId: account.user_id,
             id: randomUUID(),
             customer: {
               name: data.customer.name,

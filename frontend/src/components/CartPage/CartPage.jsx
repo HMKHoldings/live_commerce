@@ -3,14 +3,14 @@ import {ShoppingCart, Minus, Plus, CheckCircle2} from 'lucide-react';
 import CheckoutForm from '../CheckoutForm/CheckoutForm';
 import './styles.css';
 const won=n=>n.toLocaleString('ko-KR')+'원';
-export default function CartPage({cart,products,onChange,onSelect,onBack,onLike,liked}) {
+export default function CartPage({cart,products,onChange,onSelect,onBack,onLike,liked,isAuthenticated,onRequireLogin}) {
  const [excluded,setExcluded]=useState([]),[checkout,setCheckout]=useState(null),[completed,setCompleted]=useState(null);
  const lines=products.filter(p=>cart[p.id]>0);
  const chosen=lines.filter(p=>!excluded.includes(String(p.id)));
  const total=chosen.reduce((sum,p)=>sum+p.price*cart[p.id],0);
  const remove=ids=>onChange(current=>Object.fromEntries(Object.entries(current).filter(([id])=>!ids.includes(String(id)))));
  const quantity=(id,value)=>{if(Number.isInteger(value)&&value>=1&&value<=99)onChange(current=>({...current,[id]:value}));};
- const start=items=>{if(!items.length)return;setCheckout(Object.fromEntries(items.map(p=>[p.id,cart[p.id]])));window.scrollTo({top:0,behavior:'instant'});};
+ const start=items=>{if(!items.length)return;if(!isAuthenticated){onRequireLogin();return;}setCheckout(Object.fromEntries(items.map(p=>[p.id,cart[p.id]])));window.scrollTo({top:0,behavior:'instant'});};
  return <main className="cart-page wrap"><p className="cart-breadcrumb"><button onClick={onBack}>홈</button> &gt; 장바구니</p><header className="cart-heading"><h1>장바구니</h1><ol>{['장바구니','주문작성/결제','주문완료'].map((label,i)=><li key={label} aria-current={(completed?2:checkout?1:0)===i?'step':undefined}><b>{String(i+1).padStart(2,'0')}</b>{label}</li>)}</ol></header>
  {completed?<section className="cart-complete"><CheckCircle2 size={48}/><h2>주문이 접수되었습니다.</h2><p>주문번호: {completed.id}</p><strong>{won(completed.total)}</strong><p>미결제 주문입니다. 온라인 결제는 진행되지 않았습니다.</p><button className="cart-primary" onClick={onBack}>쇼핑 계속하기</button></section>:checkout?<section className="cart-checkout"><button className="cart-secondary" onClick={()=>setCheckout(null)}>장바구니로 돌아가기</button><h2>주문 상품 {Object.keys(checkout).length}개</h2><p>상품금액 {won(products.reduce((sum,p)=>sum+p.price*(checkout[p.id]||0),0))}</p><CheckoutForm cart={checkout} onComplete={result=>{setCompleted(result);onChange(current=>{const next={...current};for(const [id,count] of Object.entries(checkout)){const left=(next[id]||0)-count;if(left>0)next[id]=left;else delete next[id];}return next;});}}/></section>:<>
  <h2 className="cart-list-title">내가 담은 상품리스트</h2>

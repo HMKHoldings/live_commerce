@@ -103,7 +103,7 @@ export function App({children}) {
   const [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [liked, setLiked] = useState([]),
-    [cart, setCart] = useState({}),
+    [cart, setCart] = useState(()=>{try{return JSON.parse(sessionStorage.getItem('orange-cart')||'{}');}catch{return {};}}),
     [panel, setPanel] = useState(null),
     [selected, setSelectedState] = useState(
       () =>
@@ -177,7 +177,17 @@ export function App({children}) {
     setToast(s);
     window.setTimeout(() => setToast(""), 2600);
   };
-  const toggle = async (id) => {
+  useEffect(()=>{try{sessionStorage.setItem('orange-cart',JSON.stringify(cart));}catch{}},[cart]);
+  useEffect(()=>{
+    if(!customerId||new URLSearchParams(location.search).get('checkout')!=='1')return;
+    setPanel('cart');setSelectedState(null);
+    const url=new URL(location.href);url.searchParams.delete('checkout');history.replaceState(null,'',url);
+  },[customerId]);
+  const requireCustomerLogin=()=>{
+    try{sessionStorage.setItem('orange-cart',JSON.stringify(cart));}catch{}
+    const next=new URL(import.meta.env.BASE_URL,location.origin);next.searchParams.set('checkout','1');
+    window.location.assign(`${import.meta.env.BASE_URL}login.html?next=${encodeURIComponent(next.href)}`);
+  };  const toggle = async (id) => {
     if(savingLike)return;
     const next=liked.includes(id)?liked.filter(x=>x!==id):[...liked,id];
     if(!customerId){setLiked(next);return;}
@@ -483,7 +493,7 @@ export function App({children}) {
         </nav>
       </header>
       {panel === "cart" ? (
-        <CartPage cart={cart} products={inventory} onChange={setCart} onSelect={setSelected} onBack={() => setPanel(null)} onLike={toggle} liked={liked} />
+        <CartPage cart={cart} products={inventory} onChange={setCart} onSelect={setSelected} onBack={() => setPanel(null)} onLike={toggle} liked={liked} isAuthenticated={Boolean(customerId)} onRequireLogin={requireCustomerLogin} />
       ) : selected ? (
         <ProductDetail
           key={selected.id}
@@ -497,6 +507,7 @@ export function App({children}) {
           onBack={() => setSelected(null)}
           onAdd={add}
           onBuy={(product, quantity) => {
+            if(!customerId){requireCustomerLogin();return;}
             add(product, quantity);
             setPanel("cart");
           }}

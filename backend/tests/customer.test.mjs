@@ -1,4 +1,4 @@
-﻿import {test} from 'node:test';
+import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {openDatabase} from '../models/database.mjs';
 import {createApplication} from '../app.mjs';
@@ -20,7 +20,7 @@ test('customer signup, session isolation, profile, favorites, orders and logout'
   assert.equal((await request('/customer/profile','PUT',{name:'Updated',phone:'01012345678'},{cookie:a.cookie})).status,403);
   assert.equal((await request('/customer/profile','PUT',{name:'Updated',phone:'01012345678'},a)).status,200);
   assert.equal((await request('/customer/addresses','POST',{name:'Updated',phone:'01012345678',address:'Test address'},a)).status,200);
-  const products=(await request('/content')).data.products;const p=products.find(p=>p.stock>0);
+  const products=(await request('/content')).data.products;const p=products.find(p=>p.status==='published'&&p.stock>0);
   assert.equal((await request('/customer/favorites','PUT',{ids:[p.id]},a)).status,200);
   const review=await request('/reviews','POST',{productId:p.id,title:'Useful product',body:'This product worked well.',rating:5},a);assert.equal(review.status,201);
   const ownReviews=(await request('/customer/me','GET',undefined,a)).data.reviews;assert.equal(ownReviews.length,1);assert.equal(ownReviews[0].userId,me.data.user.id);assert.equal(ownReviews[0].author,'Updated');assert.equal(ownReviews[0].productName,p.name);

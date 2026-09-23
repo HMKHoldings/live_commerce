@@ -25,7 +25,9 @@ function Login(){
    const session=await api('/customer/login',{method:'POST',body:{username:username.trim(),password}});
    setCsrf(session.csrf);
    try{if(remember)localStorage.setItem('orange-remembered-username',username.trim());else localStorage.removeItem('orange-remembered-username');}catch{}
-   window.location.assign(import.meta.env.BASE_URL+'mypage.html');
+   const next=new URLSearchParams(location.search).get('next');
+   const fallback=import.meta.env.BASE_URL+'mypage.html';
+   if(next){const target=new URL(next,location.origin);window.location.assign(target.origin===location.origin?target.href:fallback);}else window.location.assign(fallback);
   }catch(failure){setError(failure.status===401?'아이디 또는 비밀번호를 확인해주세요.':failure.status===429?'로그인 시도가 많습니다. 잠시 후 다시 시도해주세요.':'로그인할 수 없습니다. 서버 연결을 확인하고 다시 시도해주세요.');setBusy(false);}
  }
  if(help)return <AccountRecovery key={help} mode={help} onMode={setHelp} onBack={()=>{setHelp("");setError("");}} onChooseUsername={value=>{setUsername(value);setHelp("");setError("");}}/>;
@@ -35,6 +37,6 @@ function Login(){
   {error&&<p role="alert" className="login-error">{error}</p>}
   <button className="login-submit" disabled={busy}>{busy?'로그인 중…':'로그인'}</button>
   <label className="login-remember"><input type="checkbox" checked={remember} onChange={e=>{setRemember(e.target.checked);if(!e.target.checked)try{localStorage.removeItem('orange-remembered-username');}catch{}}}/>아이디저장</label>
- </form><nav className="login-links" aria-label="계정 도움말"><a href={import.meta.env.BASE_URL+'signup.html'}>회원가입</a><button onClick={()=>setHelp('id')}>아이디찾기</button><button onClick={()=>setHelp('password')}>비밀번호찾기</button></nav></main>;
+ </form><nav className="login-links" aria-label="계정 도움말"><a href={import.meta.env.BASE_URL+'signup.html'}>회원가입</a><button onClick={()=>setHelp('id')}>아이디찾기</button><button onClick={()=>setHelp('password')}>비밀번호찾기</button></nav><a className="login-creator-link" href={import.meta.env.BASE_URL+'creator-login.html'}>크리에이터 로그인 →</a></main>;
 }
 createRoot(document.getElementById('root')).render(<StoreProvider><App><Login/></App></StoreProvider>);

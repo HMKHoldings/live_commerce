@@ -66,6 +66,7 @@ test("authenticated management, publication, persistence and storefront submissi
       ...products[0],
       name: "Admin edited product",
       price: 12345,
+      status: "published",
     };
     assert.equal(
       (
@@ -150,6 +151,11 @@ test("authenticated management, publication, persistence and storefront submissi
     assert.ok(
       (await request("/content")).data.reviews.some((r) => r.id === pending.id),
     );
+    const guestOrder = await request('/orders','POST',{requestId:randomBytes(16).toString('hex')},false);
+    assert.equal(guestOrder.status,401);
+    const shopper = await request('/customer/signup','POST',{username:'order_shopper',password:'test-password-12345',name:'Order Shopper',email:'order@example.test',consents:{terms:true,privacy:true,age:true}},false);
+    assert.equal(shopper.status,200);
+    const customerHeaders={Cookie:shopper.cookie?.split(';')[0]||shopper.response.headers.get('set-cookie').split(';')[0],'X-CSRF-Token':shopper.data.csrf};
     const order = await request(
       "/orders",
       "POST",
@@ -163,6 +169,7 @@ test("authenticated management, publication, persistence and storefront submissi
         total: 1,
       },
       false,
+      customerHeaders,
     );
     assert.equal(order.status, 201);
     assert.equal(order.data.total, 24690);
@@ -185,12 +192,13 @@ test("authenticated management, publication, persistence and storefront submissi
             items: [{ productId: product.id, quantity: 99 }],
           },
           false,
+          customerHeaders,
         )
       ).status,
       409,
     );
     const storedOrder=(await request('/admin/orders')).data.find(o=>o.id===order.data.id);
-    const duplicate=await request('/orders','POST',{requestId:storedOrder.requestId},false);
+    const duplicate=await request('/orders','POST',{requestId:storedOrder.requestId},false,customerHeaders);
     assert.equal(duplicate.status,200);
     assert.equal(duplicate.data.id,storedOrder.id);
     const cancelled=await request(`/admin/orders/${storedOrder.id}`,'PUT',{...storedOrder,status:'cancelled'});

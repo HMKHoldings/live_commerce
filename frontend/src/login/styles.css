@@ -43,3 +43,5 @@
 .recovery-ids{display:grid;gap:10px}
 .recovery-ids button{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:19px;background:#fff7f1;border:1px solid #ffccae;border-radius:5px;color:#333;font-size:18px;font-weight:600}
 .recovery-ids button span{color:#e86015;font-size:13px}
+
+.login-creator-link{display:block;margin-top:22px;padding:12px;border:1px solid #ffb58e;border-radius:8px;color:#e85d1b;text-align:center;text-decoration:none;font-size:13px;font-weight:700}.login-creator-link:hover{background:#fff5ef}
