@@ -81,7 +81,7 @@ export function StoreProvider({ children }) {
       window.removeEventListener("storage", refresh);
     };
   }, [refresh]);
-  
+
   const normalized = useMemo(() => normalize(data), [data]);
   return (
     <Context.Provider value={{ ...normalized, connected, error, refresh }}>

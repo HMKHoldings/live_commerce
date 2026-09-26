@@ -10,7 +10,9 @@ export default function ProductCatalog({ collection, onSelect, onBack, joinedDea
   const ranked = collection.kind === "best";
   const arrivals = collection.kind === "new";
   const deals = collection.kind === "group-deals";
-  const categorized = ranked || arrivals;
+  const customFilters = collection.filters || [];
+  const numbered = ranked || arrivals;
+  const categorized = numbered || customFilters.length > 0;
 
   useEffect(() => {
     if (!deals) return undefined;
@@ -25,11 +27,16 @@ export default function ProductCatalog({ collection, onSelect, onBack, joinedDea
     ["식품", ["식품", "food"]],
     ["생활", ["생활", "living"]],
   ];
-  const accepted = categories.find(([label]) => label === category)?.[1] || [];
+  const filterTabs = customFilters.length
+    ? [["전체", []], ...customFilters.map((filter) => [filter.label, filter.productIds])]
+    : categories;
+  const accepted = filterTabs.find(([label]) => label === category)?.[1] || [];
   const visibleProducts = collection.products.filter(
     (product) =>
       (!deals || Date.parse(product.endsAt) > now) &&
-      (!categorized || category === "전체" || accepted.includes(String(product.category).toLowerCase())),
+      (!categorized || category === "전체" || (customFilters.length
+        ? accepted.includes(String(product.id))
+        : accepted.includes(String(product.category).toLowerCase()))),
   );
 
   return (
@@ -41,7 +48,7 @@ export default function ProductCatalog({ collection, onSelect, onBack, joinedDea
       </div>
       {categorized && (
         <div className="best-category-tabs" aria-label={collection.title + " 카테고리"}>
-          {categories.map(([label]) => (
+          {filterTabs.map(([label]) => (
             <button key={label} type="button" aria-pressed={category === label} onClick={() => setCategory(label)}>{label}</button>
           ))}
         </div>
@@ -59,7 +66,7 @@ export default function ProductCatalog({ collection, onSelect, onBack, joinedDea
 
           return (
             <article className="catalog-product-card" key={product.id}>
-              {categorized && <span className="best-product-rank" aria-label={(ranked ? collection.products.indexOf(product) + 1 : index + 1) + "번"}>{ranked ? collection.products.indexOf(product) + 1 : index + 1}</span>}
+              {numbered && <span className="best-product-rank" aria-label={(ranked ? collection.products.indexOf(product) + 1 : index + 1) + "번"}>{ranked ? collection.products.indexOf(product) + 1 : index + 1}</span>}
               <button className="catalog-product-image" onClick={() => onSelect(product)} aria-label={product.name + " 상세보기"}>
                 <img src={product.image} alt={product.name} loading="lazy" />
                 {product.platform && <span className="catalog-live-badge">라이브 상품 <span><Play size={20} fill="currentColor" /></span></span>}

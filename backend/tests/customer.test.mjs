@@ -10,6 +10,7 @@ test('customer signup, session isolation, profile, favorites, orders and logout'
  const request=async(path,method='GET',body,session={})=>{const response=await fetch(base+path,{method,headers:{Origin:'http://localhost:5173','Content-Type':'application/json',Cookie:session.cookie||'','X-CSRF-Token':session.csrf||''},body:body?JSON.stringify(body):undefined});return {status:response.status,data:await response.json(),cookie:response.headers.get('set-cookie')?.split(';')[0]};};
  try{
   const input={username:'shopper_one',password:'test-password-12345',name:'Shopper',email:'shopper@example.test',consents:{terms:true,privacy:true,age:true}};
+  assert.deepEqual((await request('/customer/session')).data,{authenticated:false});
   assert.equal((await request('/customer/me')).status,401);
   assert.equal((await request('/customer/signup','POST',{...input,consents:{}})).status,400);
   const signup=await request('/customer/signup','POST',input);assert.equal(signup.status,200);const a={cookie:signup.cookie,csrf:signup.data.csrf};

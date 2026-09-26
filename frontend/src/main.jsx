@@ -95,6 +95,7 @@ export function App({children}) {
     inventory,
     groupDeals,
     bestProducts,
+    collections,
     reviews,
     settings,
     connected,
@@ -131,7 +132,8 @@ export function App({children}) {
   };
   const [savingLike,setSavingLike] = useState(false);
   useEffect(() => {
-    const syncCustomer=()=>api('/customer/me').then(result=>{
+    const syncCustomer=()=>api('/customer/session').then(result=>{
+      if(!result.authenticated){setCustomerId(null);return;}
       setCsrf(result.csrf);setCustomerId(result.user.id);
       setLiked(result.favorites.map(id=>/^\d+$/.test(String(id))?Number(id):id));
     }).catch(()=>setCustomerId(null));
@@ -242,6 +244,52 @@ export function App({children}) {
     });
   };
   const navigate = (name) => {
+    if (name === "오늘의 특가") {
+      const offers = inventory
+        .filter((product) => Number(product.originalPrice) > Number(product.price))
+        .sort((a, b) =>
+          (1 - Number(b.price) / Number(b.originalPrice)) -
+          (1 - Number(a.price) / Number(a.originalPrice)),
+        );
+      setActive(name);
+      setMenu(false);
+      browseCollection({
+        kind: "offers",
+        title: "오늘의 특가",
+        description: "오늘만 만날 수 있는 오렌지스토어의 특별 할인 상품입니다.",
+        products: offers,
+      });
+      return;
+    }
+    if (name === "브랜드관") {
+      const brands = [...new Set(inventory.map((product) => product.brandName?.trim() || "오렌지 셀렉트"))];
+      setActive(name);
+      setMenu(false);
+      browseCollection({
+        kind: "brands",
+        title: "브랜드관",
+        description: "오렌지스토어가 엄선한 브랜드와 상품을 한곳에서 만나보세요.",
+        products: inventory,
+        filters: brands.map((brand) => ({
+          label: brand,
+          productIds: inventory.filter((product) => (product.brandName?.trim() || "오렌지 셀렉트") === brand).map((product) => String(product.id)),
+        })),
+      });
+      return;
+    }
+    if (name === "기획전") {
+      const exhibitionProducts = [...new Map(collections.flatMap((item) => item.products).map((product) => [String(product.id), product])).values()];
+      setActive(name);
+      setMenu(false);
+      browseCollection({
+        kind: "exhibitions",
+        title: "기획전",
+        description: "테마별로 엄선한 특별한 상품들을 둘러보세요.",
+        products: exhibitionProducts,
+        filters: collections.map((item) => ({label: item.title, productIds: item.products.map((product) => String(product.id))})),
+      });
+      return;
+    }
     if (name === "공동구매") {
       if (selected) setSelected(null);
       setActive(name);
@@ -444,7 +492,7 @@ export function App({children}) {
             </button>
             <div className="nav-secondary">
               {["오늘의 특가", "브랜드관", "기획전"].map((n) => (
-                <button key={n} onClick={() => navigate(n)}>
+                <button key={n} className={active === n ? "active" : ""} onClick={() => navigate(n)}>
                   {n}
                 </button>
               ))}

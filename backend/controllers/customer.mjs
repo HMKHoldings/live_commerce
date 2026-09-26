@@ -32,6 +32,11 @@ export async function customerController({req,res,path,send,json,db,limited,prod
   try{const result=db.prepare('INSERT INTO customers(username,name,email,salt,hash,data) VALUES(?,?,?,?,?,?)').run(input.username,input.name.trim(),input.email.trim(),salt,passwordHash,JSON.stringify({favorites:[],addresses:[],inquiries:[],consentedAt:new Date().toISOString()}));return issue({id:Number(result.lastInsertRowid),username:input.username,name:input.name.trim()});}catch(e){if(String(e.message).includes('UNIQUE'))throw httpError(409,'이미 사용 중인 아이디입니다.');throw e;}
  }
  const session=customerSession(req,db);
+ if(action==='session'&&req.method==='GET'){
+  if(!session)return send(200,{authenticated:false});
+  const data=JSON.parse(session.data);
+  return send(200,{authenticated:true,csrf:session.csrf,user:{id:session.user_id,username:session.username,name:session.name},favorites:data.favorites||[]});
+ }
  if(!session)throw httpError(401,'로그인이 필요합니다.');
  if(req.method!=='GET'&&req.headers['x-csrf-token']!==session.csrf)throw httpError(403,'Invalid session token');
  const data=JSON.parse(session.data);
