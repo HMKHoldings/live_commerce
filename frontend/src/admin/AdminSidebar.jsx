@@ -14,7 +14,7 @@ const groups = [
     ["orders", "주문 목록"], ["orders", "배송 관리"], ["orders", "취소/교환/반품"], ["orders", "송장 관리"],
   ]},
   { icon: Users, title: "회원 관리", items: [
-    ["orders", "회원 목록"], ["settings", "회원 등급 관리"], ["promos", "쿠폰/포인트 관리"], ["questions", "1:1 문의 관리"],
+    ["orders", "회원 목록"], ["settings", "회원 등급 관리"], ["coupons", "쿠폰 관리"], ["questions", "1:1 문의 관리"],
   ]},
   { icon: Boxes, title: "공동구매 관리", items: [
     ["products", "공동구매 상품"], ["products", "진행중인 공동구매"], ["products", "종료된 공동구매"], ["orders", "참여자 관리"],

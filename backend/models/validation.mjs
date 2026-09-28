@@ -61,7 +61,14 @@ export function createValidator(get) {
         item.rating > 5)
     )
       throw httpError(400, "평점은 1–5입니다.");
-    if (resource === "settings" && item.id !== "site")
+    if (resource === "coupons") {
+      if (!item.title?.trim() || !["amount", "shipping"].includes(item.couponType))
+        throw httpError(400, "Invalid coupon");
+      if (!Number.isSafeInteger(item.amount) || item.amount < 0 || !Number.isSafeInteger(item.minimumSpend) || item.minimumSpend < 0)
+        throw httpError(400, "Invalid coupon amount");
+      if (item.expiresAt && !/^\d{4}-\d{2}-\d{2}$/.test(item.expiresAt))
+        throw httpError(400, "Invalid coupon expiry date");
+    }    if (resource === "settings" && item.id !== "site")
       throw httpError(400, "Only site settings are supported");
     if (
       item.status &&

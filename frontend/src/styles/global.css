@@ -158,7 +158,7 @@
     font-weight: 600;
     padding: 0;
   }
-  .nav-secondary button:first-child {
+  .nav-secondary button.active {
     color: var(--orange);
   }
   .catalog {

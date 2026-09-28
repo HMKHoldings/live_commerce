@@ -1,5 +1,5 @@
 import CartPage from "./components/CartPage/CartPage";
-import {api, setCsrf} from './api/storeApi';
+import { api, setCsrf } from "./api/storeApi";
 import ProductCatalog from "./components/ProductCatalog/ProductCatalog";
 import AccountMenu from "./components/AccountMenu/AccountMenu";
 import StoreLogin from "./components/StoreLogin/StoreLogin";
@@ -27,8 +27,6 @@ import {
 } from "lucide-react";
 import "./styles/global.css";
 import "./styles/mascot.css";
-
-
 
 import HeroBanner from "./components/HeroBanner/HeroBanner.jsx";
 import LiveVideo from "./components/LiveVideo/LiveVideo.jsx";
@@ -89,7 +87,7 @@ function Platform({ name }) {
     </span>
   );
 }
-export function App({children}) {
+export function App({ children }) {
   const {
     products,
     inventory,
@@ -104,7 +102,13 @@ export function App({children}) {
   const [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [liked, setLiked] = useState([]),
-    [cart, setCart] = useState(()=>{try{return JSON.parse(sessionStorage.getItem('orange-cart')||'{}');}catch{return {};}}),
+    [cart, setCart] = useState(() => {
+      try {
+        return JSON.parse(sessionStorage.getItem("orange-cart") || "{}");
+      } catch {
+        return {};
+      }
+    }),
     [panel, setPanel] = useState(null),
     [selected, setSelectedState] = useState(
       () =>
@@ -122,29 +126,48 @@ export function App({children}) {
     [joinedDeals, setJoinedDeals] = useState([]),
     [collection, setCollection] = useState(null),
     [selectedReview, setSelectedReview] = useState(null);
-  const [customerId,setCustomerId] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
   const primaryNavRef = useRef(null);
   const scrollPrimaryNav = () => {
     const nav = primaryNavRef.current;
     if (!nav) return;
     const atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 8;
-    nav.scrollTo({ left: atEnd ? 0 : nav.scrollLeft + nav.clientWidth * .72, behavior: "smooth" });
+    nav.scrollTo({
+      left: atEnd ? 0 : nav.scrollLeft + nav.clientWidth * 0.72,
+      behavior: "smooth",
+    });
   };
-  const [savingLike,setSavingLike] = useState(false);
+  const [savingLike, setSavingLike] = useState(false);
   useEffect(() => {
-    const syncCustomer=()=>api('/customer/session').then(result=>{
-      if(!result.authenticated){setCustomerId(null);return;}
-      setCsrf(result.csrf);setCustomerId(result.user.id);
-      setLiked(result.favorites.map(id=>/^\d+$/.test(String(id))?Number(id):id));
-    }).catch(()=>setCustomerId(null));
-    syncCustomer();window.addEventListener('customer-updated',syncCustomer);
-    return()=>window.removeEventListener('customer-updated',syncCustomer);
-  },[]);
-  useEffect(()=>{
-    const receive=event=>setCart(c=>({...c,[event.detail.id]:(c[event.detail.id]||0)+1}));
-    window.addEventListener('customer-add-cart',receive);
-    return()=>window.removeEventListener('customer-add-cart',receive);
-  },[]);
+    const syncCustomer = () =>
+      api("/customer/session")
+        .then((result) => {
+          if (!result.authenticated) {
+            setCustomerId(null);
+            return;
+          }
+          setCsrf(result.csrf);
+          setCustomerId(result.user.id);
+          setLiked(
+            result.favorites.map((id) =>
+              /^\d+$/.test(String(id)) ? Number(id) : id,
+            ),
+          );
+        })
+        .catch(() => setCustomerId(null));
+    syncCustomer();
+    window.addEventListener("customer-updated", syncCustomer);
+    return () => window.removeEventListener("customer-updated", syncCustomer);
+  }, []);
+  useEffect(() => {
+    const receive = (event) =>
+      setCart((c) => ({
+        ...c,
+        [event.detail.id]: (c[event.detail.id] || 0) + 1,
+      }));
+    window.addEventListener("customer-add-cart", receive);
+    return () => window.removeEventListener("customer-add-cart", receive);
+  }, []);
   const setSelected = (product) => {
     const url = new URL(location.href);
     if (product) url.searchParams.set("product", product.id);
@@ -179,29 +202,60 @@ export function App({children}) {
     setToast(s);
     window.setTimeout(() => setToast(""), 2600);
   };
-  useEffect(()=>{try{sessionStorage.setItem('orange-cart',JSON.stringify(cart));}catch{}},[cart]);
-  useEffect(()=>{
-    if(!customerId||new URLSearchParams(location.search).get('checkout')!=='1')return;
-    setPanel('cart');setSelectedState(null);
-    const url=new URL(location.href);url.searchParams.delete('checkout');history.replaceState(null,'',url);
-  },[customerId]);
-  const requireCustomerLogin=()=>{
-    try{sessionStorage.setItem('orange-cart',JSON.stringify(cart));}catch{}
-    const next=new URL(import.meta.env.BASE_URL,location.origin);next.searchParams.set('checkout','1');
-    window.location.assign(`${import.meta.env.BASE_URL}login.html?next=${encodeURIComponent(next.href)}`);
-  };  const toggle = async (id) => {
-    if(savingLike)return;
-    const next=liked.includes(id)?liked.filter(x=>x!==id):[...liked,id];
-    if(!customerId){setLiked(next);return;}
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("orange-cart", JSON.stringify(cart));
+    } catch {}
+  }, [cart]);
+  useEffect(() => {
+    if (
+      !customerId ||
+      new URLSearchParams(location.search).get("checkout") !== "1"
+    )
+      return;
+    setPanel("cart");
+    setSelectedState(null);
+    const url = new URL(location.href);
+    url.searchParams.delete("checkout");
+    history.replaceState(null, "", url);
+  }, [customerId]);
+  const requireCustomerLogin = () => {
+    try {
+      sessionStorage.setItem("orange-cart", JSON.stringify(cart));
+    } catch {}
+    const next = new URL(import.meta.env.BASE_URL, location.origin);
+    next.searchParams.set("checkout", "1");
+    window.location.assign(
+      `${import.meta.env.BASE_URL}login.html?next=${encodeURIComponent(next.href)}`,
+    );
+  };
+  const toggle = async (id) => {
+    if (savingLike) return;
+    const next = liked.includes(id)
+      ? liked.filter((x) => x !== id)
+      : [...liked, id];
+    if (!customerId) {
+      setLiked(next);
+      return;
+    }
     setSavingLike(true);
-    try{await api('/customer/favorites',{method:'PUT',body:{ids:next}});setLiked(next);window.dispatchEvent(new Event('customer-updated'));}
-    catch(e){notify(e.message);}finally{setSavingLike(false);}
+    try {
+      await api("/customer/favorites", { method: "PUT", body: { ids: next } });
+      setLiked(next);
+      window.dispatchEvent(new Event("customer-updated"));
+    } catch (e) {
+      notify(e.message);
+    } finally {
+      setSavingLike(false);
+    }
   };
   const add = (p, quantity = 1) => {
     setCart((c) => ({ ...c, [p.id]: (c[p.id] || 0) + quantity }));
     notify("장바구니에 상품을 담았어요");
   };
-  useEffect(() => { if (panel === "cart") window.scrollTo({top: 0, behavior: "instant"}); }, [panel]);
+  useEffect(() => {
+    if (panel === "cart") window.scrollTo({ top: 0, behavior: "instant" });
+  }, [panel]);
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   const joinDeal = (deal) => {
     if (joinedDeals.includes(deal.id)) return;
@@ -246,10 +300,14 @@ export function App({children}) {
   const navigate = (name) => {
     if (name === "오늘의 특가") {
       const offers = inventory
-        .filter((product) => Number(product.originalPrice) > Number(product.price))
-        .sort((a, b) =>
-          (1 - Number(b.price) / Number(b.originalPrice)) -
-          (1 - Number(a.price) / Number(a.originalPrice)),
+        .filter(
+          (product) => Number(product.originalPrice) > Number(product.price),
+        )
+        .sort(
+          (a, b) =>
+            1 -
+            Number(b.price) / Number(b.originalPrice) -
+            (1 - Number(a.price) / Number(a.originalPrice)),
         );
       setActive(name);
       setMenu(false);
@@ -262,23 +320,41 @@ export function App({children}) {
       return;
     }
     if (name === "브랜드관") {
-      const brands = [...new Set(inventory.map((product) => product.brandName?.trim() || "오렌지 셀렉트"))];
+      const brands = [
+        ...new Set(
+          inventory.map(
+            (product) => product.brandName?.trim() || "오렌지 셀렉트",
+          ),
+        ),
+      ];
       setActive(name);
       setMenu(false);
       browseCollection({
         kind: "brands",
         title: "브랜드관",
-        description: "오렌지스토어가 엄선한 브랜드와 상품을 한곳에서 만나보세요.",
+        description:
+          "오렌지스토어가 엄선한 브랜드와 상품을 한곳에서 만나보세요.",
         products: inventory,
         filters: brands.map((brand) => ({
           label: brand,
-          productIds: inventory.filter((product) => (product.brandName?.trim() || "오렌지 셀렉트") === brand).map((product) => String(product.id)),
+          productIds: inventory
+            .filter(
+              (product) =>
+                (product.brandName?.trim() || "오렌지 셀렉트") === brand,
+            )
+            .map((product) => String(product.id)),
         })),
       });
       return;
     }
     if (name === "기획전") {
-      const exhibitionProducts = [...new Map(collections.flatMap((item) => item.products).map((product) => [String(product.id), product])).values()];
+      const exhibitionProducts = [
+        ...new Map(
+          collections
+            .flatMap((item) => item.products)
+            .map((product) => [String(product.id), product]),
+        ).values(),
+      ];
       setActive(name);
       setMenu(false);
       browseCollection({
@@ -286,7 +362,10 @@ export function App({children}) {
         title: "기획전",
         description: "테마별로 엄선한 특별한 상품들을 둘러보세요.",
         products: exhibitionProducts,
-        filters: collections.map((item) => ({label: item.title, productIds: item.products.map((product) => String(product.id))})),
+        filters: collections.map((item) => ({
+          label: item.title,
+          productIds: item.products.map((product) => String(product.id)),
+        })),
       });
       return;
     }
@@ -308,7 +387,7 @@ export function App({children}) {
       if (selected) setSelected(null);
       setActive(name);
       setMenu(false);
-      browseCollection({kind: "new", title: "신상품", products: inventory});
+      browseCollection({ kind: "new", title: "신상품", products: inventory });
       return;
     }
     setPanel(null);
@@ -316,7 +395,11 @@ export function App({children}) {
       if (selected) setSelected(null);
       setActive(name);
       setMenu(false);
-      browseCollection({kind: "best", title: "베스트 상품", products: bestProducts});
+      browseCollection({
+        kind: "best",
+        title: "베스트 상품",
+        products: bestProducts,
+      });
       return;
     }
     setCollection(null);
@@ -480,19 +563,32 @@ export function App({children}) {
                     .filter(Boolean)
                     .join(" ")}
                   onClick={() =>
-                    n === "고객센터" ? window.location.assign(import.meta.env.BASE_URL + "customer-center.html") : navigate(n)
+                    n === "고객센터"
+                      ? window.location.assign(
+                          import.meta.env.BASE_URL + "customer-center.html",
+                        )
+                      : navigate(n)
                   }
                 >
                   {n}
                 </button>
               ))}
             </div>
-            <button className="nav-scroll-more" type="button" onClick={scrollPrimaryNav} aria-label="다음 메뉴 보기">
+            <button
+              className="nav-scroll-more"
+              type="button"
+              onClick={scrollPrimaryNav}
+              aria-label="다음 메뉴 보기"
+            >
               <ChevronRight size={19} />
             </button>
             <div className="nav-secondary">
               {["오늘의 특가", "브랜드관", "기획전"].map((n) => (
-                <button key={n} className={active === n ? "active" : ""} onClick={() => navigate(n)}>
+                <button
+                  key={n}
+                  className={active === n ? "active" : ""}
+                  onClick={() => navigate(n)}
+                >
                   {n}
                 </button>
               ))}
@@ -541,7 +637,17 @@ export function App({children}) {
         </nav>
       </header>
       {panel === "cart" ? (
-        <CartPage cart={cart} products={inventory} onChange={setCart} onSelect={setSelected} onBack={() => setPanel(null)} onLike={toggle} liked={liked} isAuthenticated={Boolean(customerId)} onRequireLogin={requireCustomerLogin} />
+        <CartPage
+          cart={cart}
+          products={inventory}
+          onChange={setCart}
+          onSelect={setSelected}
+          onBack={() => setPanel(null)}
+          onLike={toggle}
+          liked={liked}
+          isAuthenticated={Boolean(customerId)}
+          onRequireLogin={requireCustomerLogin}
+        />
       ) : selected ? (
         <ProductDetail
           key={selected.id}
@@ -555,15 +661,35 @@ export function App({children}) {
           onBack={() => setSelected(null)}
           onAdd={add}
           onBuy={(product, quantity) => {
-            if(!customerId){requireCustomerLogin();return;}
+            if (!customerId) {
+              requireCustomerLogin();
+              return;
+            }
             add(product, quantity);
             setPanel("cart");
           }}
           notify={notify}
         />
       ) : collection ? (
-        <ProductCatalog key={collection.kind || collection.title} collection={collection.kind === "best" ? {...collection, products: bestProducts} : collection.kind === "new" ? {...collection, products: inventory} : collection} onSelect={setSelected} joinedDeals={joinedDeals} onBack={() => {setCollection(null);setActive("쇼핑");}} />
-      ) : children ? children : (
+        <ProductCatalog
+          key={collection.kind || collection.title}
+          collection={
+            collection.kind === "best"
+              ? { ...collection, products: bestProducts }
+              : collection.kind === "new"
+                ? { ...collection, products: inventory }
+                : collection
+          }
+          onSelect={setSelected}
+          joinedDeals={joinedDeals}
+          onBack={() => {
+            setCollection(null);
+            setActive("쇼핑");
+          }}
+        />
+      ) : children ? (
+        children
+      ) : (
         <main>
           {active !== "SNS 라이브" && (
             <HeroBanner
@@ -607,7 +733,16 @@ export function App({children}) {
                     : "지금 SNS에서 화제인 그 상품! 오렌지스토어에서 바로 만나보세요."}
                 </p>
                 {active !== "SNS 라이브" && (
-                  <button onClick={() => browseCollection({ title: "라이브속 인기상품", description: "라이브방송을 진행했었던 상품이에요~ 특별혜택을 누리지 못했다면 다음에는 꼭 누려보세요!", products: products.filter(p => p.platform) })}>
+                  <button
+                    onClick={() =>
+                      browseCollection({
+                        title: "라이브속 인기상품",
+                        description:
+                          "라이브방송을 진행했었던 상품이에요~ 특별혜택을 누리지 못했다면 다음에는 꼭 누려보세요!",
+                        products: products.filter((p) => p.platform),
+                      })
+                    }
+                  >
                     더보기 <ChevronRight size={15} />
                   </button>
                 )}
@@ -664,7 +799,14 @@ export function App({children}) {
                   <div className="section-heading">
                     <h2>지금 인기 상품</h2>
                     <p>지금 가장 사랑받는 상품들을 만나보세요.</p>
-                    <button onClick={() => browseCollection({ title: "지금 인기 상품", products: products.filter(p => !p.platform) })}>
+                    <button
+                      onClick={() =>
+                        browseCollection({
+                          title: "지금 인기 상품",
+                          products: products.filter((p) => !p.platform),
+                        })
+                      }
+                    >
                       더보기 <ChevronRight size={15} />
                     </button>
                   </div>
@@ -707,9 +849,12 @@ export function App({children}) {
           </div>
         </main>
       )}
-      <StoreFooter showExtras={!children}
+      <StoreFooter
+        showExtras={!children}
         brand={<Brand />}
-        onOpenLogin={() => window.location.assign(import.meta.env.BASE_URL+'login.html')}
+        onOpenLogin={() =>
+          window.location.assign(import.meta.env.BASE_URL + "login.html")
+        }
         onBrowseProducts={() => setPanel("all")}
       />
       {panel && panel !== "cart" && (
@@ -742,7 +887,24 @@ export function App({children}) {
                   <p>좋은 상품과 새로운 일상을 만나보세요.</p>
                   <StoreLogin />
                 </>
-              ) : panel === "signup" ? (<><Orange /><h2>회원가입</h2><p>일반 회원가입은 준비 중입니다.</p><p>관리자 계정이 있다면 로그인해주세요.</p><button className="primary" onClick={() => window.location.assign(import.meta.env.BASE_URL+'login.html')}>로그인</button></>) : panel === "reviews" ? (
+              ) : panel === "signup" ? (
+                <>
+                  <Orange />
+                  <h2>회원가입</h2>
+                  <p>일반 회원가입은 준비 중입니다.</p>
+                  <p>관리자 계정이 있다면 로그인해주세요.</p>
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      window.location.assign(
+                        import.meta.env.BASE_URL + "login.html",
+                      )
+                    }
+                  >
+                    로그인
+                  </button>
+                </>
+              ) : panel === "reviews" ? (
                 <>
                   <h2>이달의 베스트 리뷰</h2>
                   <p>고객님들의 생생한 상품 이야기</p>

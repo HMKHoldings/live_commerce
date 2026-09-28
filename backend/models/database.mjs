@@ -9,6 +9,7 @@ export const resources = [
   "collections",
   "categories",
   "promos",
+  "coupons",
   "notices",
   "policies",
   "reviews",
@@ -52,6 +53,11 @@ export function openDatabase(
       db.exec("ROLLBACK");
       throw error;
     }
+  }
+  if (!db.prepare("SELECT 1 FROM records WHERE resource='coupons' LIMIT 1").get()) {
+    const seed = JSON.parse(readFileSync(new URL("../seed.json", import.meta.url), "utf8"));
+    const insert = db.prepare("INSERT OR IGNORE INTO records(resource,id,data) VALUES(?,?,?)");
+    for (const coupon of seed.coupons || []) insert.run("coupons", String(coupon.id), JSON.stringify(coupon));
   }
   return db;
 }

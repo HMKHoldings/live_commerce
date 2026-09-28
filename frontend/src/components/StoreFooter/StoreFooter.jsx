@@ -145,8 +145,8 @@ export default function StoreFooter({ brand, onOpenLogin, onBrowseProducts, show
       </div>}
       <nav className="store-footer-bar" aria-label="회사 및 이용 안내">
         <div className="wrap store-footer-bar-inner">
-          {[["about", "회사소개"], ["partnership", "제휴문의"], ["seller", "입점신청"], ["terms", "이용약관"], ["privacy", "개인정보처리방침"], ["contact", "고객센터"]].map(([key, label]) => (
-            <button key={key} type="button" onClick={() => openPanel({ type: "information", key })}>{label}</button>
+          {[["about.html", "회사소개"], ["partnership.html", "제휴문의"], ["seller.html", "입점신청"], ["terms.html", "이용약관"], ["privacy.html", "개인정보처리방침"], ["customer-center.html", "고객센터"]].map(([href, label]) => (
+            <a key={href} href={`${import.meta.env.BASE_URL}${href}`}>{label}</a>
           ))}
         </div>
       </nav>

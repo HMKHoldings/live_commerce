@@ -118,7 +118,7 @@ export default function Dashboard({ data, navigate }) {
   ];
   const shortcuts = [
     [Users, "회원 현황", "orders"],
-    [TicketPercent, "쿠폰 관리", "promos"],
+    [TicketPercent, "쿠폰 관리", "coupons"],
     [Star, "리뷰 관리", "reviews"],
     [LayoutGrid, "카테고리 관리", "categories"],
     [Gift, "프로모션", "promos"],

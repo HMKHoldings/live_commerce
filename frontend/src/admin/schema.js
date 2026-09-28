@@ -3,6 +3,7 @@ export const modules = [
   ["products", "상품 관리"],
   ["banners", "메인 배너"],
   ["promos", "프로모션 배너"],
+  ["coupons", "쿠폰 관리"],
   ["collections", "추천 컬렉션"],
   ["categories", "카테고리 메뉴"],
   ["orders", "주문 관리"],
@@ -78,6 +79,11 @@ export const labels = {
   showReviews: "리뷰 표시",
   showBest: "베스트 표시",
   tracking: "배송 추적 정보",
+  couponType: "쿠폰 유형",
+  amount: "할인 금액 (원)",
+  minimumSpend: "최소 주문 금액 (원)",
+  expiresAt: "사용 기한",
+  badge: "상태 문구",
 };
 export const defaults = {
   products: {
@@ -133,6 +139,17 @@ export const defaults = {
     theme: "green",
     action: "sustainable",
     image: "",
+    status: "draft",
+    order: 0,
+  },
+  coupons: {
+    title: "",
+    description: "",
+    couponType: "amount",
+    amount: 0,
+    minimumSpend: 0,
+    expiresAt: "",
+    badge: "사용 가능",
     status: "draft",
     order: 0,
   },
@@ -193,6 +210,8 @@ export const numeric = new Set([
   "order",
   "target",
   "participants",
+  "amount",
+  "minimumSpend",
 ]);
 export const media = new Set(["image", "logo", "inset", "poster", "videoUrl"]);
 export const large = new Set([
