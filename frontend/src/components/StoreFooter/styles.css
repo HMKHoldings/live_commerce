@@ -326,10 +326,10 @@
     .store-policy-links button { font-size: 13px; }
   }
 }
-/* Match the larger footer wordmark; mascot dimensions are intentionally unlayered. */
-.store-footer-brand .brand .orange-mascot { width: 54px; height: 54px; }
+/* Keep the mascot proportional to the footer wordmark. */
+.store-footer-brand .brand .orange-mascot { width: 34px; height: 34px; }
 @media (max-width: 640px) {
-  .store-footer-brand .brand .orange-mascot { width: 48px; height: 48px; }
+  .store-footer-brand .brand .orange-mascot { width: 30px; height: 30px; }
 }
 .store-footer-bar { width: 100%; background: #f5681a; border: 0; }
 .store-footer-bar-inner { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: center; min-height: 48px; padding-block: 12px; }

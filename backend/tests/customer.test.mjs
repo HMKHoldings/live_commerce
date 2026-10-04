@@ -14,6 +14,14 @@ test('customer signup, session isolation, profile, favorites, orders and logout'
   assert.equal((await request('/customer/me')).status,401);
   assert.equal((await request('/customer/signup','POST',{...input,consents:{}})).status,400);
   const signup=await request('/customer/signup','POST',input);assert.equal(signup.status,200);const a={cookie:signup.cookie,csrf:signup.data.csrf};
+  assert.equal(signup.data.user.accountType,'customer');
+  assert.equal((await request('/customer/creator-login','POST',{identifier:input.email,password:input.password})).status,401);
+  const creatorInput={username:'creator_one',password:'creator-password-12345',name:'Creator',email:'creator@example.test',phone:'010-1234-5678',channel:'@creator',category:'??',introduction:'Beauty creator',consents:{terms:true,privacy:true,age:true}};
+  const creatorSignup=await request('/customer/creator-signup','POST',creatorInput);assert.equal(creatorSignup.status,200);const creatorSession={cookie:creatorSignup.cookie,csrf:creatorSignup.data.csrf};
+  assert.equal(creatorSignup.data.user.accountType,'creator');
+  assert.equal((await request('/customer/session','GET',undefined,creatorSession)).data.user.accountType,'creator');
+  assert.equal((await request('/customer/login','POST',{username:creatorInput.username,password:creatorInput.password})).status,401);
+  assert.equal((await request('/customer/creator-login','POST',{identifier:creatorInput.email,password:creatorInput.password})).status,200);
   assert.equal((await request('/admin/products','GET',undefined,a)).status,401);
   assert.equal((await request('/customer/signup','POST',input)).status,409);
   assert.equal((await request('/customer/login','POST',{username:input.username,password:'wrong'})).status,401);

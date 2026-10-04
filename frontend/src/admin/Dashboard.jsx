@@ -116,16 +116,6 @@ export default function Dashboard({ data, navigate }) {
     [Users, "공동구매 생성", "새로운 공동구매를 시작하세요", "products", "sky"],
     [Image, "배너 관리", "메인 배너를 설정하세요", "banners", "pink"],
   ];
-  const shortcuts = [
-    [Users, "회원 현황", "orders"],
-    [TicketPercent, "쿠폰 관리", "coupons"],
-    [Star, "리뷰 관리", "reviews"],
-    [LayoutGrid, "카테고리 관리", "categories"],
-    [Gift, "프로모션", "promos"],
-    [TrendingUp, "판매 통계", "orders"],
-    [MessageCircle, "문의 관리", "questions"],
-    [Settings, "사이트 설정", "settings"],
-  ];
 
   return (
     <div className="admin-dashboard">
@@ -185,13 +175,19 @@ export default function Dashboard({ data, navigate }) {
         </Panel>
       </div>
 
-      <div className="dashboard-actions">
-        {actions.map(([Icon, title, text, target, tone, action, view]) => (
-          <button className={tone} key={title} onClick={() => navigate(target, action, view, action ? title : undefined)}>
-            <span><Icon size={29} /></span><div><strong>{title}</strong><small>{text}</small></div><i><ArrowRight size={18} /></i>
-          </button>
-        ))}
-      </div>
+      <section className="dashboard-quick">
+        <div className="dashboard-section-heading">
+          <div><span>QUICK ACTIONS</span><h2>빠른 실행</h2></div>
+          <p>자주 사용하는 관리 작업을 바로 시작하세요.</p>
+        </div>
+        <div className="dashboard-actions">
+          {actions.map(([Icon, title, text, target, tone, action, view]) => (
+            <button className={tone} key={title} onClick={() => navigate(target, action, view, action ? title : undefined)}>
+              <span><Icon size={21} /></span><div><strong>{title}</strong><small>{text}</small></div><i><ArrowRight size={16} /></i>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="dashboard-tables">
         <Panel title="최근 주문 내역" action={() => navigate("orders")}>
@@ -214,11 +210,6 @@ export default function Dashboard({ data, navigate }) {
         </Panel>
       </div>
 
-      <Panel title="바로가기 메뉴" className="shortcut-panel">
-        <div className="dashboard-shortcuts">
-          {shortcuts.map(([Icon, label, target], index) => <button key={label} onClick={() => navigate(target)}><span className={"shortcut-tone-" + (index % 5)}><Icon size={22} /></span>{label}</button>)}
-        </div>
-      </Panel>
     </div>
   );
 }

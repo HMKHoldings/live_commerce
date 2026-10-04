@@ -14,28 +14,40 @@ export async function customerController({req,res,path,send,json,db,limited,prod
   db.prepare('DELETE FROM customer_sessions WHERE expires<?').run(Date.now());
   db.prepare('INSERT INTO customer_sessions VALUES(?,?,?,?)').run(hash(token),user.id,csrf,Date.now()+8*3600000);
   res.setHeader('Set-Cookie',`orange_customer=${token}; HttpOnly; Path=/; SameSite=${production?'None':'Lax'}; Max-Age=28800${production?'; Secure':''}`);
-  return send(200,{csrf,user:{id:user.id,name:user.name,username:user.username}});
+  const accountType=JSON.parse(user.data||'{}').accountType||'customer';
+  return send(200,{csrf,user:{id:user.id,name:user.name,username:user.username,accountType}});
  };
- if(['signup','login'].includes(action)&&req.method==='POST') {
+ if(['signup','login','creator-signup','creator-login'].includes(action)&&req.method==='POST') {
   limited(`customer-auth:${req.socket.remoteAddress}`,12);
   const input=await json();
-  if(!input||typeof input.username!=='string'||! /^[A-Za-z0-9_]{4,30}$/.test(input.username)||typeof input.password!=='string'||input.password.length>128)throw httpError(400,'아이디와 비밀번호를 확인해주세요.');
-  const existing=db.prepare('SELECT * FROM customers WHERE username=? COLLATE NOCASE').get(input.username);
-  if(action==='login'){
+  if(!input||typeof input.password!=='string'||!input.password||input.password.length>128)throw httpError(400,'아이디와 비밀번호를 확인해주세요.');
+  if(action==='login'||action==='creator-login'){
+   const identifier=String(input.identifier||input.username||'').trim();
+   if(!identifier||identifier.length>254)throw httpError(400,'아이디와 비밀번호를 확인해주세요.');
+   const existing=db.prepare('SELECT * FROM customers WHERE username=? COLLATE NOCASE OR email=? COLLATE NOCASE OR phone=?').get(identifier,identifier,identifier);
+   const accountType=existing?JSON.parse(existing.data||'{}').accountType||'customer':'';
    const check=await derive(input.password,existing?.salt||'invalid-customer',64);
-   if(!existing||!timingSafeEqual(check,Buffer.from(existing.hash,'hex')))throw httpError(401,'아이디 또는 비밀번호를 확인해주세요.');
+   const expectedType=action==='creator-login'?'creator':'customer';
+   if(!existing||accountType!==expectedType||!timingSafeEqual(check,Buffer.from(existing.hash,'hex')))throw httpError(401,'아이디 또는 비밀번호를 확인해주세요.');
    return issue(existing);
   }
-  if(input.password.length<12||typeof input.name!=='string'||!input.name.trim()||input.name.length>60||typeof input.email!=='string'||input.email.length>254||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)||!input.consents?.terms||!input.consents?.privacy||!input.consents?.age)throw httpError(400,'필수 회원정보와 동의 항목을 확인해주세요.');
+  if(typeof input.username!=='string'||! /^[A-Za-z0-9_]{4,30}$/.test(input.username))throw httpError(400,'아이디와 비밀번호를 확인해주세요.');
+  const existing=db.prepare('SELECT * FROM customers WHERE username=? COLLATE NOCASE').get(input.username);
+  const minimumPasswordLength=action==='creator-signup'?6:12;
+  if(input.password.length<minimumPasswordLength||typeof input.name!=='string'||!input.name.trim()||input.name.length>60||typeof input.email!=='string'||input.email.length>254||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)||!input.consents?.terms||!input.consents?.privacy||!input.consents?.age)throw httpError(400,'필수 회원정보와 동의 항목을 확인해주세요.');
   if(existing)throw httpError(409,'이미 사용 중인 아이디입니다.');
+  const creator=action==='creator-signup';
+  if(creator&&(!/^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/.test(String(input.phone||''))||typeof input.channel!=='string'||!input.channel.trim()||input.channel.length>200||typeof input.category!=='string'||!input.category.trim()||input.category.length>60))throw httpError(400,'크리에이터 정보를 확인해주세요.');
+  if(creator&&db.prepare('SELECT id FROM customers WHERE email=? COLLATE NOCASE OR phone=?').get(input.email.trim(),input.phone.trim()))throw httpError(409,'이미 등록된 이메일 또는 휴대폰 번호입니다.');
   const salt=randomBytes(24).toString('hex'),passwordHash=(await derive(input.password,salt,64)).toString('hex');
-  try{const result=db.prepare('INSERT INTO customers(username,name,email,salt,hash,data) VALUES(?,?,?,?,?,?)').run(input.username,input.name.trim(),input.email.trim(),salt,passwordHash,JSON.stringify({favorites:[],addresses:[],inquiries:[],consentedAt:new Date().toISOString()}));return issue({id:Number(result.lastInsertRowid),username:input.username,name:input.name.trim()});}catch(e){if(String(e.message).includes('UNIQUE'))throw httpError(409,'이미 사용 중인 아이디입니다.');throw e;}
+  const accountData={favorites:[],addresses:[],inquiries:[],consentedAt:new Date().toISOString(),accountType:creator?'creator':'customer',...(creator?{creatorProfile:{channel:input.channel.trim(),category:input.category.trim(),introduction:String(input.introduction||'').trim().slice(0,500)}}:{})};
+  try{const result=db.prepare('INSERT INTO customers(username,name,email,phone,salt,hash,data) VALUES(?,?,?,?,?,?,?)').run(input.username,input.name.trim(),input.email.trim(),creator?input.phone.trim():'',salt,passwordHash,JSON.stringify(accountData));return issue({id:Number(result.lastInsertRowid),username:input.username,name:input.name.trim(),data:JSON.stringify(accountData)});}catch(e){if(String(e.message).includes('UNIQUE'))throw httpError(409,'이미 사용 중인 아이디입니다.');throw e;}
  }
  const session=customerSession(req,db);
  if(action==='session'&&req.method==='GET'){
   if(!session)return send(200,{authenticated:false});
   const data=JSON.parse(session.data);
-  return send(200,{authenticated:true,csrf:session.csrf,user:{id:session.user_id,username:session.username,name:session.name},favorites:data.favorites||[]});
+  return send(200,{authenticated:true,csrf:session.csrf,user:{id:session.user_id,username:session.username,name:session.name,accountType:data.accountType||'customer'},favorites:data.favorites||[]});
  }
  if(!session)throw httpError(401,'로그인이 필요합니다.');
  if(req.method!=='GET'&&req.headers['x-csrf-token']!==session.csrf)throw httpError(403,'Invalid session token');

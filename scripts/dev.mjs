@@ -2,7 +2,8 @@ import { spawn } from "node:child_process";
 
 const processes = [];
 const backendPort = Number(process.env.PORT || 3111);
-const backendHealthUrl = "http://127.0.0.1:" + backendPort + "/api/health";
+const devHost = process.env.DEV_HOST || "::1";
+const backendHealthUrl = "http://[" + devHost + "]:" + backendPort + "/api/health";
 
 async function backendIsRunning() {
   try {
@@ -16,13 +17,13 @@ async function backendIsRunning() {
 }
 
 if (await backendIsRunning()) {
-  console.log("Backend already running at http://127.0.0.1:" + backendPort);
+  console.log("Backend already running at http://[" + devHost + "]:" + backendPort);
 } else {
   processes.push(
     spawn(
       process.execPath,
       ["--env-file-if-exists=.env.server", "backend/index.mjs"],
-      { stdio: "inherit" },
+      { stdio: "inherit", env: { ...process.env, HOST: devHost } },
     ),
   );
 }
@@ -35,7 +36,7 @@ processes.push(
       "--config",
       "frontend/vite.config.js",
       "--host",
-      "127.0.0.1",
+      devHost,
     ],
     { stdio: "inherit" },
   ),

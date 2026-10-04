@@ -5,9 +5,9 @@
     "type": "module",
     "scripts": {
         "dev": "node scripts/dev.mjs",
-        "dev:web": "vite --config frontend/vite.config.js --host 127.0.0.1",
+        "dev:web": "vite --config frontend/vite.config.js --host ::1",
         "build": "vite build --config frontend/vite.config.js",
-        "preview": "vite preview --config frontend/vite.config.js --host 127.0.0.1",
+        "preview": "vite preview --config frontend/vite.config.js --host ::1",
         "server": "node --env-file-if-exists=.env.server backend/index.mjs",
         "admin:create": "node --env-file-if-exists=.env.server backend/create-admin.mjs",
         "test:server": "node --test backend/tests/*.test.mjs",

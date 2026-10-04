@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => ({
   base: mode === "production" ? "/live_commerce/" : "/",
   server: {
     proxy: {
-      "/api": "http://127.0.0.1:3111",
-      "/uploads": "http://127.0.0.1:3111",
+      "/api": "http://[::1]:3111",
+      "/uploads": "http://[::1]:3111",
     },
   },
   build: {
@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => ({
         signup: resolve(frontendRoot, "signup.html"),
         login: resolve(frontendRoot, "login.html"),
         creatorLogin: resolve(frontendRoot, "creator-login.html"),
+        creatorSignup: resolve(frontendRoot, "creator-signup.html"),
         creatorDashboard: resolve(frontendRoot, "creator-dashboard.html"),
         customerCenter: resolve(frontendRoot, "customer-center.html"),
         notices: resolve(frontendRoot, "notices.html"),

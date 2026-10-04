@@ -14,7 +14,7 @@ function Login(){
  const [show,setShow]=useState(false);
  const [busy,setBusy]=useState(false);
  const [error,setError]=useState('');
- const [help,setHelp]=useState('');
+ const [help,setHelp]=useState(()=>new URLSearchParams(location.search).get('help')==='password'?'password':'');
  async function submit(event){
   event.preventDefault();if(busy)return;
   setError('');setHelp('');

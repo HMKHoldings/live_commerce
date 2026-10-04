@@ -7,10 +7,11 @@
 }
 
 .orange-mascot.small { width: 32px; height: 32px; }
-.store-footer-brand .orange-mascot { width: 44px; height: 44px; }
+.brand .orange-mascot { width: 36px; height: 36px; }
+.store-footer-brand .orange-mascot { width: 34px; height: 34px; }
 .banner-bag .orange-mascot.small { width: 32px; height: 32px; margin-inline: auto; }
 
 @media (max-width: 640px) {
-  .brand .orange-mascot { width: 48px; height: 48px; }
-  .store-footer-brand .orange-mascot { width: 40px; height: 40px; }
+  .brand .orange-mascot { width: 30px; height: 30px; }
+  .store-footer-brand .orange-mascot { width: 30px; height: 30px; }
 }

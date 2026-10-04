@@ -48,12 +48,19 @@ function Orange({ small = false }) {
 }
 function Brand() {
   const { settings } = useStore();
+  const orangeIndex = settings.brandName.indexOf("오렌지");
+  const splitIndex = orangeIndex === -1 ? settings.brandName.length : orangeIndex + "오렌지".length;
   return (
     <a className="brand" href="./" aria-label={`${settings.brandName} 홈`}>
-      <Orange />
       <span>
-        <strong>{settings.brandName}</strong>
+        <strong>{settings.brandName.slice(0, splitIndex)}</strong>
       </span>
+      <Orange />
+      {settings.brandName.slice(splitIndex).trim() && (
+        <span>
+          <strong>{settings.brandName.slice(splitIndex).trim()}</strong>
+        </span>
+      )}
     </a>
   );
 }
