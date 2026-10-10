@@ -32,6 +32,21 @@ export function openDatabase(
     CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,admin_id INTEGER NOT NULL REFERENCES admins(id),csrf TEXT NOT NULL,expires INTEGER NOT NULL);
     CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,actor TEXT NOT NULL,action TEXT NOT NULL,resource TEXT NOT NULL,record_id TEXT NOT NULL,created TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY,value TEXT NOT NULL);`);
+  db.exec(`CREATE TABLE IF NOT EXISTS creator_daily_metrics(
+    creator_id INTEGER NOT NULL REFERENCES customers(id),
+    date TEXT NOT NULL,
+    viewers INTEGER NOT NULL DEFAULT 0 CHECK(viewers >= 0),
+    revenue INTEGER NOT NULL DEFAULT 0 CHECK(revenue >= 0),
+    retained_views INTEGER NOT NULL DEFAULT 0 CHECK(retained_views >= 0),
+    measured_views INTEGER NOT NULL DEFAULT 0 CHECK(measured_views >= retained_views),
+    PRIMARY KEY(creator_id,date)
+  );`);
+  db.exec(`CREATE TABLE IF NOT EXISTS creator_social_snapshots(
+    creator_id INTEGER NOT NULL REFERENCES customers(id),
+    account_id TEXT NOT NULL, username TEXT NOT NULL, day TEXT NOT NULL,
+    followers INTEGER NOT NULL CHECK(followers >= 0), fetched_at INTEGER NOT NULL,
+    PRIMARY KEY(creator_id,account_id,day)
+  );`);
   if (!db.prepare("SELECT 1 FROM metadata WHERE key=?").get("seeded")) {
     const seed = JSON.parse(
       readFileSync(new URL("../seed.json", import.meta.url), "utf8"),

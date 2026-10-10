@@ -59,9 +59,6 @@ function CreatorLogin(){
           <div className="creator-options"><label><input type="checkbox" checked={remember} onChange={event=>setRemember(event.target.checked)}/> 이메일/번호 저장</label><button type="button" onClick={()=>location.assign(import.meta.env.BASE_URL+'login.html?help=password&next='+encodeURIComponent(import.meta.env.BASE_URL+'creator-dashboard.html'))}>비밀번호 찾기</button></div>
           {notice&&<p className="creator-notice" role="alert">{notice}</p>}<button className="creator-submit" disabled={busy}>{busy?'로그인 중…':'로그인'}</button>
         </form>
-        <div className="creator-divider"><span/>또는<span/></div>
-        <button className="creator-social" onClick={()=>setNotice('Google 로그인은 준비 중입니다.')}><b className="google">G</b>Google로 계속하기</button>
-        <button className="creator-social" onClick={()=>setNotice('카카오 로그인은 준비 중입니다.')}><b className="kakao">K</b>카카오로 계속하기</button>
         <p className="creator-apply-copy">아직 크리에이터가 아니신가요?</p><button className="creator-apply" onClick={()=>location.assign(import.meta.env.BASE_URL+'creator-signup.html')}>크리에이터 신청하기</button>
         <a className="creator-member-link" href="./login.html">일반 회원으로 로그인하기 <ArrowRight size={16}/></a>
       </section>

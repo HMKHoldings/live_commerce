@@ -4,7 +4,11 @@ import {authController} from '../controllers/auth.mjs';
 import {contentController} from '../controllers/content.mjs';
 import {ordersController} from '../controllers/orders.mjs';
 import {adminController} from '../controllers/admin.mjs';
+import {creatorAnalyticsController} from '../controllers/creator-analytics.mjs';
+import {creatorSocialController} from '../controllers/creator-social.mjs';
 const routes = [
+ {matches:p=>p==='/api/creator/social/instagram',handle:creatorSocialController},
+ {matches:p=>p==='/api/creator/analytics',handle:creatorAnalyticsController},
  {matches:p=>p.startsWith('/api/customer/recovery/'),handle:recoveryController},
  {matches:p=>p.startsWith('/api/customer/'),handle:customerController},
  {matches: (p,m)=>p==='/api/auth/login'&&m==='POST'||p==='/api/auth/me'||p==='/api/auth/logout'&&m==='POST', handle:authController},
